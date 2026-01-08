@@ -381,15 +381,41 @@ def interactive_tool_call(tools) -> Optional[str]:
     console.print("\n[bold cyan]🔧 Interactive Tool Call Builder[/bold cyan]")
     console.print("[dim]Select a tool and fill in the parameters step by step[/dim]\n")
 
+    # Helper function to get parameter string
+    def get_params_display(tool):
+        """Get a formatted string of tool parameters for display."""
+        if not hasattr(tool, "params") or not tool.params:
+            return ""
+
+        try:
+            params_schema = tool.params.model_json_schema()
+            if "properties" not in params_schema:
+                return ""
+
+            required_params = params_schema.get("required", [])
+            param_list = []
+
+            for param_name in params_schema["properties"].keys():
+                if param_name in required_params:
+                    param_list.append(f"{param_name}*")
+                else:
+                    param_list.append(f"{param_name}")
+
+            return f"({', '.join(param_list)})"
+        except Exception:
+            return ""
+
     # Create a numbered list of tools
     tool_list = []
     for i, tool in enumerate(tools, 1):
         desc = tool.short_desc if hasattr(tool, "short_desc") and tool.short_desc else "No description"
+        params_display = get_params_display(tool)
         tool_list.append((tool, desc))
-        console.print(f"  [cyan]{i:2d}.[/cyan] [yellow]{tool.name}[/yellow]")
+        console.print(f"  [cyan]{i:2d}.[/cyan] [yellow]{tool.name}[/yellow]{params_display}")
         console.print(f"      [dim]{desc}[/dim]")
 
     console.print(f"\n  [cyan] 0.[/cyan] [dim]Cancel and go back[/dim]")
+    console.print(f"  [dim]* = required parameter[/dim]")
 
     # Get tool selection
     while True:
