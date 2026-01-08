@@ -332,6 +332,138 @@ def format_observation(observation: str, step_count: int):
     console.print(panel)
 
 
+def interactive_tool_call(tools) -> Optional[str]:
+    """Interactive tool selection and parameter filling.
+
+    Returns the formatted tool call string, or None if cancelled.
+    """
+    console.print("\n[bold cyan]🔧 Interactive Tool Call Builder[/bold cyan]")
+    console.print("[dim]Select a tool and fill in the parameters step by step[/dim]\n")
+
+    # Create a numbered list of tools
+    tool_list = []
+    for i, tool in enumerate(tools, 1):
+        desc = tool.short_desc if hasattr(tool, "short_desc") and tool.short_desc else "No description"
+        tool_list.append((tool, desc))
+        console.print(f"  [cyan]{i:2d}.[/cyan] [yellow]{tool.name}[/yellow]")
+        console.print(f"      [dim]{desc}[/dim]")
+
+    console.print(f"\n  [cyan] 0.[/cyan] [dim]Cancel and go back[/dim]")
+
+    # Get tool selection
+    while True:
+        try:
+            choice = Prompt.ask(
+                f"\n[bold blue]Select a tool[/bold blue] (0-{len(tools)})",
+                default="0"
+            )
+            choice_idx = int(choice)
+            if choice_idx == 0:
+                return None
+            if 1 <= choice_idx <= len(tools):
+                selected_tool = tools[choice_idx - 1]
+                break
+            else:
+                console.print(f"[red]Please enter a number between 0 and {len(tools)}[/red]")
+        except ValueError:
+            console.print("[red]Please enter a valid number[/red]")
+
+    console.print(f"\n[green]✓ Selected:[/green] [bold]{selected_tool.name}[/bold]")
+
+    # Get tool parameters
+    params_dict = {}
+    if hasattr(selected_tool, "params") and selected_tool.params:
+        try:
+            params_schema = selected_tool.params.model_json_schema()
+            if "properties" in params_schema:
+                required_params = params_schema.get("required", [])
+
+                console.print(f"\n[bold cyan]Fill in the parameters:[/bold cyan]")
+                console.print("[dim]Tip: You can copy-paste values from the conversation above[/dim]\n")
+
+                for param_name, param_info in params_schema["properties"].items():
+                    param_type = param_info.get("type", "any")
+                    param_desc = param_info.get("description", "")
+                    is_required = param_name in required_params
+
+                    # Display parameter info
+                    req_label = "[red]*required[/red]" if is_required else "[dim]optional[/dim]"
+                    console.print(f"[yellow]{param_name}[/yellow] ({param_type}, {req_label})")
+                    if param_desc:
+                        console.print(f"  [dim]{param_desc}[/dim]")
+
+                    # Prompt for value
+                    while True:
+                        value = Prompt.ask(
+                            f"  Value",
+                            default="" if not is_required else None
+                        )
+
+                        # Skip if optional and empty
+                        if not value and not is_required:
+                            break
+
+                        # Validate and convert type
+                        if value:
+                            try:
+                                # Handle different types
+                                if param_type == "array":
+                                    # Try to parse as JSON array
+                                    if value.startswith("["):
+                                        import json
+                                        params_dict[param_name] = json.loads(value)
+                                    else:
+                                        # Assume comma-separated values
+                                        params_dict[param_name] = [v.strip().strip("'\"") for v in value.split(",")]
+                                elif param_type == "integer":
+                                    params_dict[param_name] = int(value)
+                                elif param_type == "number":
+                                    params_dict[param_name] = float(value)
+                                elif param_type == "boolean":
+                                    params_dict[param_name] = value.lower() in ["true", "yes", "1"]
+                                else:
+                                    # String - remove quotes if present
+                                    params_dict[param_name] = value.strip("'\"")
+                                break
+                            except (ValueError, json.JSONDecodeError) as e:
+                                console.print(f"[red]Invalid value for type {param_type}: {e}[/red]")
+                                console.print("[yellow]Please try again[/yellow]")
+                        elif is_required:
+                            console.print("[red]This parameter is required[/red]")
+        except Exception as e:
+            console.print(f"[red]Error processing parameters: {e}[/red]")
+            return None
+
+    # Build the tool call string
+    if params_dict:
+        # Format parameters as key=value pairs
+        param_strs = []
+        for key, value in params_dict.items():
+            if isinstance(value, str):
+                param_strs.append(f"{key}='{value}'")
+            elif isinstance(value, list):
+                # Format list with proper quotes
+                formatted_items = [f"'{item}'" if isinstance(item, str) else str(item) for item in value]
+                param_strs.append(f"{key}=[{', '.join(formatted_items)}]")
+            else:
+                param_strs.append(f"{key}={value}")
+
+        tool_call = f"{selected_tool.name}({', '.join(param_strs)})"
+    else:
+        tool_call = f"{selected_tool.name}()"
+
+    # Show preview
+    console.print(f"\n[bold green]✓ Tool call built:[/bold green]")
+    console.print(f"  [cyan]{tool_call}[/cyan]")
+
+    # Confirm
+    if Prompt.ask("\n[bold blue]Execute this tool call?[/bold blue] (y/n)", choices=["y", "n"], default="y") == "y":
+        return tool_call
+    else:
+        console.print("[yellow]Cancelled[/yellow]")
+        return None
+
+
 def display_help():
     """Display help information."""
     help_content = """[bold]📋 Available Commands:[/bold]
@@ -340,6 +472,7 @@ def display_help():
 • [cyan]tools[/cyan] - Show available API tools (summary)
 • [cyan]tools-detail[/cyan] - Show detailed tool information with parameters
 • [cyan]policy[/cyan] - Show agent policy and guidelines
+• [cyan]call[/cyan] or [cyan]api[/cyan] - Interactive tool call builder (recommended!)
 • [cyan]quit[/cyan] or [cyan]exit[/cyan] - Exit the simulation
 
 [bold]💡 How to Respond:[/bold]
@@ -348,8 +481,15 @@ def display_help():
    Just type your message naturally:
    [green]I'd be happy to help! Could you provide your email address?[/green]
 
-[bold]2. Make a tool call:[/bold]
-   Use function syntax with the tool name and parameters:
+[bold]2. Make a tool call (Interactive - Easy!):[/bold]
+   Type [cyan]call[/cyan] or [cyan]api[/cyan] to open the interactive tool builder
+   • Select tool from dropdown menu
+   • Fill in parameters one by one
+   • Copy-paste values from conversation
+   • Get confirmation before executing
+
+[bold]3. Make a tool call (Direct - Advanced):[/bold]
+   Type the function call directly:
    [cyan]find_user_id_by_email(email='john@example.com')[/cyan]
    [cyan]get_order_details(order_id='#W0000001')[/cyan]
    [cyan]cancel_pending_order(order_id='#W0000001', reason='no longer needed')[/cyan]
@@ -387,7 +527,7 @@ def get_user_action(step_count: int, tools, policy: str) -> Optional[str]:
         f"\n[bold cyan]━━━ STEP {step_count} - YOUR TURN ━━━[/bold cyan]"
     )
     console.print(
-        "[dim]Type a message, make a tool call, or enter a command (type 'help' for options)[/dim]"
+        "[dim]Type a message, 'call' for interactive tool builder, or 'help' for all options[/dim]"
     )
 
     while True:
@@ -408,6 +548,14 @@ def get_user_action(step_count: int, tools, policy: str) -> Optional[str]:
         elif action.lower() == "policy":
             display_policy(policy)
             continue
+        elif action.lower() in ["call", "api"]:
+            # Interactive tool call builder
+            tool_call = interactive_tool_call(tools)
+            if tool_call:
+                return tool_call
+            else:
+                console.print("[yellow]Tool call cancelled, try again[/yellow]")
+                continue
         elif action.strip() == "":
             console.print("[yellow]Please enter an action or command[/yellow]")
             continue

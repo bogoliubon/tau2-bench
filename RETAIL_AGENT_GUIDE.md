@@ -33,6 +33,8 @@ When you start, you'll see a list of customer service scenarios to choose from. 
 The simulation will show you messages from the customer. You respond by:
 - **Typing text messages** - Communicate with the customer naturally
 - **Making tool calls** - Use API functions to query or modify the database
+  - **Interactive mode** (recommended): Type `call` or `api` to use the menu-driven tool builder
+  - **Direct mode** (advanced): Type the function call directly like `get_user_details(user_id='U123')`
 
 ### 3. Use Available Tools
 You have access to 17 API tools organized into categories:
@@ -66,7 +68,55 @@ While interacting with customers, you can use these commands:
 - `tools` - Display available API tools (summary)
 - `tools-detail` - Show detailed tool information with parameters
 - `policy` - View the agent policy and guidelines
+- `call` or `api` - **Open interactive tool call builder** (recommended!)
 - `quit` or `exit` - Exit the simulation
+
+## Interactive Tool Call Builder (Recommended!)
+
+The easiest way to make API calls is using the **interactive tool builder**. Just type `call` or `api` and you'll get:
+
+### How It Works:
+1. **Select a tool** - Choose from a numbered list of all 17 tools
+2. **Fill parameters** - The system prompts you for each parameter one by one
+3. **Copy-paste friendly** - Easily copy values from the conversation history
+4. **Type validation** - Automatic validation for strings, numbers, arrays, etc.
+5. **Preview & confirm** - See the final tool call before executing
+
+### Example Flow:
+```
+Your action: call
+
+🔧 Interactive Tool Call Builder
+Select a tool and fill in the parameters step by step
+
+  1. find_user_id_by_email
+      Find a user's ID by their email address
+  2. get_user_details
+      Get detailed information about a user
+  ...
+
+Select a tool (0-17): 1
+✓ Selected: find_user_id_by_email
+
+Fill in the parameters:
+Tip: You can copy-paste values from the conversation above
+
+email (string, *required)
+  The email address to search for
+  Value: john@example.com
+
+✓ Tool call built:
+  find_user_id_by_email(email='john@example.com')
+
+Execute this tool call? (y/n) [y]: y
+```
+
+### Benefits:
+- ✅ No syntax errors - the system builds the correct format for you
+- ✅ Easy copy-paste - just paste values without worrying about quotes
+- ✅ See all parameters - never miss a required field
+- ✅ Type safety - automatic validation for different data types
+- ✅ Quick and intuitive - faster than typing the whole function call
 
 ## Example Interaction
 
@@ -79,8 +129,10 @@ Here's a typical interaction flow:
 
 👤 CUSTOMER: Sure, it's john.doe@example.com
 
-🤖 YOU: [Makes tool call]
-find_user_id_by_email(email='john.doe@example.com')
+🤖 YOU: [Types 'call' to use interactive tool builder]
+        [Selects tool #1: find_user_id_by_email]
+        [Enters email: john.doe@example.com]
+        [Confirms and executes]
 
 ⚙️ SYSTEM: Found user with ID: U12345
 
