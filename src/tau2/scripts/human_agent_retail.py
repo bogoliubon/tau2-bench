@@ -486,6 +486,31 @@ def format_observation(observation: str, step_count: int):
                 formatted_lines.append(
                     f"[bold green]🤖 YOU (AGENT):[/bold green] {line[10:].strip()}"
                 )
+            elif line.startswith("tool:"):
+                # Direct tool output (without system: prefix)
+                tool_msg = line[5:].strip()
+                tool_start = tool_msg.find("{")
+                if tool_start != -1:
+                    # Find the complete JSON (might span multiple lines)
+                    json_str = tool_msg[tool_start:]
+
+                    # Check if JSON continues on next lines
+                    brace_count = json_str.count("{") - json_str.count("}")
+                    j = i + 1
+                    while brace_count > 0 and j < len(lines):
+                        json_str += "\n" + lines[j]
+                        brace_count = json_str.count("{") - json_str.count("}")
+                        j += 1
+
+                    # Format the tool output
+                    formatted_output = format_tool_output(json_str)
+                    formatted_lines.append(f"[bold yellow]⚙️  SYSTEM (Tool Output):[/bold yellow]")
+                    formatted_lines.append(formatted_output)
+
+                    # Skip the lines we consumed
+                    i = j - 1
+                else:
+                    formatted_lines.append(f"[bold yellow]⚙️  TOOL:[/bold yellow] {tool_msg}")
             elif line.startswith("system:"):
                 # Check if this is a tool output
                 system_msg = line[7:].strip()
