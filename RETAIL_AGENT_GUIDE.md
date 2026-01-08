@@ -199,6 +199,41 @@ The 74 training scenarios cover:
 
 Try different scenarios to practice various customer service situations!
 
+## Trajectory Saving & Progress Tracking
+
+The interface automatically saves your conversations and tracks your progress:
+
+### Auto-Save
+- Each completed task is saved to `data/tau2/human_trajectories/retail/task_{id}_human.json`
+- Trajectories are saved in tau2-bench's standard format
+- Compatible with the evaluation system
+
+### Progress Tracking
+- Your progress is tracked in `data/tau2/human_trajectories/retail/progress.json`
+- Shows which tasks you've completed (e.g., "15/74 tasks completed")
+- Task list displays **✓ Done** next to completed tasks
+- You can still redo completed tasks if you want
+
+### Resume Anytime
+- **Pause and resume** - Complete some tasks, take a break, come back later
+- Progress persists across sessions
+- Great for collecting all 74 human demonstrations incrementally
+- No need to complete everything in one sitting!
+
+### Example Task List
+```
+Progress: 3/74 tasks completed
+
+┌────────┬──────────┬──────────┬─────────────────────────────┐
+│ Number │ Status   │ Task ID  │ Scenario                    │
+├────────┼──────────┼──────────┼─────────────────────────────┤
+│   1    │ ✓ Done   │ 0        │ Cancel pending order        │
+│   2    │ ✓ Done   │ 1        │ Exchange delivered items    │
+│   3    │          │ 2        │ Modify order address        │
+│   4    │ ✓ Done   │ 3        │ Return items for refund     │
+└────────┴──────────┴──────────┴─────────────────────────────┘
+```
+
 ## Troubleshooting
 
 **Tool call syntax errors?**
