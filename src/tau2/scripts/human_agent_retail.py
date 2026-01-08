@@ -11,6 +11,7 @@ This script allows you to:
 
 import json
 import logging
+import warnings
 from typing import Optional
 
 from loguru import logger
@@ -28,6 +29,9 @@ from tau2.utils.tools import is_functional_tool_call, parse_functional_tool_call
 
 # Initialize Rich console
 console = Console()
+
+# Suppress Pydantic serialization warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 
 
 def disable_logging():
