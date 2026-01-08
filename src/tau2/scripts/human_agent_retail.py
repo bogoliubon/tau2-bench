@@ -56,6 +56,7 @@ def display_welcome():
 • Provide excellent customer service
 
 [bold]How It Works:[/bold]
+• You'll practice with 74 training scenarios
 • You'll see customer messages and can respond with text or tool calls
 • Type messages naturally to communicate with customers
 • Use tool calls like: [cyan]get_user_details(user_id='U123')[/cyan]
@@ -69,8 +70,11 @@ def display_welcome():
     console.print(welcome_panel)
 
 
-def display_tasks(domain: str = "retail", task_split_set: Optional[str] = None):
-    """Display available retail tasks and let user choose one."""
+def display_tasks(domain: str = "retail", task_split_set: Optional[str] = "train"):
+    """Display available retail tasks and let user choose one.
+
+    Defaults to 'train' split for practice scenarios.
+    """
     try:
         tasks = load_tasks(domain, task_split_set)
     except Exception as e:
@@ -78,7 +82,8 @@ def display_tasks(domain: str = "retail", task_split_set: Optional[str] = None):
         raise
 
     # Create a table for tasks
-    table = Table(title="📋 Available Customer Service Scenarios", box=box.ROUNDED)
+    split_name = f" ({task_split_set} split)" if task_split_set else ""
+    table = Table(title=f"📋 Available Customer Service Scenarios{split_name}", box=box.ROUNDED)
     table.add_column("Number", style="cyan", justify="center", width=8)
     table.add_column("Task ID", style="green", justify="left", width=10)
     table.add_column("Scenario", style="white", justify="left")

@@ -131,12 +131,12 @@ When acting as an agent, remember to:
 
 ## Practice Scenarios
 
-The retail environment includes **114 total tasks** split as follows:
-- **Training set**: 74 tasks for practice
-- **Test set**: 40 tasks for evaluation
+The interface uses the **training set with 74 tasks** for practice. The full tau2-bench retail environment has:
+- **Training set**: 74 tasks (used by this interface)
+- **Test set**: 40 tasks (reserved for agent evaluation)
 - **Base set**: All 114 tasks combined
 
-These scenarios cover:
+The 74 training scenarios cover:
 - Order cancellations
 - Returns and exchanges
 - Shipping address updates
