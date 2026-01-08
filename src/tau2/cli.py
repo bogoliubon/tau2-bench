@@ -182,6 +182,12 @@ def main():
     )
     play_parser.set_defaults(func=lambda args: run_manual_mode())
 
+    # Retail agent command
+    retail_agent_parser = subparsers.add_parser(
+        "retail-agent", help="Interactive interface for acting as a retail customer service agent"
+    )
+    retail_agent_parser.set_defaults(func=lambda args: run_retail_agent())
+
     # View command
     view_parser = subparsers.add_parser("view", help="View simulation results")
     view_parser.add_argument(
@@ -389,6 +395,12 @@ def run_manual_mode():
     from tau2.scripts.manual_mode import main as manual_main
 
     manual_main()
+
+
+def run_retail_agent():
+    from tau2.scripts.human_agent_retail import main as retail_agent_main
+
+    retail_agent_main()
 
 
 if __name__ == "__main__":
