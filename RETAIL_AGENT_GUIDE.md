@@ -131,7 +131,12 @@ When acting as an agent, remember to:
 
 ## Practice Scenarios
 
-The retail environment includes 114 different scenarios covering:
+The retail environment includes **114 total tasks** split as follows:
+- **Training set**: 74 tasks for practice
+- **Test set**: 40 tasks for evaluation
+- **Base set**: All 114 tasks combined
+
+These scenarios cover:
 - Order cancellations
 - Returns and exchanges
 - Shipping address updates
