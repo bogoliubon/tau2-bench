@@ -481,7 +481,19 @@ def format_tool_output(tool_output: str) -> str:
                 formatted_parts.append(f"    {addr.get('city', '')}, {addr.get('state', '')} {addr.get('zip', '')}")
 
             if "payment_history" in data:
-                total = sum(p.get("amount", 0) for p in data.get("payment_history", []))
+                formatted_parts.append(f"\n  [bold]Payment History:[/bold]")
+                total = 0
+                for payment in data.get("payment_history", []):
+                    transaction_type = payment.get("transaction_type", "unknown")
+                    amount = payment.get("amount", 0)
+                    payment_method = payment.get("payment_method_id", "N/A")
+                    total += amount
+
+                    if transaction_type == "refund":
+                        formatted_parts.append(f"    • [red]Refund:[/red] ${amount:.2f} ({payment_method})")
+                    else:
+                        formatted_parts.append(f"    • [green]Payment:[/green] ${amount:.2f} ({payment_method})")
+
                 formatted_parts.append(f"\n  [bold]Total:[/bold] [green]${total:.2f}[/green]")
 
         # Handle user details
