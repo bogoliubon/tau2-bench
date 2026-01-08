@@ -496,6 +496,42 @@ def format_tool_output(tool_output: str) -> str:
 
                 formatted_parts.append(f"\n  [bold]Total:[/bold] [green]${total:.2f}[/green]")
 
+            # Fulfillment/tracking information
+            if "fulfillments" in data and data.get("fulfillments"):
+                formatted_parts.append(f"\n  [bold]Fulfillments:[/bold]")
+                for fulfillment in data.get("fulfillments", []):
+                    tracking_ids = fulfillment.get("tracking_id", [])
+                    item_ids = fulfillment.get("item_ids", [])
+                    if tracking_ids:
+                        formatted_parts.append(f"    • Tracking: {', '.join(tracking_ids)}")
+                        formatted_parts.append(f"      Items: {', '.join(item_ids)}")
+
+            # Cancel reason (if order was cancelled)
+            if "cancel_reason" in data and data.get("cancel_reason"):
+                formatted_parts.append(f"\n  [bold red]Cancel Reason:[/bold red] {data.get('cancel_reason')}")
+
+            # Exchange information
+            if "exchange_items" in data and data.get("exchange_items"):
+                formatted_parts.append(f"\n  [bold]Exchange Information:[/bold]")
+                formatted_parts.append(f"    Items to exchange: {', '.join(data.get('exchange_items', []))}")
+                if data.get("exchange_new_items"):
+                    formatted_parts.append(f"    New items: {', '.join(data.get('exchange_new_items', []))}")
+                if data.get("exchange_payment_method_id"):
+                    formatted_parts.append(f"    Payment method: {data.get('exchange_payment_method_id')}")
+                if data.get("exchange_price_difference") is not None:
+                    price_diff = data.get("exchange_price_difference")
+                    if price_diff > 0:
+                        formatted_parts.append(f"    Additional charge: [yellow]${price_diff:.2f}[/yellow]")
+                    elif price_diff < 0:
+                        formatted_parts.append(f"    Refund: [green]${abs(price_diff):.2f}[/green]")
+
+            # Return information
+            if "return_items" in data and data.get("return_items"):
+                formatted_parts.append(f"\n  [bold]Return Information:[/bold]")
+                formatted_parts.append(f"    Items to return: {', '.join(data.get('return_items', []))}")
+                if data.get("return_payment_method_id"):
+                    formatted_parts.append(f"    Refund payment method: {data.get('return_payment_method_id')}")
+
         # Handle user details
         elif isinstance(data, dict) and "user_id" in data:
             formatted_parts.append(f"[bold cyan]User Details:[/bold cyan]")
