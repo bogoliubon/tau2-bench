@@ -95,12 +95,16 @@ def display_tasks(domain: str = "retail", task_split_set: Optional[str] = "train
                 if isinstance(task.description, str):
                     description = task.description
                 elif hasattr(task.description, "purpose"):
-                    description = task.description.purpose
+                    description = task.description.purpose if task.description.purpose else "Customer service task"
                 else:
                     description = str(task.description)
             else:
                 description = "Customer service task"
         except Exception:
+            description = "Customer service task"
+
+        # Ensure description is not None
+        if description is None:
             description = "Customer service task"
 
         # Truncate long descriptions
