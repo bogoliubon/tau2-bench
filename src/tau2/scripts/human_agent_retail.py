@@ -1014,13 +1014,24 @@ def main():
                         )
                     )
 
-                    # Save trajectory and update progress
-                    console.print("\n[bold]Saving your conversation...[/bold]")
-                    if save_trajectory(task.id, env, reward):
-                        # Mark task as completed
-                        completed_tasks.add(task.id)
-                        save_progress(completed_tasks)
-                        console.print(f"[green]✅ Progress updated: {len(completed_tasks)}/74 tasks completed[/green]")
+                    # Ask if user wants to save trajectory
+                    console.print("\n[bold]Would you like to save this conversation?[/bold]")
+                    console.print("[dim]Only save trajectories where you performed well.[/dim]")
+                    save_choice = Prompt.ask(
+                        "[bold blue]Save this trajectory?[/bold blue]",
+                        choices=["y", "n"],
+                        default="y"
+                    )
+
+                    if save_choice.lower() == "y":
+                        console.print("\n[bold]Saving your conversation...[/bold]")
+                        if save_trajectory(task.id, env, reward):
+                            # Mark task as completed
+                            completed_tasks.add(task.id)
+                            save_progress(completed_tasks)
+                            console.print(f"[green]✅ Progress updated: {len(completed_tasks)}/74 tasks completed[/green]")
+                    else:
+                        console.print("[yellow]⏭️  Trajectory not saved. You can redo this task later.[/yellow]")
 
                     break
                 elif truncated:
