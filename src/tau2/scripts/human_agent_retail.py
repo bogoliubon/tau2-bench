@@ -340,6 +340,129 @@ def display_tool_details(tools):
                     console.print(f"    [cyan]{tool.name}(...)[/cyan]")
 
 
+def format_tool_output(tool_output: str) -> str:
+    """Format tool output JSON into readable tables and structures."""
+    try:
+        # Try to parse as JSON
+        data = json.loads(tool_output)
+
+        # Create formatted output
+        formatted_parts = []
+
+        # Handle product details
+        if isinstance(data, dict) and "variants" in data and "product_id" in data:
+            formatted_parts.append(f"[bold cyan]Product:[/bold cyan] {data.get('name', 'Unknown')}")
+            formatted_parts.append(f"[dim]Product ID: {data.get('product_id')}[/dim]\n")
+
+            variants = data.get("variants", {})
+            if variants:
+                formatted_parts.append("[bold yellow]Available Variants:[/bold yellow]")
+                table = Table(box=box.SIMPLE, show_header=True)
+                table.add_column("Item ID", style="cyan", width=12)
+                table.add_column("Options", style="white", width=35)
+                table.add_column("Price", style="green", width=10, justify="right")
+                table.add_column("Status", style="yellow", width=12)
+
+                for item_id, variant in variants.items():
+                    options_str = ", ".join([f"{k}: {v}" for k, v in variant.get("options", {}).items()])
+                    price_str = f"${variant.get('price', 0):.2f}"
+                    status = "✓ Available" if variant.get("available") else "✗ Out of stock"
+                    status_color = "green" if variant.get("available") else "red"
+
+                    table.add_row(
+                        item_id,
+                        options_str,
+                        price_str,
+                        f"[{status_color}]{status}[/{status_color}]"
+                    )
+
+                # Render table to string
+                from io import StringIO
+                from rich.console import Console as RichConsole
+                string_console = RichConsole(file=StringIO(), width=100)
+                string_console.print(table)
+                formatted_parts.append(string_console.file.getvalue())
+
+        # Handle user details
+        elif isinstance(data, dict) and "user_id" in data:
+            formatted_parts.append(f"[bold cyan]User Details:[/bold cyan]")
+            formatted_parts.append(f"  User ID: [yellow]{data.get('user_id')}[/yellow]")
+
+            if "name" in data:
+                name = data.get("name", {})
+                formatted_parts.append(f"  Name: {name.get('first_name', '')} {name.get('last_name', '')}")
+
+            if "email" in data:
+                formatted_parts.append(f"  Email: {data.get('email')}")
+
+            if "address" in data:
+                addr = data.get("address", {})
+                formatted_parts.append(f"  Address:")
+                formatted_parts.append(f"    {addr.get('address1', '')}")
+                if addr.get('address2'):
+                    formatted_parts.append(f"    {addr.get('address2')}")
+                formatted_parts.append(f"    {addr.get('city', '')}, {addr.get('state', '')} {addr.get('zip', '')}")
+
+            if "payment_methods" in data:
+                formatted_parts.append(f"\n  [bold]Payment Methods:[/bold]")
+                for pm_id, pm in data.get("payment_methods", {}).items():
+                    pm_type = pm.get("type", "unknown")
+                    if pm_type == "CreditCard":
+                        formatted_parts.append(f"    • [{pm_id}] {pm.get('brand', '')} ****{pm.get('last_four', '')}")
+                    elif pm_type == "GiftCard":
+                        formatted_parts.append(f"    • [{pm_id}] Gift Card (${pm.get('balance', 0):.2f})")
+                    else:
+                        formatted_parts.append(f"    • [{pm_id}] {pm_type}")
+
+            if "orders" in data:
+                formatted_parts.append(f"\n  [bold]Orders:[/bold] {', '.join(data.get('orders', []))}")
+
+        # Handle order details
+        elif isinstance(data, dict) and "order_id" in data:
+            formatted_parts.append(f"[bold cyan]Order Details:[/bold cyan]")
+            formatted_parts.append(f"  Order ID: [yellow]{data.get('order_id')}[/yellow]")
+            formatted_parts.append(f"  Status: [{'green' if data.get('status') == 'delivered' else 'yellow'}]{data.get('status', 'unknown')}[/{'green' if data.get('status') == 'delivered' else 'yellow'}]")
+            formatted_parts.append(f"  User ID: {data.get('user_id')}")
+
+            if "items" in data:
+                formatted_parts.append(f"\n  [bold]Items:[/bold]")
+                for item in data.get("items", []):
+                    options_str = ", ".join([f"{k}: {v}" for k, v in item.get("options", {}).items()])
+                    formatted_parts.append(f"    • {item.get('name')} ({options_str}) - ${item.get('price', 0):.2f}")
+                    formatted_parts.append(f"      Item ID: {item.get('item_id')}")
+
+            if "address" in data:
+                addr = data.get("address", {})
+                formatted_parts.append(f"\n  [bold]Shipping Address:[/bold]")
+                formatted_parts.append(f"    {addr.get('address1', '')}")
+                if addr.get('address2'):
+                    formatted_parts.append(f"    {addr.get('address2')}")
+                formatted_parts.append(f"    {addr.get('city', '')}, {addr.get('state', '')} {addr.get('zip', '')}")
+
+            if "payment_history" in data:
+                total = sum(p.get("amount", 0) for p in data.get("payment_history", []))
+                formatted_parts.append(f"\n  [bold]Total:[/bold] [green]${total:.2f}[/green]")
+
+        # Handle simple string response (like user_id lookup)
+        elif isinstance(data, str):
+            formatted_parts.append(f"[green]{data}[/green]")
+
+        # Handle dict with simple structure
+        elif isinstance(data, dict):
+            for key, value in data.items():
+                formatted_parts.append(f"  {key}: [yellow]{value}[/yellow]")
+
+        # Fallback to pretty JSON
+        else:
+            formatted_parts.append(json.dumps(data, indent=2))
+
+        return "\n".join(formatted_parts)
+
+    except json.JSONDecodeError:
+        # Not JSON, return as-is
+        return tool_output
+
+
 def format_observation(observation: str, step_count: int):
     """Format and display the current observation."""
     if not observation.strip():
@@ -351,7 +474,9 @@ def format_observation(observation: str, step_count: int):
     formatted_lines = []
     lines = observation.strip().split("\n")
 
-    for line in lines:
+    i = 0
+    while i < len(lines):
+        line = lines[i]
         if line.strip():
             if line.startswith("user:"):
                 formatted_lines.append(
@@ -362,11 +487,43 @@ def format_observation(observation: str, step_count: int):
                     f"[bold green]🤖 YOU (AGENT):[/bold green] {line[10:].strip()}"
                 )
             elif line.startswith("system:"):
-                formatted_lines.append(
-                    f"[bold yellow]⚙️  SYSTEM:[/bold yellow] {line[7:].strip()}"
-                )
+                # Check if this is a tool output
+                system_msg = line[7:].strip()
+
+                # Look for tool output pattern
+                if "tool:" in system_msg:
+                    # Extract tool output JSON
+                    tool_start = system_msg.find("{")
+                    if tool_start != -1:
+                        # Find the complete JSON (might span multiple lines)
+                        json_str = system_msg[tool_start:]
+
+                        # Check if JSON continues on next lines
+                        brace_count = json_str.count("{") - json_str.count("}")
+                        j = i + 1
+                        while brace_count > 0 and j < len(lines):
+                            json_str += "\n" + lines[j]
+                            brace_count = json_str.count("{") - json_str.count("}")
+                            j += 1
+
+                        # Format the tool output
+                        formatted_output = format_tool_output(json_str)
+                        formatted_lines.append(f"[bold yellow]⚙️  SYSTEM (Tool Output):[/bold yellow]")
+                        formatted_lines.append(formatted_output)
+
+                        # Skip the lines we consumed
+                        i = j - 1
+                    else:
+                        formatted_lines.append(
+                            f"[bold yellow]⚙️  SYSTEM:[/bold yellow] {system_msg}"
+                        )
+                else:
+                    formatted_lines.append(
+                        f"[bold yellow]⚙️  SYSTEM:[/bold yellow] {system_msg}"
+                    )
             else:
                 formatted_lines.append(f"[white]{line.strip()}[/white]")
+        i += 1
 
     content = "\n".join(formatted_lines)
     panel = Panel(content, title=title, border_style="blue", box=box.ROUNDED)
