@@ -458,6 +458,32 @@ def format_tool_output(tool_output: str) -> str:
                 string_console.print(table)
                 formatted_parts.append(string_console.file.getvalue())
 
+        # Handle order details (check this BEFORE user details, since orders also have user_id)
+        elif isinstance(data, dict) and "order_id" in data:
+            formatted_parts.append(f"[bold cyan]Order Details:[/bold cyan]")
+            formatted_parts.append(f"  Order ID: [yellow]{data.get('order_id')}[/yellow]")
+            formatted_parts.append(f"  Status: [{'green' if data.get('status') == 'delivered' else 'yellow'}]{data.get('status', 'unknown')}[/{'green' if data.get('status') == 'delivered' else 'yellow'}]")
+            formatted_parts.append(f"  User ID: {data.get('user_id')}")
+
+            if "items" in data:
+                formatted_parts.append(f"\n  [bold]Items:[/bold]")
+                for item in data.get("items", []):
+                    options_str = ", ".join([f"{k}: {v}" for k, v in item.get("options", {}).items()])
+                    formatted_parts.append(f"    • {item.get('name')} ({options_str}) - ${item.get('price', 0):.2f}")
+                    formatted_parts.append(f"      Item ID: {item.get('item_id')}")
+
+            if "address" in data:
+                addr = data.get("address", {})
+                formatted_parts.append(f"\n  [bold]Shipping Address:[/bold]")
+                formatted_parts.append(f"    {addr.get('address1', '')}")
+                if addr.get('address2'):
+                    formatted_parts.append(f"    {addr.get('address2')}")
+                formatted_parts.append(f"    {addr.get('city', '')}, {addr.get('state', '')} {addr.get('zip', '')}")
+
+            if "payment_history" in data:
+                total = sum(p.get("amount", 0) for p in data.get("payment_history", []))
+                formatted_parts.append(f"\n  [bold]Total:[/bold] [green]${total:.2f}[/green]")
+
         # Handle user details
         elif isinstance(data, dict) and "user_id" in data:
             formatted_parts.append(f"[bold cyan]User Details:[/bold cyan]")
@@ -491,32 +517,6 @@ def format_tool_output(tool_output: str) -> str:
 
             if "orders" in data:
                 formatted_parts.append(f"\n  [bold]Orders:[/bold] {', '.join(data.get('orders', []))}")
-
-        # Handle order details
-        elif isinstance(data, dict) and "order_id" in data:
-            formatted_parts.append(f"[bold cyan]Order Details:[/bold cyan]")
-            formatted_parts.append(f"  Order ID: [yellow]{data.get('order_id')}[/yellow]")
-            formatted_parts.append(f"  Status: [{'green' if data.get('status') == 'delivered' else 'yellow'}]{data.get('status', 'unknown')}[/{'green' if data.get('status') == 'delivered' else 'yellow'}]")
-            formatted_parts.append(f"  User ID: {data.get('user_id')}")
-
-            if "items" in data:
-                formatted_parts.append(f"\n  [bold]Items:[/bold]")
-                for item in data.get("items", []):
-                    options_str = ", ".join([f"{k}: {v}" for k, v in item.get("options", {}).items()])
-                    formatted_parts.append(f"    • {item.get('name')} ({options_str}) - ${item.get('price', 0):.2f}")
-                    formatted_parts.append(f"      Item ID: {item.get('item_id')}")
-
-            if "address" in data:
-                addr = data.get("address", {})
-                formatted_parts.append(f"\n  [bold]Shipping Address:[/bold]")
-                formatted_parts.append(f"    {addr.get('address1', '')}")
-                if addr.get('address2'):
-                    formatted_parts.append(f"    {addr.get('address2')}")
-                formatted_parts.append(f"    {addr.get('city', '')}, {addr.get('state', '')} {addr.get('zip', '')}")
-
-            if "payment_history" in data:
-                total = sum(p.get("amount", 0) for p in data.get("payment_history", []))
-                formatted_parts.append(f"\n  [bold]Total:[/bold] [green]${total:.2f}[/green]")
 
         # Handle simple string response (like user_id lookup)
         elif isinstance(data, str):
