@@ -150,7 +150,7 @@ def display_policy(policy: str):
 
 
 def display_tools(tools):
-    """Display available API tools."""
+    """Display available API tools with their parameters."""
     if not tools:
         console.print(Panel("No tools available.", style="red"))
         return
@@ -184,12 +184,37 @@ def display_tools(tools):
         else:
             other_tools.append(tool)
 
+    # Helper function to get parameter string
+    def get_params_string(tool):
+        """Get a formatted string of tool parameters."""
+        if not hasattr(tool, "params") or not tool.params:
+            return "none"
+
+        try:
+            params_schema = tool.params.model_json_schema()
+            if "properties" not in params_schema:
+                return "none"
+
+            required_params = params_schema.get("required", [])
+            param_list = []
+
+            for param_name in params_schema["properties"].keys():
+                if param_name in required_params:
+                    param_list.append(f"[red]{param_name}*[/red]")
+                else:
+                    param_list.append(f"[dim]{param_name}[/dim]")
+
+            return ", ".join(param_list)
+        except Exception:
+            return "unknown"
+
     # Create table for READ tools
     if read_tools:
         console.print("\n[bold cyan]📖 READ TOOLS[/bold cyan] (Query information)")
         table = Table(box=box.SIMPLE)
-        table.add_column("Tool Name", style="cyan", justify="left")
-        table.add_column("Description", style="white", justify="left")
+        table.add_column("Tool Name", style="cyan", justify="left", width=30)
+        table.add_column("Parameters", style="white", justify="left", width=40)
+        table.add_column("Description", style="dim", justify="left")
 
         for tool in read_tools:
             desc = (
@@ -197,16 +222,19 @@ def display_tools(tools):
                 if hasattr(tool, "short_desc") and tool.short_desc
                 else "No description"
             )
-            table.add_row(tool.name, desc)
+            params = get_params_string(tool)
+            table.add_row(tool.name, params, desc)
 
         console.print(table)
+        console.print("[dim]  * = required parameter[/dim]")
 
     # Create table for WRITE tools
     if write_tools:
         console.print("\n[bold yellow]✏️  WRITE TOOLS[/bold yellow] (Modify database)")
         table = Table(box=box.SIMPLE)
-        table.add_column("Tool Name", style="yellow", justify="left")
-        table.add_column("Description", style="white", justify="left")
+        table.add_column("Tool Name", style="yellow", justify="left", width=30)
+        table.add_column("Parameters", style="white", justify="left", width=40)
+        table.add_column("Description", style="dim", justify="left")
 
         for tool in write_tools:
             desc = (
@@ -214,16 +242,19 @@ def display_tools(tools):
                 if hasattr(tool, "short_desc") and tool.short_desc
                 else "No description"
             )
-            table.add_row(tool.name, desc)
+            params = get_params_string(tool)
+            table.add_row(tool.name, params, desc)
 
         console.print(table)
+        console.print("[dim]  * = required parameter[/dim]")
 
     # Create table for OTHER tools
     if other_tools:
         console.print("\n[bold green]🔧 OTHER TOOLS[/bold green]")
         table = Table(box=box.SIMPLE)
-        table.add_column("Tool Name", style="green", justify="left")
-        table.add_column("Description", style="white", justify="left")
+        table.add_column("Tool Name", style="green", justify="left", width=30)
+        table.add_column("Parameters", style="white", justify="left", width=40)
+        table.add_column("Description", style="dim", justify="left")
 
         for tool in other_tools:
             desc = (
@@ -231,9 +262,11 @@ def display_tools(tools):
                 if hasattr(tool, "short_desc") and tool.short_desc
                 else "No description"
             )
-            table.add_row(tool.name, desc)
+            params = get_params_string(tool)
+            table.add_row(tool.name, params, desc)
 
         console.print(table)
+        console.print("[dim]  * = required parameter[/dim]")
 
 
 def display_tool_details(tools):
