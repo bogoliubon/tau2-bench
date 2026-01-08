@@ -12,7 +12,9 @@ This script allows you to:
 import json
 import logging
 import warnings
-from typing import Optional
+from datetime import datetime
+from pathlib import Path
+from typing import Optional, Set
 
 from loguru import logger
 from rich import box
@@ -32,6 +34,66 @@ console = Console()
 
 # Suppress Pydantic serialization warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
+
+# Trajectory save location
+TRAJECTORY_DIR = Path("data/tau2/human_trajectories/retail")
+PROGRESS_FILE = TRAJECTORY_DIR / "progress.json"
+
+
+def load_progress() -> Set[str]:
+    """Load the set of completed task IDs."""
+    if not PROGRESS_FILE.exists():
+        return set()
+
+    try:
+        with open(PROGRESS_FILE, 'r') as f:
+            data = json.load(f)
+            return set(data.get("completed_tasks", []))
+    except Exception as e:
+        console.print(f"[yellow]Warning: Could not load progress file: {e}[/yellow]")
+        return set()
+
+
+def save_progress(completed_tasks: Set[str]):
+    """Save the set of completed task IDs."""
+    TRAJECTORY_DIR.mkdir(parents=True, exist_ok=True)
+
+    try:
+        data = {
+            "completed_tasks": sorted(list(completed_tasks)),
+            "last_updated": datetime.now().isoformat(),
+            "total_completed": len(completed_tasks)
+        }
+        with open(PROGRESS_FILE, 'w') as f:
+            json.dump(data, f, indent=2)
+    except Exception as e:
+        console.print(f"[red]Error saving progress: {e}[/red]")
+
+
+def save_trajectory(task_id: str, env: AgentGymEnv, reward: float):
+    """Save the human trajectory for a task."""
+    TRAJECTORY_DIR.mkdir(parents=True, exist_ok=True)
+
+    try:
+        # Get the simulation run from the environment
+        if hasattr(env, '_simulation_run') and env._simulation_run:
+            simulation_run = env._simulation_run
+
+            # Create trajectory file
+            trajectory_file = TRAJECTORY_DIR / f"task_{task_id}_human.json"
+
+            # Save as JSON
+            with open(trajectory_file, 'w') as f:
+                f.write(simulation_run.model_dump_json(indent=2))
+
+            console.print(f"[green]✅ Trajectory saved to:[/green] [cyan]{trajectory_file}[/cyan]")
+            return True
+        else:
+            console.print("[yellow]⚠️  Could not save trajectory: simulation data not available[/yellow]")
+            return False
+    except Exception as e:
+        console.print(f"[red]❌ Error saving trajectory: {e}[/red]")
+        return False
 
 
 def disable_logging():
@@ -74,10 +136,11 @@ def display_welcome():
     console.print(welcome_panel)
 
 
-def display_tasks(domain: str = "retail", task_split_set: Optional[str] = "train"):
+def display_tasks(domain: str = "retail", task_split_set: Optional[str] = "train", completed_tasks: Optional[Set[str]] = None):
     """Display available retail tasks and let user choose one.
 
     Defaults to 'train' split for practice scenarios.
+    Shows completion status if completed_tasks is provided.
     """
     try:
         tasks = load_tasks(domain, task_split_set)
@@ -85,10 +148,18 @@ def display_tasks(domain: str = "retail", task_split_set: Optional[str] = "train
         console.print(f"[red]Error loading tasks: {e}[/red]")
         raise
 
+    if completed_tasks is None:
+        completed_tasks = set()
+
+    # Show progress summary
+    if completed_tasks:
+        console.print(f"\n[bold]Progress:[/bold] {len(completed_tasks)}/{len(tasks)} tasks completed")
+
     # Create a table for tasks
     split_name = f" ({task_split_set} split)" if task_split_set else ""
     table = Table(title=f"📋 Available Customer Service Scenarios{split_name}", box=box.ROUNDED)
     table.add_column("Number", style="cyan", justify="center", width=8)
+    table.add_column("Status", style="white", justify="center", width=10)
     table.add_column("Task ID", style="green", justify="left", width=10)
     table.add_column("Scenario", style="white", justify="left")
 
@@ -112,10 +183,14 @@ def display_tasks(domain: str = "retail", task_split_set: Optional[str] = "train
             description = "Customer service task"
 
         # Truncate long descriptions
-        if len(description) > 80:
-            description = description[:77] + "..."
+        if len(description) > 70:
+            description = description[:67] + "..."
 
-        table.add_row(str(i), task.id, description)
+        # Determine status
+        is_completed = task.id in completed_tasks
+        status = "[green]✓ Done[/green]" if is_completed else ""
+
+        table.add_row(str(i), status, task.id, description)
 
     console.print(table)
 
@@ -839,10 +914,17 @@ def main():
     display_welcome()
 
     try:
+        # Load progress
+        completed_tasks = load_progress()
+
         # Step 1: Choose a task
         console.print("\n[bold]Step 1: Choose a Customer Service Scenario[/bold]")
-        task = display_tasks(domain="retail")
+        task = display_tasks(domain="retail", completed_tasks=completed_tasks)
         console.print(f"\n[green]✅ Selected:[/green] Task {task.id}")
+
+        # Check if task is already completed
+        if task.id in completed_tasks:
+            console.print("[yellow]⚠️  This task was previously completed. You can redo it if you like.[/yellow]")
 
         # Display task description if available
         if hasattr(task, "description") and task.description:
@@ -931,6 +1013,15 @@ def main():
                             box=box.ROUNDED,
                         )
                     )
+
+                    # Save trajectory and update progress
+                    console.print("\n[bold]Saving your conversation...[/bold]")
+                    if save_trajectory(task.id, env, reward):
+                        # Mark task as completed
+                        completed_tasks.add(task.id)
+                        save_progress(completed_tasks)
+                        console.print(f"[green]✅ Progress updated: {len(completed_tasks)}/74 tasks completed[/green]")
+
                     break
                 elif truncated:
                     console.print(
