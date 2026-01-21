@@ -558,13 +558,13 @@ def format_tool_output(tool_output: str) -> str:
                     # Check both 'source' and 'type' for payment method type
                     pm_type = pm.get("source", pm.get("type", "unknown"))
                     if pm_type == "credit_card" or pm_type == "CreditCard":
-                        formatted_parts.append(f"    • [{pm_id}] Credit Card: {pm.get('brand', '')} ****{pm.get('last_four', '')}")
+                        formatted_parts.append(f"    • [yellow]{pm_id}[/yellow] - Credit Card: {pm.get('brand', '')} ****{pm.get('last_four', '')}")
                     elif pm_type == "gift_card" or pm_type == "GiftCard":
-                        formatted_parts.append(f"    • [{pm_id}] Gift Card - Balance: ${pm.get('balance', 0):.2f}")
+                        formatted_parts.append(f"    • [yellow]{pm_id}[/yellow] - Gift Card (Balance: ${pm.get('balance', 0):.2f})")
                     elif pm_type == "paypal" or pm_type == "Paypal":
-                        formatted_parts.append(f"    • [{pm_id}] PayPal")
+                        formatted_parts.append(f"    • [yellow]{pm_id}[/yellow] - PayPal")
                     else:
-                        formatted_parts.append(f"    • [{pm_id}] {pm_type}")
+                        formatted_parts.append(f"    • [yellow]{pm_id}[/yellow] - {pm_type}")
 
             if "orders" in data:
                 formatted_parts.append(f"\n  [bold]Orders:[/bold] {', '.join(data.get('orders', []))}")
