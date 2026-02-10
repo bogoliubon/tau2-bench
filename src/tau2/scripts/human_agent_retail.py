@@ -479,6 +479,8 @@ def format_tool_output(tool_output: str) -> str:
                 if addr.get('address2'):
                     formatted_parts.append(f"    {addr.get('address2')}")
                 formatted_parts.append(f"    {addr.get('city', '')}, {addr.get('state', '')} {addr.get('zip', '')}")
+                if addr.get('country'):
+                    formatted_parts.append(f"    {addr.get('country')}")
 
             if "payment_history" in data:
                 formatted_parts.append(f"\n  [bold]Payment History:[/bold]")
@@ -554,6 +556,8 @@ def format_tool_output(tool_output: str) -> str:
                 if addr.get('address2'):
                     formatted_parts.append(f"    {addr.get('address2')}")
                 formatted_parts.append(f"    {addr.get('city', '')}, {addr.get('state', '')} {addr.get('zip', '')}")
+                if addr.get('country'):
+                    formatted_parts.append(f"    {addr.get('country')}")
 
             if "payment_methods" in data:
                 formatted_parts.append(f"\n  [bold]Payment Methods:[/bold]")
