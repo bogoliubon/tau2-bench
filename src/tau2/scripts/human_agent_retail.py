@@ -487,7 +487,10 @@ def format_tool_output(tool_output: str) -> str:
                     transaction_type = payment.get("transaction_type", "unknown")
                     amount = payment.get("amount", 0)
                     payment_method = payment.get("payment_method_id", "N/A")
-                    total += amount
+                    if transaction_type == "refund":
+                        total -= amount
+                    else:
+                        total += amount
 
                     if transaction_type == "refund":
                         formatted_parts.append(f"    • [red]Refund:[/red] ${amount:.2f} ({payment_method})")
