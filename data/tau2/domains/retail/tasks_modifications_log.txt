@@ -1,0 +1,154 @@
+RETAIL TASKS - MODIFICATIONS AND ISSUES LOG
+============================================
+
+MODIFICATIONS MADE:
+-------------------
+
+1. Task 44: Added get_user_details (DOESN'T CHANGE REWARD)
+   - Original: find_user_id_by_name_zip -> get_order_details
+   - Modified: find_user_id_by_name_zip -> get_user_details(user_id="aarav_anderson_8794") -> get_order_details
+   - Reason: Ground truth was missing get_user_details call
+
+2. Task 46: Added get_user_details + removed wrong order lookups (DOESN'T CHANGE REWARD)
+   - Added: get_user_details(user_id="daiki_johnson_9523")
+   - Removed: get_order_details(#9502126) and get_order_details(#9502127) - wrong format order IDs
+   - Kept only: get_order_details(#W9502127) - correct order ID
+   - Reason: Ground truth had unnecessary failed lookups for customer typos
+
+3. Task 47: Added get_user_details + removed wrong order lookups (DOESN"T CHANGE REWARD)
+   - Added: get_user_details(user_id="daiki_johnson_9523")
+   - Removed: get_order_details(#9502126) and get_order_details(#9502127) - wrong format order IDs
+   - Kept only: get_order_details(#W9502127) - correct order ID
+   - Reason: Ground truth had unnecessary failed lookups for customer typos
+
+4. Task 41: Removed duplicate get_order_details call (DOESN'T CHANGE REWARD)
+   - Removed: action_id 41_8 get_order_details(order_id="#W4082615")
+   - Kept: action_id 41_3 get_order_details(order_id="#W4082615") - first call
+   - Reason: Ground truth expected same order to be looked up twice (before modify_pending_order_items)
+   - Policy does NOT require re-fetching order details before modifying
+
+5. Task 57: Added missing authentication and order lookup actions (DOESN'T CHANGE REWARD)
+   - Original: Empty actions list (no actions expected)
+   - Added: find_user_id_by_name_zip(first_name="Ivan", last_name="Hernandez", zip="92133")
+   - Added: get_user_details(user_id="ivan_hernandez_6923")
+   - Added: get_order_details(order_id="#W4284542")
+   - Reason: Ground truth had no actions, but agent should authenticate user and look up order
+   - Task scenario: Customer asks about order, then decides not to cancel (no write actions)
+
+6. Task 59: Added get_user_details + updated user scenario + removed calculate (CHANGES USER BEHAVIOUR/REWARD)
+   - Added: get_user_details(user_id="yusuf_taylor_7149") after find_user_id_by_name_zip
+   - Reason: Ground truth was missing get_user_details call
+   - Also updated user scenario (reason_for_call):
+     - Added: "If the agent cannot determine which order is older, clarify that the one containing the Desk Lamp is the older order."
+     - Reason: Customer was expected to know which order is older but instructions didn't specify
+     - Agent tools don't show order dates, so customer needs to provide this info
+   - Removed: calculate(expression="164.28")
+     - Reason: Unnecessary - refund amount is directly visible from order total, no calculation needed
+
+
+7. Task 72: Added missing authentication, order lookup, and product lookup actions (DOENS'T CHANGE REWARD)
+   - Added: find_user_id_by_name_zip(first_name="Ivan", last_name="Khan", zip="28243")
+   - Added: get_user_details(user_id="ivan_khan_7475")
+   - Added: get_order_details(order_id="#W5270061")
+   - Added: get_product_details(product_id="2524789262") — backpack variants
+   - Reason: Ground truth only had the two write actions (modify_pending_order_address, modify_pending_order_items)
+     but was missing all read/lookup actions needed to authenticate user, find the order, and check available variants
+
+
+8. Task 82: Updated user scenario (reason_for_call) (CHANGES USER BEHAVIOUR/REWARD)
+   - Original: "...you become angry and return everything on that order and refund to GC."
+   - Modified: "...you become angry and return everything on the order with the more expensive tablet, and refund to GC."
+   - Reason: Simulated customer kept misinterpreting "everything on that order" as just "both tablets"
+     instead of all 4 items on the order. Clarified wording to specify which order explicitly.
+
+9. Task 91: REVERTED — kept original same-item exchange (NO CHANGE)
+   - Previously changed from exchange to return because policy line 132 required "different product option"
+   - Reverted because policy was updated to allow same-item exchanges for replacements
+   - Ground truth remains: exchange_delivered_order_items(order_id="#W3239882", item_ids=["9494281769"], new_item_ids=["9494281769"], payment_method_id="credit_card_5902940")
+
+10. Task 98: Changed exchange payment method from Mastercard to Visa (CHANGES REWARD)
+   - Original: credit_card_8105988 (Mastercard) for both exchanges
+   - Modified: credit_card_3951670 (Visa) for both exchanges
+   - Reason: Customer explicitly requested "the other card" / Visa for exchanges.
+     Exchange policy does not restrict payment to original method (unlike return policy line 124).
+     Ground truth originally used the original Mastercard, but customer preference should be honored.
+
+11. Task 107: REVERTED — kept original same-item exchange and original user instruction (NO CHANGE)
+   - Previously changed from exchange to return and added fallback to user instruction
+   - Reverted because policy was updated to allow same-item exchanges for replacements
+   - Ground truth remains: exchange_delivered_order_items(order_id="#W1304208", item_ids=["1615379700"], new_item_ids=["1615379700"], payment_method_id="paypal_1679017")
+   - User instruction reverted to original (removed return fallback clause)
+
+12. Task 110: Removed redundant modify_user_address action (DOESN'T CHANGE REWARD)
+   - Removed: modify_user_address(user_id="sophia_martin_8570", address1="760 Elm Avenue", ...)
+   - Reason: User default address is already 760 Elm Avenue in initial DB.
+     The action is a no-op. Customer scenario says they moved to new house (760 Elm Ave)
+     but default address is already there. Removed to keep ground truth clean.
+
+ISSUES FOUND:
+-------------
+
+1. BUG: Order total display incorrect after item modification (found during task 63) (DOESN"T IMPACT REWARD)
+   - File: src/tau2/scripts/human_agent_retail.py, line 485-497
+   - The "Total" in the order details output sums ALL payment history amounts (payments + refunds)
+     instead of subtracting refunds from payments.
+   - Example: After modifying order #W5061109 (swapping speaker $302.67 -> $271.89),
+     payment history shows Payment: $1319.43 and Refund: $30.78.
+     Code computes Total as 1319.43 + 30.78 = $1350.21 (wrong).
+     Should be 1319.43 - 30.78 = $1288.65 (correct new order total).
+   - Fix: Line 490, `total += amount` should check transaction_type and subtract for refunds.
+   - Impact: Misleading total shown to human agent, caused incorrect total to be communicated to customer.
+   - FIXED: commit 0e3dc09 — now subtracts refunds from total instead of adding them.
+
+2. AMBIGUITY: No rule for determining "most recent" order (found during task 67)
+   - Orders in the user's order list have no date/timestamp field.
+   - No policy or code logic defines how to determine which order is most recent.
+   - Ground truth for task 67 expects #W6729841 (last in user's order list) as the most recent.
+   - Assumption for now: the last order ID in the user's order list is the most recent.
+   - FIXED
+
+3. BUG: Task 105 ground truth exchange impossible — insufficient gift card balance
+   - User: aarav_anderson_8794, only payment method: gift_card_7245904 (balance: $17.00)
+   - Ground truth expects: exchange_delivered_order_items on order #W4316152,
+     exchanging two Tea Kettles (7292993796 × 2, $94.80 each) for 3761330360 ($101.12) + 9647374798 ($109.58)
+   - Price difference: $210.70 - $189.60 = +$21.10 (customer owes $21.10)
+   - Gift card balance ($17.00) < price difference ($21.10) → exchange fails with
+     "Insufficient gift card balance to pay for the price difference"
+   - No other payment methods available for this user
+   - Ground truth action cannot be executed as written
+   - Task skipped, needs fix (either increase gift card balance or change target variants)
+   - add tranfer_to_human_agent in ground truth
+
+   FIXED
+
+
+POLICY CHANGES:
+---------------
+
+1. Exchange policy updated to allow same-item replacements (affects tasks 91, 107)
+   - File: data/tau2/domains/retail/policy.md, line 132
+   - Problem: Tasks 91 and 107 ground truths expected same-item-to-same-item exchanges
+     (e.g. exchanging a defective/worn item for the exact same variant as a replacement).
+     The original policy wording "different product option" disallowed this.
+     This is a common real-world scenario (defective product, worn item received) that the policy
+     did not accommodate.
+   - Original: "each item can be exchanged to an available new item of the same product but of different product option"
+   - Changed to: "each item can be exchanged to an available new item of the same product (including same-item exchanges for replacements)"
+   - Note: exchange_delivered_order_items code already allowed same-item exchanges (no validation).
+     modify_pending_order_items code still blocks same item_id → same item_id (only affects pending orders).
+   - Tasks 91 and 107 ground truths reverted to their original same-item exchanges.
+
+
+
+
+TUDOR: REDO task 67. 
+
+CHLOE + CHAO:
+REDO: 
+due to policy change (same product modification): 91, 107
+
+Clarifciation of older orders: 59, 67
+
+Changed GroundTruth: 98 (from mastercard to VISA)
+
+Wrong User behaviour (clarified instructions): 82
