@@ -29,6 +29,25 @@ from tau2.utils.pydantic_utils import get_pydantic_hash
 from tau2.utils.utils import DATA_DIR, get_commit_hash, get_now, show_dict_diff
 
 
+def load_policy(path: str) -> str:
+    """Load a policy from a file. Supports .md (raw text) and .json (refinement output)."""
+    p = Path(path)
+    if p.suffix == ".md":
+        return p.read_text()
+    with open(p, "r") as f:
+        data = json.load(f)
+    if "iterations" in data:
+        for iteration in reversed(data["iterations"]):
+            if iteration.get("policy"):
+                return iteration["policy"]
+        raise ValueError(f"No policy found in iterations of {p}")
+    if "final_population" in data:
+        return data["final_population"][0]["wiki"]
+    if "wiki" in data:
+        return data["wiki"]
+    raise ValueError(f"Could not find policy/wiki in {p}")
+
+
 def get_options() -> RegistryInfo:
     """
     Returns options for the simulator.
@@ -143,6 +162,12 @@ def run_domain(config: RunConfig) -> Results:
         )
         ConsoleDisplay.console.print(console_text)
 
+    # Load custom policy if provided
+    policy_override = None
+    if config.policy_path:
+        policy_override = load_policy(config.policy_path)
+        logger.info(f"Using custom policy from {config.policy_path} ({len(policy_override)} chars)")
+
     num_trials = config.num_trials
     save_to = config.save_to
     if save_to is None:
@@ -167,6 +192,7 @@ def run_domain(config: RunConfig) -> Results:
         seed=config.seed,
         log_level=config.log_level,
         enforce_communication_protocol=config.enforce_communication_protocol,
+        policy_override=policy_override,
     )
     metrics = compute_metrics(simulation_results)
     ConsoleDisplay.display_agent_metrics(metrics)
@@ -193,6 +219,7 @@ def run_tasks(
     seed: Optional[int] = 300,
     log_level: Optional[str] = "INFO",
     enforce_communication_protocol: bool = False,
+    policy_override: Optional[str] = None,
 ) -> Results:
     """
     Runs tasks for a given domain.
@@ -368,6 +395,7 @@ def run_tasks(
                 evaluation_type=evaluation_type,
                 seed=seed,
                 enforce_communication_protocol=enforce_communication_protocol,
+                policy_override=policy_override,
             )
             simulation.trial = trial
             if console_display:
@@ -415,6 +443,7 @@ def run_task(
     evaluation_type: EvaluationType = EvaluationType.ALL,
     seed: Optional[int] = None,
     enforce_communication_protocol: bool = False,
+    policy_override: Optional[str] = None,
 ) -> SimulationRun:
     """
     Runs tasks for a given domain.
@@ -450,18 +479,20 @@ def run_task(
     environment = environment_constructor()
     AgentConstructor = registry.get_agent_constructor(agent)
 
+    domain_policy = policy_override if policy_override else environment.get_policy()
+
     solo_mode = False
     if issubclass(AgentConstructor, LLMAgent):
         agent = AgentConstructor(
             tools=environment.get_tools(),
-            domain_policy=environment.get_policy(),
+            domain_policy=domain_policy,
             llm=llm_agent,
             llm_args=llm_args_agent,
         )
     elif issubclass(AgentConstructor, LLMGTAgent):
         agent = AgentConstructor(
             tools=environment.get_tools(),
-            domain_policy=environment.get_policy(),
+            domain_policy=domain_policy,
             llm=llm_agent,
             llm_args=llm_args_agent,
             task=task,
@@ -472,7 +503,7 @@ def run_task(
         user_tools = environment.get_user_tools() if environment.user_tools else []
         agent = AgentConstructor(
             tools=environment.get_tools() + user_tools,
-            domain_policy=environment.get_policy(),
+            domain_policy=domain_policy,
             llm=llm_agent,
             llm_args=llm_args_agent,
             task=task,
@@ -480,7 +511,7 @@ def run_task(
     elif issubclass(AgentConstructor, GymAgent):
         agent = AgentConstructor(
             tools=environment.get_tools(),
-            domain_policy=environment.get_policy(),
+            domain_policy=domain_policy,
         )
     else:
         raise ValueError(

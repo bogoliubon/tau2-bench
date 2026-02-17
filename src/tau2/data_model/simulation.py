@@ -167,6 +167,13 @@ class RunConfig(BaseModel):
             default=False,
         ),
     ]
+    policy_path: Annotated[
+        Optional[str],
+        Field(
+            description="Path to a custom policy file (.md or .json). Overrides the domain's default policy.",
+            default=None,
+        ),
+    ]
 
     def validate(self) -> None:
         """

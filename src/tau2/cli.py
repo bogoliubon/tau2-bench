@@ -141,6 +141,12 @@ def add_run_args(parser):
         default=False,
         help="Enforce communication protocol rules (e.g., no mixed messages with text and tool calls). Default is False.",
     )
+    parser.add_argument(
+        "--policy-path",
+        type=str,
+        default=None,
+        help="Path to a custom policy file (.md or .json refinement output). Overrides the domain's default policy.",
+    )
 
 
 def main():
@@ -172,6 +178,7 @@ def main():
                 seed=args.seed,
                 log_level=args.log_level,
                 enforce_communication_protocol=args.enforce_communication_protocol,
+                policy_path=args.policy_path,
             )
         )
     )

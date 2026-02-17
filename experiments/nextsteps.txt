@@ -1,0 +1,74 @@
+IDEAS:
+- try batch on tudor trajecotories (see if batching helps)
+
+- use gpt4o for now only
+- try gpt5omini maybe?
+- evaluate chloes trajectories indivually (maybe add them later)
+- maybe do more trials
+- prompt optimization, try optimizing the prompt in the instructions
+
+- later on:
+    - try tudors rpe approach from taubench
+- use all human trajecories, think about a good strategy to incorporate them all
+
+
+FAILURE ANALYSIS (gpt-4o without_escape, 10.7K policy, test split)
+===================================================================
+14/40 tasks failed. All failures are DB=0.0 (DB check is the sole gatekeeper;
+action checks are informational only and don't affect reward).
+
+Failure categories:
+
+1. WRONG OPERATION TYPE (exchange vs modify vs return)
+   - Task 5: User kept changing mind across confirmations (exchange both → only
+     desk lamp → cancel everything, return water bottle). Agent executed desk lamp
+     exchange too eagerly on first confirmation, corrupting DB. Should have waited
+     for full negotiation before committing irreversible actions.
+   - Task 86: Used exchange instead of modifyt
+   - Task 111: Used exchange on a pending order (got error, then gave up instead
+     of trying modify). User said "exchange" which misled the agent — agent should
+     check order status, not trust user wording.
+
+2. WRONG ORDER ID
+   - Task 26: User said "sent to Texas by mistake." Agent only checked 2 of 4 orders,
+     both shipped to Jacksonville FL. Ignored the Texas clue, picked wrong order,
+     returned all 5 items from it. Should have checked all orders and matched shipping
+     address to user's description. Also never escalated to human for amex refund.
+   - Task 53: Operated on wrong order entirely
+   - Task 94: Operated on wrong order entirely
+
+3. HALLUCINATED / WRONG ADDRESS
+   - Task 97: Used fake address instead of looking it up from user's orders
+   - Task 101: Hallucinated "123 Main St, Apt 1" — address exists nowhere in user
+     data. User twice asked to copy from another order; agent fabricated one instead. (hard instruction to follow)
+
+4. WRONG ITEM VARIANT (close but not exact match)
+   - Task 100: Picked red hardshell instead of red softshell (user said "exact same
+     but red" — agent changed material too). Also wrong payment method.
+
+5. EXTRA / REPEATED DESTRUCTIVE ACTIONS
+   - Task 33: Cancelled order user asked for, but GT doesn't include it. Possible
+     GT annotation bug.
+   - Task 71: Tried modify with wrong item_ids first, corrupted DB state.
+   - Task 36: Called modify_pending_order_items 4x with wrong args.
+
+6. DIDN'T ASK USER FOR REQUIRED INFO
+   - Task 100: Never asked which payment method for price difference (policy says
+     "user must provide"). D2efaulted to original.
+   - Task 38: Wrong calculate expression and wrong cancellation reason.
+
+7. AGENT GAVE UP AFTER ERROR
+   - Task 111: After exchange failed on pending order, told user "wait until
+     delivered" instead of using modify_pending_order_items.
+   - Task 74: Action checks pass but order-of-operations issue.
+
+Key insights:
+- reward = DB_reward x COMMUNICATE_reward (ACTION checks don't affect score)
+- DB is the sole gatekeeper since COMMUNICATE almost always passes
+- User wording ("exchange") can mislead agent into wrong tool
+
+Learned policy weaknesses:
+- Too vague on payment method rules ("are confirmed" vs "user must provide")
+- Doesn't explicitly distinguish exchange (delivered) vs modify (pending) vs return
+- No rule about looking up addresses from existing orders instead of guessing
+- No rule about matching ALL original attributes when user says "same but different X"
