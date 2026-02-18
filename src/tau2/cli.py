@@ -195,6 +195,12 @@ def main():
     )
     retail_agent_parser.set_defaults(func=lambda args: run_retail_agent())
 
+    # Airline agent command
+    airline_agent_parser = subparsers.add_parser(
+        "airline-agent", help="Interactive interface for acting as an airline customer service agent"
+    )
+    airline_agent_parser.set_defaults(func=lambda args: run_airline_agent())
+
     # View command
     view_parser = subparsers.add_parser("view", help="View simulation results")
     view_parser.add_argument(
@@ -408,6 +414,12 @@ def run_retail_agent():
     from tau2.scripts.human_agent_retail import main as retail_agent_main
 
     retail_agent_main()
+
+
+def run_airline_agent():
+    from tau2.scripts.human_agent_airline import main as airline_agent_main
+
+    airline_agent_main()
 
 
 if __name__ == "__main__":

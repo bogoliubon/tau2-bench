@@ -141,14 +141,51 @@ POLICY CHANGES:
 
 
 
-TUDOR: REDO task 67. 
+NEW CHANGES: 
 
-CHLOE + CHAO:
-REDO: 
-due to policy change (same product modification): 91, 107
+13. Task 100: Added payment method preference to user instruction (CHANGES USER BEHAVIOUR)
+   - Original reason_for_call: No mention of payment method
+   - Added: "If the agent asks which payment method to use for any price difference, you want to use your Visa credit card."
+   - Reason: GT expects modify_pending_order_items with credit_card_3261838 (Visa), but original
+     order #W3295833 was paid with paypal_3650980. User instruction gave no payment preference,
+     so agent defaulted to original PayPal and user agreed. Both trials failed on this.
+     Added explicit preference to align user behaviour with GT expectation.
 
-Clarifciation of older orders: 59, 67
+14. Task 38: Added cancellation reason hint to user instruction (CHANGES USER BEHAVIOUR)
+   - Original: "...you wonder if the agent can just cancel the order so that you can order again."
+   - Modified: "...you wonder if the agent can just cancel the order since you no longer need it, so that you can order again."
+   - Reason: GT expects cancel_pending_order with reason "no longer needed", but user instruction
+     gave no hint about cancellation reason. User-sim sometimes picked "ordered by mistake" instead,
+     causing DB mismatch. Added "since you no longer need it" to steer user-sim toward correct reason.
 
-Changed GroundTruth: 98 (from mastercard to VISA)
+15. Task 32: Added cancellation reason hint to user instruction (CHANGES USER BEHAVIOUR)
+   - Original: "...cancel the charger you just bought, because it goes with the tablet... Also cancel the boot and kettle, and return the sneaker."
+   - Modified: "...cancel the charger you just bought, because you no longer need it without the tablet. Also cancel the boot and kettle since you no longer need them either, and return the sneaker."
+   - Reason: GT expects cancel_pending_order with reason "no longer needed" for both orders,
+     but user instruction gave no hint about cancellation reason. Preventive fix.
 
-Wrong User behaviour (clarified instructions): 82
+16. Task 55: Added cancellation reason hint to user instruction (CHANGES USER BEHAVIOUR)
+   - Original: "You recently faced a financial issue and want to cancel or return all possible orders."
+   - Modified: "You recently faced a financial issue and want to cancel or return all possible orders. You no longer need any of the items."
+   - Reason: GT expects cancel_pending_order with reason "no longer needed" for both orders,
+     but user instruction only mentioned "financial issue". Preventive fix.
+
+
+CODE FIXES:
+-----------
+
+1. BUG FIX: modify_pending_order_items stale variant variable (affects tasks 36, 100, 20, 21, 37)
+   - File: src/tau2/domains/retail/tools.py, lines 499-505
+   - Problem: The function has two loops. Loop 1 validates items and calculates price differences,
+     setting `variant = self._get_variant(product_id, new_item_id)` each iteration. Loop 2 applies
+     the modifications but reuses the `variant` variable without re-fetching it. Since `variant`
+     retains the value from the LAST iteration of Loop 1, all items in Loop 2 get the price and
+     options of whichever item was processed last in Loop 1.
+   - Impact: When modifying 2+ items, all items except the last end up with wrong price/options.
+     The GT expected DB was generated with this same bug, so GT ordering produces a matching
+     (but corrupted) DB. Any other ordering produces a different corruption → DB mismatch → reward 0.0.
+   - Fix: Added `variant = self._get_variant(item.product_id, new_item_id)` inside Loop 2 so each
+     item gets its own correct variant.
+   - Affected test tasks: 36, 100 (2+ item modifications). Affected train tasks: 20, 21, 37.
+   - Note: GT expected DB states for these tasks need to be regenerated with the fixed code.
+   - Note: exchange_delivered_order_items and return_delivered_order_items do NOT have this bug.
