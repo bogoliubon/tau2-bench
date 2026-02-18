@@ -173,41 +173,69 @@ def iterative_policy_refinement(
     
     current_policy = None
     
-    # Prompts
-    INITIAL_PROMPT = """You are analyzing customer service agent conversations to extract the agent's policy for handling different workflows.
+    # Shared extraction instructions
+    EXTRACTION_INSTRUCTIONS = """Your task is to reconstruct the agent's operational policy as a set of explicit decision rules.
 
-Here is a conversation between an agent and a user:
+Do NOT summarize the behavior.
+Do NOT describe general strategies.
+Instead, infer the concrete decision procedure that maps:
+  (conversation state, retrieved information, system state) → next action
+
+Only extract rules supported by trajectory evidence.
+Do not invent best practices or assume unstated policies.
+
+If a behavior appears only once and there is no evidence it is mandatory, mark it as:
+  Observed Behavior (not proven mandatory).
+
+For each rule, express in conditional form where possible:
+  IF [conditions] → THEN [actions]
+
+Each rule must be:
+- Specific and testable
+- Based only on observable evidence
+- Written as concrete instructions
+- Free of abstraction
+
+Avoid vague statements such as:
+- "The agent verifies information."
+- "The agent ensures correctness."
+
+Extraction Requirements:
+- If clarification is requested before acting, infer the missing precondition.
+- If a tool call occurs, infer: required prior information, why it was valid at that moment, conditions under which it would be invalid.
+- If tools are called in sequence, infer their dependency structure.
+- If multiple candidate entities exist, infer the selection procedure.
+- If confirmation occurs before execution, determine whether it is mandatory.
+- If system state changes, encode the state-dependent rule explicitly.
+
+Group rules into:
+1. Information Gathering Rules
+2. Selection Rules
+3. Action Execution Rules
+4. Confirmation Rules
+5. Tool Usage Constraints
+6. State-Dependent Rules
+
+Do not introduce domain-specific assumptions beyond the trajectory.{length_constraint}"""
+
+    # Prompts
+    INITIAL_PROMPT = """You are given a full agent trajectory containing user messages, assistant messages, tool calls, and tool outputs.
 
 {trajectory}
 
-Please extract and describe the agent's policy - the rules, guidelines, and strategies the agent follows to successfully handle customer requests. Focus on:
-1. How the agent gathers information
-2. When and how the agent uses tools
-3. How the agent communicates with the user
-4. Any specific constraints or requirements the agent follows
-
-Provide a clear, structured policy description.{length_constraint}"""
+""" + EXTRACTION_INSTRUCTIONS
 
     UPDATE_PROMPT = """You previously extracted the following agent policy:
 
 {current_policy}
 
-Here is another conversation:
+Here is another trajectory:
 
 {trajectory}
 
-Based on this new conversation, does the policy need to be updated? When considering updates, focus on:
-1. How the agent gathers information
-2. When and how the agent uses tools
-3. How the agent communicates with the user
-4. Any specific constraints or requirements the agent follows
+Based on this new trajectory, update the policy. Add new rules, refine existing ones, or correct any that are contradicted by new evidence. Provide the COMPLETE updated policy.
 
-Consider:
-- Are there new patterns or rules to add?
-- Are there existing rules that need refinement?
-- Does the policy need any corrections?
-
-Provide the COMPLETE updated policy (do not just describe the changes, provide the full policy text).{length_constraint}"""
+""" + EXTRACTION_INSTRUCTIONS
 
     length_constraint = ""
     if max_policy_chars is not None:

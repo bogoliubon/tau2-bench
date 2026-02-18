@@ -23,6 +23,7 @@ def batch_policy_refinement(
     success_only: bool = True,
     batch_size: int = 5,
     n_shuffle: int = 1,
+    max_policy_chars: Optional[int] = None,
 ) -> Dict:
     """
     Extract and refine agent policy using batches of trajectories.
@@ -101,83 +102,98 @@ def batch_policy_refinement(
     
     current_policy = None
     
-    # Prompts for flow-specific extraction
-    INITIAL_BATCH_PROMPT_FLOW_SPECIFIC = """You are analyzing successful customer service agent conversations to extract the agent's policy for handling {flow_description}.
+    # Shared extraction instructions
+    EXTRACTION_INSTRUCTIONS = """Your task is to reconstruct the agent's operational policy as a set of explicit decision rules.
 
-Here are {num_traj} conversations between agents and users:
+Do NOT summarize the behavior.
+Do NOT describe general strategies.
+Instead, infer the concrete decision procedure that maps:
+  (conversation state, retrieved information, system state) → next action
+
+Only extract rules supported by trajectory evidence.
+Do not invent best practices or assume unstated policies.
+
+If a behavior appears only once and there is no evidence it is mandatory, mark it as:
+  Observed Behavior (not proven mandatory).
+
+For each rule, express in conditional form where possible:
+  IF [conditions] → THEN [actions]
+
+Each rule must be:
+- Specific and testable
+- Based only on observable evidence
+- Written as concrete instructions
+- Free of abstraction
+
+Avoid vague statements such as:
+- "The agent verifies information."
+- "The agent ensures correctness."
+
+Extraction Requirements:
+- If clarification is requested before acting, infer the missing precondition.
+- If a tool call occurs, infer: required prior information, why it was valid at that moment, conditions under which it would be invalid.
+- If tools are called in sequence, infer their dependency structure.
+- If multiple candidate entities exist, infer the selection procedure.
+- If confirmation occurs before execution, determine whether it is mandatory.
+- If system state changes, encode the state-dependent rule explicitly.
+
+Group rules into:
+1. Information Gathering Rules
+2. Selection Rules
+3. Action Execution Rules
+4. Confirmation Rules
+5. Tool Usage Constraints
+6. State-Dependent Rules
+
+Do not introduce domain-specific assumptions beyond the trajectory.{length_constraint}"""
+
+    # Prompts for flow-specific extraction
+    INITIAL_BATCH_PROMPT_FLOW_SPECIFIC = """You are given {num_traj} full agent trajectories for {flow_description}, each containing user messages, assistant messages, tool calls, and tool outputs.
 
 {trajectories}
 
-Please extract and describe the agent's policy specifically for {flow_description} based on these conversations. Focus on:
-1. How the agent gathers information needed for {flow_description}
-2. When and how the agent uses the {tool_name} tool
-3. How the agent communicates with the user during this process
-4. Any specific constraints or requirements for {flow_description}
-
-Identify common patterns across the conversations and provide a clear, structured policy description focused on this specific workflow."""
+""" + EXTRACTION_INSTRUCTIONS
 
     UPDATE_BATCH_PROMPT_FLOW_SPECIFIC = """You previously extracted the following agent policy for {flow_description}:
 
 {current_policy}
 
-Here are {num_traj} additional successful conversations involving {flow_description}:
+Here are {num_traj} additional trajectories involving {flow_description}:
 
 {trajectories}
 
-Based on these new conversations, does the policy need to be updated? When considering updates, focus on:
-1. How the agent gathers information needed for {flow_description}
-2. When and how the agent uses the {tool_name} tool
-3. How the agent communicates with the user during this process
-4. Any specific constraints or requirements for {flow_description}
+Based on these new trajectories, update the policy. Add new rules, refine existing ones, or correct any that are contradicted by new evidence. Provide the COMPLETE updated policy.
 
-Consider:
-- Are there new patterns or rules to add?
-- Are there existing rules that need refinement?
-- Does the policy need any corrections?
-
-If NO update is needed (the current policy already covers these conversations well), respond with ONLY the word:
-No
-
-If an update IS needed, provide the COMPLETE updated policy (do not just describe the changes, provide the full policy text)."""
+""" + EXTRACTION_INSTRUCTIONS
 
     # Prompts for general extraction (all flows)
-    INITIAL_BATCH_PROMPT_GENERAL = """You are analyzing successful customer service agent conversations to extract the agent's policy for handling different workflows.
-
-Here are {num_traj} conversations between agents and users:
+    INITIAL_BATCH_PROMPT_GENERAL = """You are given {num_traj} full agent trajectories, each containing user messages, assistant messages, tool calls, and tool outputs.
 
 {trajectories}
 
-Please extract and describe the agent's policy - the rules, guidelines, and strategies the agent follows to successfully handle customer requests. Focus on:
-1. How the agent gathers information
-2. When and how the agent uses tools
-3. How the agent communicates with the user
-4. Any specific constraints or requirements the agent follows
-
-Identify common patterns across the conversations and provide a clear, structured policy description."""
+""" + EXTRACTION_INSTRUCTIONS
 
     UPDATE_BATCH_PROMPT_GENERAL = """You previously extracted the following agent policy:
 
 {current_policy}
 
-Here are {num_traj} additional successful conversations:
+Here are {num_traj} additional trajectories:
 
 {trajectories}
 
-Based on these new conversations, does the policy need to be updated? When considering updates, focus on:
-1. How the agent gathers information
-2. When and how the agent uses tools
-3. How the agent communicates with the user
-4. Any specific constraints or requirements the agent follows
+Based on these new trajectories, update the policy. Add new rules, refine existing ones, or correct any that are contradicted by new evidence. Provide the COMPLETE updated policy.
 
-Consider:
-- Are there new patterns or rules to add?
-- Are there existing rules that need refinement?
-- Does the policy need any corrections?
+""" + EXTRACTION_INSTRUCTIONS
 
-If NO update is needed (the current policy already covers these conversations well), respond with ONLY the word:
-No
+    # Build length constraint
+    length_constraint = ""
+    if max_policy_chars is not None:
+        length_constraint = f"\n\nThe policy must not exceed {max_policy_chars} characters. Be concise — use short bullet points, merge overlapping rules, and drop details that can be inferred from general rules."
 
-If an update IS needed, provide the COMPLETE updated policy (do not just describe the changes, provide the full policy text)."""
+    INITIAL_BATCH_PROMPT_FLOW_SPECIFIC = INITIAL_BATCH_PROMPT_FLOW_SPECIFIC.replace("{length_constraint}", length_constraint)
+    UPDATE_BATCH_PROMPT_FLOW_SPECIFIC = UPDATE_BATCH_PROMPT_FLOW_SPECIFIC.replace("{length_constraint}", length_constraint)
+    INITIAL_BATCH_PROMPT_GENERAL = INITIAL_BATCH_PROMPT_GENERAL.replace("{length_constraint}", length_constraint)
+    UPDATE_BATCH_PROMPT_GENERAL = UPDATE_BATCH_PROMPT_GENERAL.replace("{length_constraint}", length_constraint)
 
     # Process in batches
     num_batches = (n_traj + batch_size - 1) // batch_size
@@ -190,81 +206,74 @@ If an update IS needed, provide the COMPLETE updated policy (do not just describ
         
         print(f"\n[Batch {batch_num}/{num_batches}] Processing {len(batch_task_ids)} trajectories...")
 
-        # Shuffle the task IDs if needed
-        if n_shuffle > 1:
-            print(f"Shuffling task IDs {n_shuffle} times...")
-            for _ in range(n_shuffle):
+        for shuffle_iter in range(n_shuffle):
+            if n_shuffle > 1:
                 random.shuffle(batch_task_ids)
 
-                # Extract all trajectories in this batch
-                trajectories_text = ""
-                for idx, task_id in enumerate(batch_task_ids, 1):
-                    trial = 0
-                    trajectory = extract_conversation_text(
-                        results_path, 
-                        task_id, 
-                        trial,
-                        include_instruction=False
+            # Extract all trajectories in this batch
+            trajectories_text = ""
+            for idx, task_id in enumerate(batch_task_ids, 1):
+                trial = 0
+                trajectory = extract_conversation_text(
+                    results_path,
+                    task_id,
+                    trial,
+                    include_instruction=False
+                )
+
+                if not trajectory:
+                    print(f"[warning] Could not extract trajectory for task_id={task_id}")
+                    continue
+
+                trajectories_text += f"=== Conversation {idx} (task_id={task_id}) ===\n{trajectory}\n\n"
+
+            # Build prompt based on whether this is first batch or update
+            if tool_name is not None:
+                flow_desc = tool_name_to_description(tool_name)
+                if current_policy is None:
+                    prompt = INITIAL_BATCH_PROMPT_FLOW_SPECIFIC.format(
+                        num_traj=len(batch_task_ids),
+                        trajectories=trajectories_text,
+                        flow_description=flow_desc,
+                        tool_name=tool_name
                     )
-                    
-                    if not trajectory:
-                        print(f"[warning] Could not extract trajectory for task_id={task_id}")
-                        continue
-                    
-                    trajectories_text += f"=== Conversation {idx} (task_id={task_id}) ===\n{trajectory}\n\n"
-                
-                # Build prompt based on whether this is first batch or update
-                if tool_name is not None:
-                    flow_desc = tool_name_to_description(tool_name)
-                    if batch_idx == 0:
-                        prompt = INITIAL_BATCH_PROMPT_FLOW_SPECIFIC.format(
-                            num_traj=len(batch_task_ids),
-                            trajectories=trajectories_text,
-                            flow_description=flow_desc,
-                            tool_name=tool_name
-                        )
-                    else:
-                        prompt = UPDATE_BATCH_PROMPT_FLOW_SPECIFIC.format(
-                            current_policy=current_policy,
-                            num_traj=len(batch_task_ids),
-                            trajectories=trajectories_text,
-                            flow_description=flow_desc,
-                            tool_name=tool_name
-                        )
                 else:
-                    # General extraction (all flows)
-                    if batch_idx == 0:
-                        prompt = INITIAL_BATCH_PROMPT_GENERAL.format(
-                            num_traj=len(batch_task_ids),
-                            trajectories=trajectories_text
-                        )
-                    else:
-                        prompt = UPDATE_BATCH_PROMPT_GENERAL.format(
-                            current_policy=current_policy,
-                            num_traj=len(batch_task_ids),
-                            trajectories=trajectories_text
-                        )
-                
-                # Call LLM
-                print(f"Calling {model_name}...")
-                response = call_llm(prompt, model_name)
-        
-                # Check if update was made (for non-initial batches)
-                if batch_idx > 0 and response.strip() == "No":
-                    print(f"No update needed - policy remains unchanged")
-                    updated = False
+                    prompt = UPDATE_BATCH_PROMPT_FLOW_SPECIFIC.format(
+                        current_policy=current_policy,
+                        num_traj=len(batch_task_ids),
+                        trajectories=trajectories_text,
+                        flow_description=flow_desc,
+                        tool_name=tool_name
+                    )
+            else:
+                # General extraction (all flows)
+                if current_policy is None:
+                    prompt = INITIAL_BATCH_PROMPT_GENERAL.format(
+                        num_traj=len(batch_task_ids),
+                        trajectories=trajectories_text
+                    )
                 else:
-                    print(f"Policy extracted/updated (length: {len(response)} chars)")
-                    current_policy = response
-                    updated = True
-                
-                # Record batch
-                refinement_history["iterations"].append({
-                    "batch_num": batch_num,
-                    "task_ids": batch_task_ids,
-                    "updated": updated,
-                    "policy": current_policy
-                })
+                    prompt = UPDATE_BATCH_PROMPT_GENERAL.format(
+                        current_policy=current_policy,
+                        num_traj=len(batch_task_ids),
+                        trajectories=trajectories_text
+                    )
+
+            # Call LLM
+            print(f"Calling {model_name}...")
+            response = call_llm(prompt, model_name)
+
+            print(f"Policy extracted/updated (length: {len(response)} chars)")
+            current_policy = response
+            updated = True
+
+            # Record batch
+            refinement_history["iterations"].append({
+                "batch_num": batch_num,
+                "task_ids": batch_task_ids,
+                "updated": updated,
+                "policy": current_policy
+            })
         
     refinement_history["final_policy"] = current_policy
     
@@ -277,7 +286,7 @@ If an update IS needed, provide the COMPLETE updated policy (do not just describ
         json.dump(refinement_history, f, indent=2)
     
     print(f"\n[Done] Saved refinement history to {output_path}")
-    print(f"Final policy length: {len(current_policy)} chars")
+    print(f"Final policy length: {len(current_policy) if current_policy else 0} chars")
     
     return refinement_history
 
@@ -335,7 +344,13 @@ def main():
         default=1,
         help="Number of times to shuffle the same batch"
     )
-    
+    parser.add_argument(
+        "--max_policy_chars",
+        type=int,
+        default=None,
+        help="Max policy length in characters. Adds a length constraint to the prompt. Off by default."
+    )
+
     args = parser.parse_args()
     
     # Run refinement
@@ -349,6 +364,7 @@ def main():
         success_only=True,
         batch_size=args.batch_size,
         n_shuffle=args.n_shuffle,
+        max_policy_chars=args.max_policy_chars,
     )
 
 
