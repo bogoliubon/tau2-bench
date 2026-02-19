@@ -443,62 +443,83 @@ def format_tool_output(tool_output: str) -> str:
 
             # Direct flight results
             elif isinstance(first, dict) and "flight_number" in first:
-                formatted_parts.append("[bold cyan]Available Flights:[/bold cyan]")
-                table = Table(box=box.SIMPLE, show_header=True)
-                table.add_column("Flight", style="cyan", width=10)
-                table.add_column("Route", style="white", width=12)
-                table.add_column("Date", style="white", width=12)
-                table.add_column("Departure", style="green", width=12)
-                table.add_column("Arrival", style="green", width=12)
-                table.add_column("Business $", style="yellow", width=12, justify="right")
-                table.add_column("Economy $", style="yellow", width=12, justify="right")
-                table.add_column("Basic Eco $", style="yellow", width=12, justify="right")
-                table.add_column("Seats (B/E/BE)", style="dim", width=14, justify="right")
-                for flight in data:
-                    prices = flight.get("prices", {})
-                    seats = flight.get("available_seats", {})
-                    seats_str = f"{seats.get('business', '?')}/{seats.get('economy', '?')}/{seats.get('basic_economy', '?')}"
-                    table.add_row(
-                        flight.get("flight_number", ""),
-                        f"{flight.get('origin', '')} → {flight.get('destination', '')}",
-                        flight.get("date", ""),
-                        flight.get("scheduled_departure_time_est", ""),
-                        flight.get("scheduled_arrival_time_est", ""),
-                        str(prices.get("business", "")),
-                        str(prices.get("economy", "")),
-                        str(prices.get("basic_economy", "")),
-                        seats_str,
-                    )
                 from io import StringIO
                 from rich.console import Console as RichConsole
-                string_console = RichConsole(file=StringIO(), width=140)
+                formatted_parts.append(f"[bold cyan]Available Flights[/bold cyan] [dim]({len(data)} found)[/dim]")
+                table = Table(box=box.SIMPLE_HEAD, show_header=True, header_style="bold", pad_edge=False)
+                table.add_column("#", style="dim", width=3, justify="right")
+                table.add_column("Flight", style="bold cyan", width=9)
+                table.add_column("Route", style="white", width=10)
+                table.add_column("Date", style="white", width=12)
+                table.add_column("Dep → Arr (EST)", style="green", width=20)
+                table.add_column("Business", style="yellow", width=16, justify="right")
+                table.add_column("Economy", style="yellow", width=16, justify="right")
+                table.add_column("Basic Eco", style="yellow", width=16, justify="right")
+
+                def fmt_cabin(prices, seats, cabin):
+                    p = prices.get(cabin, "")
+                    s = seats.get(cabin, "?")
+                    return f"${p} ({s} seats)" if p != "" else "—"
+
+                for i, flight in enumerate(data, 1):
+                    prices = flight.get("prices", {})
+                    seats = flight.get("available_seats", {})
+                    dep = flight.get("scheduled_departure_time_est", "")
+                    arr = flight.get("scheduled_arrival_time_est", "")
+                    table.add_row(
+                        str(i),
+                        flight.get("flight_number", ""),
+                        f"{flight.get('origin', '')}→{flight.get('destination', '')}",
+                        flight.get("date", "") or "—",
+                        f"{dep} → {arr}" if dep or arr else "—",
+                        fmt_cabin(prices, seats, "business"),
+                        fmt_cabin(prices, seats, "economy"),
+                        fmt_cabin(prices, seats, "basic_economy"),
+                    )
+                string_console = RichConsole(file=StringIO(), width=120)
                 string_console.print(table)
                 formatted_parts.append(string_console.file.getvalue())
 
             # One-stop flight results (list of pairs)
             elif isinstance(first, list) and len(first) == 2:
-                formatted_parts.append("[bold cyan]One-Stop Flights:[/bold cyan]")
+                from io import StringIO
+                from rich.console import Console as RichConsole
+                formatted_parts.append(f"[bold cyan]One-Stop Flights[/bold cyan] [dim]({len(data)} options)[/dim]")
+
+                def fmt_cabin(prices, seats, cabin):
+                    p = prices.get(cabin, "")
+                    s = seats.get(cabin, "?")
+                    return f"${p} ({s} seats)" if p != "" else "—"
+
                 for i, (leg1, leg2) in enumerate(data, 1):
-                    formatted_parts.append(f"\n  [bold]Option {i}:[/bold]")
-                    formatted_parts.append(
-                        f"    Leg 1: [cyan]{leg1.get('flight_number', '')}[/cyan] "
-                        f"{leg1.get('origin', '')} → {leg1.get('destination', '')} "
-                        f"on {leg1.get('date', '')} "
-                        f"dep {leg1.get('scheduled_departure_time_est', '')} arr {leg1.get('scheduled_arrival_time_est', '')}"
-                    )
-                    formatted_parts.append(
-                        f"    Leg 2: [cyan]{leg2.get('flight_number', '')}[/cyan] "
-                        f"{leg2.get('origin', '')} → {leg2.get('destination', '')} "
-                        f"on {leg2.get('date', '')} "
-                        f"dep {leg2.get('scheduled_departure_time_est', '')} arr {leg2.get('scheduled_arrival_time_est', '')}"
-                    )
-                    prices1 = leg1.get("prices", {})
-                    prices2 = leg2.get("prices", {})
-                    seats1 = leg1.get("available_seats", {})
-                    seats2 = leg2.get("available_seats", {})
-                    formatted_parts.append(f"    Business:      ${prices1.get('business', 0)} + ${prices2.get('business', 0)}  (seats: {seats1.get('business', '?')} / {seats2.get('business', '?')})")
-                    formatted_parts.append(f"    Economy:       ${prices1.get('economy', 0)} + ${prices2.get('economy', 0)}  (seats: {seats1.get('economy', '?')} / {seats2.get('economy', '?')})")
-                    formatted_parts.append(f"    Basic Economy: ${prices1.get('basic_economy', 0)} + ${prices2.get('basic_economy', 0)}  (seats: {seats1.get('basic_economy', '?')} / {seats2.get('basic_economy', '?')})")
+                    formatted_parts.append(f"\n  [bold]Option {i}[/bold]")
+                    table = Table(box=box.SIMPLE, show_header=True, header_style="bold", show_edge=False, pad_edge=False)
+                    table.add_column("Leg", style="dim", width=5)
+                    table.add_column("Flight", style="bold cyan", width=9)
+                    table.add_column("Route", style="white", width=10)
+                    table.add_column("Date", style="white", width=12)
+                    table.add_column("Dep → Arr (EST)", style="green", width=20)
+                    table.add_column("Business", style="yellow", width=16, justify="right")
+                    table.add_column("Economy", style="yellow", width=16, justify="right")
+                    table.add_column("Basic Eco", style="yellow", width=16, justify="right")
+                    for leg_num, leg in [(1, leg1), (2, leg2)]:
+                        prices = leg.get("prices", {})
+                        seats = leg.get("available_seats", {})
+                        dep = leg.get("scheduled_departure_time_est", "")
+                        arr = leg.get("scheduled_arrival_time_est", "")
+                        table.add_row(
+                            f"✈ {leg_num}",
+                            leg.get("flight_number", ""),
+                            f"{leg.get('origin', '')}→{leg.get('destination', '')}",
+                            leg.get("date", "") or "—",
+                            f"{dep} → {arr}" if dep or arr else "—",
+                            fmt_cabin(prices, seats, "business"),
+                            fmt_cabin(prices, seats, "economy"),
+                            fmt_cabin(prices, seats, "basic_economy"),
+                        )
+                    string_console = RichConsole(file=StringIO(), width=120)
+                    string_console.print(table)
+                    formatted_parts.append(string_console.file.getvalue())
             else:
                 formatted_parts.append(json.dumps(data, indent=2))
 
