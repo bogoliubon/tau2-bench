@@ -453,8 +453,11 @@ def format_tool_output(tool_output: str) -> str:
                 table.add_column("Business $", style="yellow", width=12, justify="right")
                 table.add_column("Economy $", style="yellow", width=12, justify="right")
                 table.add_column("Basic Eco $", style="yellow", width=12, justify="right")
+                table.add_column("Seats (B/E/BE)", style="dim", width=14, justify="right")
                 for flight in data:
                     prices = flight.get("prices", {})
+                    seats = flight.get("available_seats", {})
+                    seats_str = f"{seats.get('business', '?')}/{seats.get('economy', '?')}/{seats.get('basic_economy', '?')}"
                     table.add_row(
                         flight.get("flight_number", ""),
                         f"{flight.get('origin', '')} → {flight.get('destination', '')}",
@@ -464,10 +467,11 @@ def format_tool_output(tool_output: str) -> str:
                         str(prices.get("business", "")),
                         str(prices.get("economy", "")),
                         str(prices.get("basic_economy", "")),
+                        seats_str,
                     )
                 from io import StringIO
                 from rich.console import Console as RichConsole
-                string_console = RichConsole(file=StringIO(), width=120)
+                string_console = RichConsole(file=StringIO(), width=140)
                 string_console.print(table)
                 formatted_parts.append(string_console.file.getvalue())
 
@@ -476,12 +480,25 @@ def format_tool_output(tool_output: str) -> str:
                 formatted_parts.append("[bold cyan]One-Stop Flights:[/bold cyan]")
                 for i, (leg1, leg2) in enumerate(data, 1):
                     formatted_parts.append(f"\n  [bold]Option {i}:[/bold]")
-                    formatted_parts.append(f"    Leg 1: [cyan]{leg1.get('flight_number', '')}[/cyan] {leg1.get('origin', '')} → {leg1.get('destination', '')} on {leg1.get('date', '')} at {leg1.get('scheduled_departure_time_est', '')}")
-                    formatted_parts.append(f"    Leg 2: [cyan]{leg2.get('flight_number', '')}[/cyan] {leg2.get('origin', '')} → {leg2.get('destination', '')} on {leg2.get('date', '')} at {leg2.get('scheduled_departure_time_est', '')}")
+                    formatted_parts.append(
+                        f"    Leg 1: [cyan]{leg1.get('flight_number', '')}[/cyan] "
+                        f"{leg1.get('origin', '')} → {leg1.get('destination', '')} "
+                        f"on {leg1.get('date', '')} "
+                        f"dep {leg1.get('scheduled_departure_time_est', '')} arr {leg1.get('scheduled_arrival_time_est', '')}"
+                    )
+                    formatted_parts.append(
+                        f"    Leg 2: [cyan]{leg2.get('flight_number', '')}[/cyan] "
+                        f"{leg2.get('origin', '')} → {leg2.get('destination', '')} "
+                        f"on {leg2.get('date', '')} "
+                        f"dep {leg2.get('scheduled_departure_time_est', '')} arr {leg2.get('scheduled_arrival_time_est', '')}"
+                    )
                     prices1 = leg1.get("prices", {})
                     prices2 = leg2.get("prices", {})
-                    formatted_parts.append(f"    Business: ${prices1.get('business', 0)} + ${prices2.get('business', 0)}")
-                    formatted_parts.append(f"    Economy: ${prices1.get('economy', 0)} + ${prices2.get('economy', 0)}")
+                    seats1 = leg1.get("available_seats", {})
+                    seats2 = leg2.get("available_seats", {})
+                    formatted_parts.append(f"    Business:      ${prices1.get('business', 0)} + ${prices2.get('business', 0)}  (seats: {seats1.get('business', '?')} / {seats2.get('business', '?')})")
+                    formatted_parts.append(f"    Economy:       ${prices1.get('economy', 0)} + ${prices2.get('economy', 0)}  (seats: {seats1.get('economy', '?')} / {seats2.get('economy', '?')})")
+                    formatted_parts.append(f"    Basic Economy: ${prices1.get('basic_economy', 0)} + ${prices2.get('basic_economy', 0)}  (seats: {seats1.get('basic_economy', '?')} / {seats2.get('basic_economy', '?')})")
             else:
                 formatted_parts.append(json.dumps(data, indent=2))
 
