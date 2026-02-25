@@ -72,10 +72,16 @@ def batch_policy_refinement(
         # use all successful tasks
         with open(results_path, "r") as f:
             data = json.load(f)
-        task_ids = [result["task_id"] for result in data if result["reward"] > 0.0]  
+        task_ids = [result["task_id"] for result in data if result["reward"] > 0.0]
+
+    elif tool_name is None and not success_only:
+        # use all tasks (successful and failed)
+        with open(results_path, "r") as f:
+            data = json.load(f)
+        task_ids = [result["task_id"] for result in data]
 
     else:
-        raise NotImplementedError("Only success_only=True is supported currently")
+        raise NotImplementedError("Unsupported filter combination")
             
     if len(task_ids) < n_traj:
         print(f"[warning] Only {len(task_ids)} tasks available, requested {n_traj}")
@@ -103,11 +109,9 @@ def batch_policy_refinement(
     current_policy = None
     
     # Shared extraction instructions
-    EXTRACTION_INSTRUCTIONS = """Your task is to reconstruct the agent's operational policy as a set of explicit decision rules.
+    EXTRACTION_INSTRUCTIONS = """Your task is to write an actionable operational policy for a customer service agent, based on the provided trajectories. This policy will be injected into the agent's system prompt as its operating instructions.
 
-Do NOT summarize the behavior.
-Do NOT describe general strategies.
-Instead, infer the concrete decision procedure that maps:
+Infer the concrete decision procedure that maps:
   (conversation state, retrieved information, system state) → next action
 
 Only extract rules supported by trajectory evidence.
@@ -124,26 +128,6 @@ Each rule must be:
 - Based only on observable evidence
 - Written as concrete instructions
 - Free of abstraction
-
-Avoid vague statements such as:
-- "The agent verifies information."
-- "The agent ensures correctness."
-
-Extraction Requirements:
-- If clarification is requested before acting, infer the missing precondition.
-- If a tool call occurs, infer: required prior information, why it was valid at that moment, conditions under which it would be invalid.
-- If tools are called in sequence, infer their dependency structure.
-- If multiple candidate entities exist, infer the selection procedure.
-- If confirmation occurs before execution, determine whether it is mandatory.
-- If system state changes, encode the state-dependent rule explicitly.
-
-Group rules into:
-1. Information Gathering Rules
-2. Selection Rules
-3. Action Execution Rules
-4. Confirmation Rules
-5. Tool Usage Constraints
-6. State-Dependent Rules
 
 Do not introduce domain-specific assumptions beyond the trajectory.{length_constraint}"""
 
@@ -350,9 +334,14 @@ def main():
         default=None,
         help="Max policy length in characters. Adds a length constraint to the prompt. Off by default."
     )
+    parser.add_argument(
+        "--include_failed",
+        action="store_true",
+        help="Include failed trajectories (default: only successful ones)"
+    )
 
     args = parser.parse_args()
-    
+
     # Run refinement
     batch_policy_refinement(
         results_path=args.results_path,
@@ -361,7 +350,7 @@ def main():
         model_name=args.model_name,
         output_path=args.output_path,
         seed=args.seed,
-        success_only=True,
+        success_only=not args.include_failed,
         batch_size=args.batch_size,
         n_shuffle=args.n_shuffle,
         max_policy_chars=args.max_policy_chars,

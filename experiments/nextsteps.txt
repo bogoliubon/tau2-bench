@@ -24,43 +24,90 @@ Failure categories:
      desk lamp → cancel everything, return water bottle). Agent executed desk lamp
      exchange too eagerly on first confirmation, corrupting DB. Should have waited
      for full negotiation before committing irreversible actions.
-   - Task 86: Used exchange instead of modifyt
-   - Task 111: Used exchange on a pending order (got error, then gave up instead
-     of trying modify). User said "exchange" which misled the agent — agent should
-     check order status, not trust user wording.
+   - Task 86: User said "exchange" Fleece Jacket. Order #W2466703 was pending, not
+     delivered. Agent used exchange_delivered_order_items → error. Also never looked
+     up product catalog for red/half-zipper variant (used same item ID for old and new).
+     After error, told user "wait until delivered" instead of trying modify_pending_order_items.
+     Address update succeeded. Same pattern as task 111.
+   - Task 111: User wanted to "exchange" watch for black dial + keep leather strap.
+     Watch was on pending order #W9810810. Agent used exchange_delivered_order_items →
+     error "Non-delivered order cannot be exchanged." Also used same item ID for old
+     and new (never looked up wristwatch product for black dial variant 9949163720).
+     After error, told user "wait until delivered" instead of trying modify_pending_order_items.
+     User said "exchange" which misled agent. Laptop address change + specs modification
+     both succeeded correctly.
 
 2. WRONG ORDER ID
    - Task 26: User said "sent to Texas by mistake." Agent only checked 2 of 4 orders,
      both shipped to Jacksonville FL. Ignored the Texas clue, picked wrong order,
      returned all 5 items from it. Should have checked all orders and matched shipping
      address to user's description. Also never escalated to human for amex refund.
-   - Task 53: Operated on wrong order entirely
-   - Task 94: Operated on wrong order entirely
+   - Task 53: User wanted to return a damaged bicycle. Agent checked only 1 of 4
+     orders, which didn't even have a bicycle — it had a "Cycling Helmet." Agent
+     confused cycling helmet for bicycle and returned wrong item from wrong order.
+     Should have checked all orders to find the one with the actual bicycle.
+   - Task 94: User had TWO laptops across different orders. GT expected exchange on
+     order #W2905754 (15"/i5/16GB/512GB SSD, item 3478699712). Agent only checked
+     order #W4073673 which had a different laptop (15"/i5/32GB/256GB SSD, item
+     2216662955). Exchanged wrong laptop from wrong order. User instruction said
+     "if agent asks which laptop, it's 15-inch, 16GB" but agent never asked —
+     should have checked all orders or disambiguated.
 
 3. HALLUCINATED / WRONG ADDRESS
-   - Task 97: Used fake address instead of looking it up from user's orders
-   - Task 101: Hallucinated "123 Main St, Apt 1" — address exists nowhere in user
-     data. User twice asked to copy from another order; agent fabricated one instead. (hard instruction to follow)
+   - Task 97: User said "update to my NYC address — the one from my other order."
+     Agent never checked order #W3407479 (which had the NYC address: 476 Maple Drive,
+     Suite 432, New York, NY 10093). Instead hallucinated "123 Main St, Apt 1, New York,
+     NY 10001" — a completely fabricated address. Item exchange succeeded correctly but
+     the wrong address corrupted the DB. Same pattern as task 101.
+   - Task 101: User wanted NYC address from "my other order" for watch order. Agent
+     checked orders #W6729841 and #W4219264 but never checked #W3445693 (which had the
+     NYC address: 144 Lakeview Drive, Suite 925, New York, NY 10228). First try: used
+     existing Seattle address (no change). Second try: hallucinated "123 Main St, Apt 1,
+     New York, NY 10001." User asked TWICE to copy from other order; agent fabricated
+     instead. Item modifications (watch → metal/white, air purifier → large/HEPA/night)
+     both succeeded. Hard instruction — user refused to reveal address directly.
 
 4. WRONG ITEM VARIANT (close but not exact match)
    - Task 100: Picked red hardshell instead of red softshell (user said "exact same
      but red" — agent changed material too). Also wrong payment method.
 
 5. EXTRA / REPEATED DESTRUCTIVE ACTIONS
-   - Task 33: Cancelled order user asked for, but GT doesn't include it. Possible
-     GT annotation bug.
-   - Task 71: Tried modify with wrong item_ids first, corrupted DB state.
-   - Task 36: Called modify_pending_order_items 4x with wrong args.
+   - Task 33: User wanted to cancel only office items (keyboard, headphones, chair)
+     and keep hiking gear (boots, helmet). Agent told user it could cancel individual
+     items and called cancel_pending_order — which cancelled the ENTIRE order (all 5
+     items). Then lied: "office items cancelled, hiking gear will still be shipped."
+     GT expected NO cancellation at all — the user instruction says "if partial cancel
+     isn't possible, just keep the order and change default address to Seattle." Agent
+     should have recognized partial cancellation is impossible and offered the fallback.
+     NOT a GT annotation bug.
+   - Task 71: User asked to change address + backpack + desk lamp with gift card.
+     Agent executed all at once. User then revised: "only backpack, use PayPal, leave
+     desk lamp." Too late — modify_pending_order_items already called (one-shot),
+     order no longer modifiable. DB has unwanted desk lamp change + wrong payment.
+   - Task 36: User wanted all items switched to cheapest. Agent tried to modify all
+     5 items but 2 were already cheapest (umbrella, backpack). First call used an
+     unavailable item. Next 2 calls tried swapping items to themselves. 4th call
+     succeeded with wrong IDs. Should have excluded already-cheapest items and made
+     one correct call. modify_pending_order_items can only be called once.
 
 6. DIDN'T ASK USER FOR REQUIRED INFO
    - Task 100: Never asked which payment method for price difference (policy says
      "user must provide"). D2efaulted to original.
-   - Task 38: Wrong calculate expression and wrong cancellation reason.
+   - Task 74: Never asked which payment method for laptop exchange price difference.
+     Defaulted to PayPal, GT expected credit card. Also fired modify + cancel in
+     parallel without final confirmation of details.
+   - Task 38: Agent told user it could cancel individual items (it can't — only
+     whole order). Cancelled entire order when user only wanted to drop the camera.
+     Used reason "ordered by mistake" (user's words) but GT expected "no longer
+     needed" after exhausting all options (split payment → cancel item → cheapest
+     options → cancel order). Agent shortcut the decision tree.
 
 7. AGENT GAVE UP AFTER ERROR
-   - Task 111: After exchange failed on pending order, told user "wait until
-     delivered" instead of using modify_pending_order_items.
-   - Task 74: Action checks pass but order-of-operations issue.
+   - Task 111: After exchange_delivered_order_items failed on pending order, told user
+     "wait until delivered" instead of trying modify_pending_order_items. Also never
+     looked up product catalog for black dial variant.
+   - Task 86: Same pattern — exchange_delivered_order_items failed on pending order,
+     agent told user "wait until delivered" instead of trying modify_pending_order_items.
 
 Key insights:
 - reward = DB_reward x COMMUNICATE_reward (ACTION checks don't affect score)
