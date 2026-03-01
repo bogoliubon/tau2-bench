@@ -118,17 +118,18 @@ class AirlineTools(ToolKitBase):  # Tools
         """
         results = []
         for flight in self.db.flights.values():
-            check = (
-                (origin is None or flight.origin == origin)
-                and (destination is None or flight.destination == destination)
-                and (date in flight.dates)
-                and (flight.dates[date].status == "available")
-                and (
-                    leave_after is None
-                    or flight.scheduled_departure_time_est >= leave_after
-                )
-            )
-            if check:
+            if not (origin is None or flight.origin == origin):
+                continue
+            if not (destination is None or flight.destination == destination):
+                continue
+            dates_to_check = flight.dates.keys() if date == "*" else [date]
+            for d in dates_to_check:
+                if d not in flight.dates:
+                    continue
+                if flight.dates[d].status != "available":
+                    continue
+                if leave_after is not None and flight.scheduled_departure_time_est < leave_after:
+                    continue
                 direct_flight = DirectFlight(
                     flight_number=flight.flight_number,
                     origin=flight.origin,
@@ -136,8 +137,9 @@ class AirlineTools(ToolKitBase):  # Tools
                     status="available",
                     scheduled_departure_time_est=flight.scheduled_departure_time_est,
                     scheduled_arrival_time_est=flight.scheduled_arrival_time_est,
-                    available_seats=flight.dates[date].available_seats,
-                    prices=flight.dates[date].prices,
+                    available_seats=flight.dates[d].available_seats,
+                    prices=flight.dates[d].prices,
+                    date=d,
                 )
                 results.append(direct_flight)
         return results
@@ -439,10 +441,10 @@ class AirlineTools(ToolKitBase):  # Tools
         Args:
             origin: The origin city airport in three letters, such as 'JFK'.
             destination: The destination city airport in three letters, such as 'LAX'.
-            date: The date of the flight in the format 'YYYY-MM-DD', such as '2024-01-01'.
+            date: The date of the flight in the format 'YYYY-MM-DD', such as '2024-01-01'. Use '*' to search all dates.
 
         Returns:
-            The direct flights between the two cities on the specific date.
+            The direct flights between the two cities on the specific date (or all dates if '*').
         """
         return self._search_direct_flight(
             date=date, origin=origin, destination=destination

@@ -1,0 +1,158 @@
+AIRLINE TASKS - MODIFICATIONS AND ISSUES LOG
+=============================================
+
+MODIFICATIONS MADE:
+-------------------
+
+1. Task 5: Updated evaluation criteria — original ground truth was incorrect (CHANGES REWARD)
+   - Original: Only expected get_user_details; asserted "Agent does not offer any compensation."
+   - Issue: The user's reservation 3JA7XV is business class with a confirmed delayed flight (HAT045).
+     Per policy, business class passengers qualify for compensation regardless of membership level.
+     Delay compensation = $50 x number of passengers = $50 x 4 = $200 certificate.
+     Policy requires changing or cancelling the reservation before issuing compensation.
+   - Added actions:
+     - get_reservation_details(reservation_id="3JA7XV")
+     - cancel_reservation(reservation_id="3JA7XV")
+     - send_certificate(user_id="mei_brown_7075", amount=200)
+   - Updated nl_assertions:
+     - Kept: "Agent identifies that user is not a Gold member but a Regular member."
+     - Added: "Agent confirms the flight is delayed and the reservation is business class."
+     - Added: "Agent cancels the reservation and offers a $200 travel certificate ($50 x 4 passengers) for the delayed flight."
+     - Removed: "Agent does not offer any compensation." (incorrect per policy)
+   - Reasoning: Policy says "Only compensate if the user is a silver/gold member or has travel insurance or flies business."
+     User flies business, so compensation is allowed. Policy also says delay compensation is offered
+     "after confirming the facts and changing or cancelling the reservation."
+
+2. Task 7: Updated evaluation criteria — original ground truth expected cancellations that violate policy (CHANGES REWARD)
+   - Original: Expected upgrade XEHM4B to economy, cancel XEHM4B, cancel 59XX6W.
+   - Issue: Neither reservation meets cancellation criteria.
+     XEHM4B: basic economy, no insurance, created 2024-05-01 (14 days ago), not business, flights not cancelled.
+       Upgrading cabin from basic_economy to economy does not satisfy any cancellation criterion.
+       Still fails: past 24hrs, no insurance, not business, flights not cancelled by airline.
+     59XX6W: economy, has insurance, created 2024-05-12 (3 days ago), not business.
+       Has insurance but user stated "no specific reason" for cancellation.
+       Insurance only covers health/weather reasons — change of plans is not covered.
+   - Removed actions:
+     - update_reservation_flights (cabin upgrade XEHM4B — upgrading to economy doesn't enable cancellation)
+     - cancel_reservation(reservation_id="XEHM4B")
+     - cancel_reservation(reservation_id="59XX6W")
+   - Added actions:
+     - get_user_details(user_id="daiki_muller_1116")
+   - Updated nl_assertions:
+     - Removed: "Agent upgrades XEHM4B to economy.", "Agent cancels XEHM4B.", "Agent cancels 59XX6W."
+     - Added: "Agent refuses to cancel XEHM4B (basic economy, no insurance, not business, past 24hrs, flights not cancelled by airline)."
+     - Added: "Agent refuses to cancel 59XX6W (user provides no covered reason for insurance — change of plans is not covered)."
+     - Kept: "Agent communicates that total cost of upcoming flights is $1,628."
+   - Updated user instructions:
+     - Removed: "If the agent says either of the two reservations is basic economy, ask to upgrade to economy first and then cancel the reservation."
+       Reason: Upgrading from basic economy to economy does not enable cancellation, so asking for this is misleading.
+     - Added: "If the agent asks for a reason for cancellation, say it is due to a change of plans."
+       Reason: Ensures a consistent cancellation reason is given. Change of plans is not covered by insurance.
+   - Reasoning: Policy cancellation requires one of: within 24hrs, airline cancelled, business class, or insurance+covered reason.
+     XEHM4B: basic economy, no insurance, past 24hrs, not business, flights not cancelled → no criterion met.
+     59XX6W: has insurance but change of plans is not covered (only health/weather) → no criterion met.
+     Original ground truth incorrectly assumed upgrading cabin enables cancellation and did not require a cancellation reason.
+
+3. Task 9: Updated evaluation criteria — NQNU5R flights already landed (CHANGES REWARD)
+   - Original: Expected cancel_reservation(NQNU5R) and search_direct_flight only.
+   - Issue: NQNU5R's flights (HAT214 on 2024-05-13, HAT045 on 2024-05-14) have status "landed" in the database.
+     Policy: "If any portion of the flight has already been flown, the agent cannot help and transfer is needed."
+     The get_flight_status tool returns the status from the DB. Both flights are landed = already flown.
+     Note: DB contains statuses: available, landed, cancelled, on time, flying, delayed.
+     "landed" is not documented in policy.md but exists in the data and clearly means the flight is complete.
+   - Removed actions:
+     - cancel_reservation(reservation_id="NQNU5R")
+   - Added actions:
+     - get_user_details(user_id="aarav_ahmed_6699")
+     - get_reservation_details for IFOYYZ, NQNU5R, M20IZO
+   - Updated nl_assertions:
+     - Removed: "Check that Agent cancelled NQNU5R."
+     - Added: "Agent does not cancel NQNU5R (flights are landed — already flown). Agent should transfer to human agent."
+     - Fixed: "May 12" → "May 22" in search assertion (typo in original)
+   - Reasoning: Both flights have "landed" status. Agent cannot help with already-flown flights per policy.
+
+4. Task 14: Fixed communicate_info, user instruction, and added single-reservation preference (CHANGES USER BEHAVIOUR/REWARD)
+   - Issue 1: communicate_info said "$44" and assertion said "$44 charged to mastercard",
+     but booking is for 3 passengers: total $2,613, Mastercard charge $1,786.
+     "$44" was per-person math ($871 - $500 - $327). Also, user instruction said
+     "only book if MC charge < original flight charge ($567)" — $1,786 > $567 would
+     cause customer to refuse, contradicting the expected booking.
+   - Updated communicate_info: ["327", "1000", "44"] → ["327", "1000", "1786"]
+   - Updated nl_assertion: "$44 charged to mastercard" → "$1,786 charged to mastercard"
+   - Updated user instruction: changed "less charges than original flight" to
+     "less than $2,000 in charges to your master card" ($1,786 < $2,000 → customer proceeds)
+   - Issue 2: Without guidance, "minimize MC payment" + "use certificates as much as possible"
+     would logically lead to 3 separate bookings (one per passenger, using all 3 certificates)
+     for $1,286 MC instead of $1,786. Task 23 tests that optimal approach.
+   - Added: "You prefer to have all three passengers in a single reservation for simplicity."
+     This makes the 1-booking GT ($1,786 MC) consistent with user intent.
+   - Ground truth booking unchanged (3 passengers, payments totaling $2,613).
+
+5. Task 17: Clarified gift card preference in user instruction (CHANGES USER BEHAVIOUR)
+   - Original: "You prefer gift card payment."
+   - Modified: "You prefer to use your gift card with the higher balance for payment."
+   - Reason: User has two gift cards (gift_card_8190333 $280, gift_card_6490722 $127).
+     Original instruction was ambiguous — didn't specify which gift card.
+     Ground truth expects gift_card_8190333 ($280). Updated to ensure deterministic choice.
+
+6. Task 21: Added baggage payment method hint to user instruction (CHANGES USER BEHAVIOUR)
+   - Added: "If the agent asks for a payment method for the baggage update, use the same gift card that was used for the flight change."
+   - Reason: GT expects gift_card_6276644 for both flight change and baggage update.
+     Baggage is free (Silver + economy = 2 free bags), but API requires a payment_id.
+     Without guidance, user sim might pick a different gift card (e.g. $6 one), causing reward 0.
+
+7. Task 23: Fixed passenger names in user instruction and ground truth (CHANGES USER BEHAVIOUR/REWARD)
+   - User instruction: "Aarav" → "Raj", "Evelyn" → "Liam"
+   - Ground truth passengers: "Aarav Sanchez" → "Raj Sanchez", "Evelyn Wilson" → "Liam Wilson"
+   - Updated nl_assertions to match new names
+   - Reason: Saved passengers in user profile are Raj Sanchez and Liam Wilson.
+     GT had different first names with no user instruction to change them.
+     Agent has no way to infer "Aarav" maps to "Raj Sanchez" from saved passengers.
+
+8. Task 27: Changed from send_certificate to transfer_to_human_agent (CHANGES REWARD)
+   - Removed action: send_certificate(user_id="ethan_martin_2396", amount=150)
+   - Added action: transfer_to_human_agent
+   - Updated nl_assertions: removed certificate issuance, added policy explanation and transfer
+   - Reason: Policy line 165 requires cancelling/changing reservation before issuing delay
+     compensation. But reservation M61CQM cannot be cancelled: economy class, no insurance,
+     created May 5 (past 24hrs), flight delayed but not cancelled by airline — no cancellation
+     criterion met. Since compensation cannot be issued within policy constraints, agent must
+     transfer to human agent per policy line 15.
+
+9. Task 33: Fixed baggage cost — bags are free for gold member in economy (CHANGES REWARD)
+   - Original: nonfree_baggages=2, assertion "Agent add 2 non-free baggages to reservation HXDUBJ."
+   - Issue: User is a gold member with economy class. Gold + economy = 3 free checked bags per passenger.
+     User wants 2 bags, which is within the free allowance. nonfree_baggages should be 0, not 2.
+   - Updated action: nonfree_baggages: 2 → 0
+   - Updated nl_assertion: "Agent add 2 non-free baggages" → "Agent adds 2 checked bags (both free for gold member in economy)."
+   - Reasoning: Policy says gold members get 3 free checked bags in economy. 2 ≤ 3 → all free.
+
+10. Task 38: Clarified which reservation in user instruction (CHANGES USER BEHAVIOUR)
+   - Original: "say that it is the last reservation" / "delayed flight in your most recent reservation"
+   - Issue: User has two reservations: SDZQKO (created May 13) and 4OG6T3 (created May 9).
+     "Last" / "most recent" would point to SDZQKO, but GT expects 4OG6T3 (the older one).
+   - Updated task_instructions: "last reservation" → "older reservation (not the most recent one)"
+   - Updated reason_for_call: "most recent reservation" → "older reservation"
+   - Reasoning: GT expects 4OG6T3 which is the older reservation. Original wording was ambiguous/incorrect.
+
+11. Task 39: Removed MSJ4OA cancellation — insurance reason not covered (CHANGES REWARD)
+   - Original: Expected cancel_reservation(reservation_id="MSJ4OA") and assertion "Agent cancels reservation MSJ4OA."
+   - Issue: MSJ4OA is economy with insurance. Customer's reason for cancellation is "giving up seat
+     for someone else" — not a covered insurance reason (only health/weather are covered).
+     Policy line 147: "The user has travel insurance and the reason for cancellation is covered by insurance."
+   - Removed action: cancel_reservation(reservation_id="MSJ4OA")
+   - Updated nl_assertion: "Agent cancels reservation MSJ4OA." →
+     "Agent refuses to cancel MSJ4OA (economy, insurance present but reason 'giving up seat' is not covered)."
+   - Reasoning: Insurance only covers health/weather reasons. "Giving up seat" is not covered.
+
+CODE CHANGES:
+-------------
+
+1. search_direct_flight wildcard date support
+   - File: src/tau2/domains/airline/tools.py, method _search_direct_flight
+   - Change: When date="*", search across all available dates instead of a single date.
+     Returns DirectFlight objects with the date field populated for each matching date.
+   - Reason: The original tool required a specific date, making it impossible to check if a
+     direct flight exists on any date for a given route. This is needed when modifying
+     reservations where the user wants a nonstop flight but doesn't specify a date.
+   - Backward compatible: Non-wildcard date queries behave exactly as before.

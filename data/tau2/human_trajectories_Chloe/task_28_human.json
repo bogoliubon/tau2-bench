@@ -1,0 +1,546 @@
+{
+  "id": "27ed6068-0283-479f-ad29-1f1688799705",
+  "task_id": "28",
+  "timestamp": "2026-02-06T15:18:17.302768",
+  "start_time": "2026-02-06T15:13:32.368527",
+  "end_time": "2026-02-06T15:18:17.302718",
+  "duration": 284.95930454100017,
+  "termination_reason": "user_stop",
+  "agent_cost": null,
+  "user_cost": null,
+  "reward_info": null,
+  "messages": [
+    {
+      "role": "assistant",
+      "content": "Hi! How can I help you today?",
+      "tool_calls": null,
+      "turn_idx": 0,
+      "timestamp": "2026-02-06T15:13:32.369613",
+      "cost": 0.0,
+      "usage": null,
+      "raw_data": null
+    },
+    {
+      "role": "user",
+      "content": "Hi, I want to return a skateboard, garden hose, backpack, keyboard, and bed from my last order. Also, I want to cancel the hose from a new order I just placed. How much refund will I get after all this?",
+      "tool_calls": null,
+      "turn_idx": 1,
+      "timestamp": "2026-02-06T15:13:33.737195",
+      "cost": 0.001232,
+      "usage": {
+        "completion_tokens": 49,
+        "prompt_tokens": 420
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Hi, I want to return a skateboard, garden hose, backpack, keyboard, and bed from my last order. Also, I want to cancel the hose from a new order I just placed. How much refund will I get after all this?",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "please give me your name and zip",
+      "tool_calls": null,
+      "turn_idx": 2,
+      "timestamp": "2026-02-06T15:13:41.828232",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "please give me your name and zip"
+      }
+    },
+    {
+      "role": "user",
+      "content": "Isabella Johansson, 32286.",
+      "tool_calls": null,
+      "turn_idx": 3,
+      "timestamp": "2026-02-06T15:13:42.445997",
+      "cost": 0.001032,
+      "usage": {
+        "completion_tokens": 8,
+        "prompt_tokens": 484
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Isabella Johansson, 32286.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Isabella",
+            "last_name": "Johansson",
+            "zip": "32286"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 4,
+      "timestamp": "2026-02-06T15:14:01.617190",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "find_user_id_by_name_zip(first_name='Isabella', last_name='Johansson', zip='32286')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "isabella_johansson_2152",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 5,
+      "timestamp": "2026-02-06T15:14:01.618552"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_user_details",
+          "arguments": {
+            "user_id": "isabella_johansson_2152"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 6,
+      "timestamp": "2026-02-06T15:14:08.081745",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_user_details(user_id='isabella_johansson_2152')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"user_id\": \"isabella_johansson_2152\", \"name\": {\"first_name\": \"Isabella\", \"last_name\": \"Johansson\"}, \"address\": {\"address1\": \"313 Chestnut Street\", \"address2\": \"Suite 537\", \"city\": \"Jacksonville\", \"country\": \"USA\", \"state\": \"FL\", \"zip\": \"32286\"}, \"email\": \"isabella.johansson9391@example.com\", \"payment_methods\": {\"paypal_3024827\": {\"source\": \"paypal\", \"id\": \"paypal_3024827\"}}, \"orders\": [\"#W3792453\", \"#W7181492\", \"#W5565470\", \"#W2575533\"]}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 7,
+      "timestamp": "2026-02-06T15:14:08.082828"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W3792453"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 8,
+      "timestamp": "2026-02-06T15:14:14.926349",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_order_details(order_id='#W3792453')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"order_id\": \"#W3792453\", \"user_id\": \"isabella_johansson_2152\", \"address\": {\"address1\": \"313 Chestnut Street\", \"address2\": \"Suite 537\", \"city\": \"Jacksonville\", \"country\": \"USA\", \"state\": \"FL\", \"zip\": \"32286\"}, \"items\": [{\"name\": \"Skateboard\", \"product_id\": \"1968349452\", \"item_id\": \"4293355847\", \"price\": 200.8, \"options\": {\"deck material\": \"bamboo\", \"length\": \"31 inch\", \"design\": \"plain\"}}], \"status\": \"delivered\", \"fulfillments\": [{\"tracking_id\": [\"908856694334\"], \"item_ids\": [\"4293355847\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 200.8, \"payment_method_id\": \"paypal_3024827\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 9,
+      "timestamp": "2026-02-06T15:14:14.927675"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W7181492"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 10,
+      "timestamp": "2026-02-06T15:14:22.520459",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_order_details(order_id='#W7181492')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"order_id\": \"#W7181492\", \"user_id\": \"isabella_johansson_2152\", \"address\": {\"address1\": \"313 Chestnut Street\", \"address2\": \"Suite 537\", \"city\": \"Jacksonville\", \"country\": \"USA\", \"state\": \"FL\", \"zip\": \"32286\"}, \"items\": [{\"name\": \"Garden Hose\", \"product_id\": \"6679515468\", \"item_id\": \"5753502325\", \"price\": 96.35, \"options\": {\"length\": \"25ft\", \"material\": \"rubber\", \"color\": \"green\"}}, {\"name\": \"Backpack\", \"product_id\": \"2524789262\", \"item_id\": \"9851293632\", \"price\": 193.38, \"options\": {\"color\": \"green\", \"size\": \"small\", \"material\": \"polyester\", \"compartment\": \"camera\"}}, {\"name\": \"Bookshelf\", \"product_id\": \"8600330539\", \"item_id\": \"3778705663\", \"price\": 473.48, \"options\": {\"material\": \"metal\", \"color\": \"black\", \"height\": \"6 ft\"}}, {\"name\": \"Hiking Boots\", \"product_id\": \"7363354090\", \"item_id\": \"8118291112\", \"price\": 260.56, \"options\": {\"size\": \"12\", \"material\": \"leather\", \"waterproof\": \"no\"}}, {\"name\": \"Coffee Maker\", \"product_id\": \"7996920482\", \"item_id\": \"3020722515\", \"price\": 238.64, \"options\": {\"color\": \"black\", \"capacity\": \"1 cup\", \"type\": \"french press\", \"features\": \"auto shutoff\"}}], \"status\": \"delivered\", \"fulfillments\": [{\"tracking_id\": [\"418708581751\"], \"item_ids\": [\"5753502325\", \"9851293632\", \"3778705663\", \"8118291112\", \"3020722515\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1262.41, \"payment_method_id\": \"paypal_3024827\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 11,
+      "timestamp": "2026-02-06T15:14:22.521680"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W5565470"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 12,
+      "timestamp": "2026-02-06T15:14:30.046043",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_order_details(order_id='#W5565470')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"order_id\": \"#W5565470\", \"user_id\": \"isabella_johansson_2152\", \"address\": {\"address1\": \"812 Cedar Avenue\", \"address2\": \"Suite 500\", \"city\": \"Houston\", \"country\": \"USA\", \"state\": \"TX\", \"zip\": \"77129\"}, \"items\": [{\"name\": \"Electric Kettle\", \"product_id\": \"1075968781\", \"item_id\": \"7602931732\", \"price\": 153.25, \"options\": {\"capacity\": \"1L\", \"material\": \"stainless steel\", \"color\": \"black\"}}, {\"name\": \"Mechanical Keyboard\", \"product_id\": \"1656367028\", \"item_id\": \"9570044148\", \"price\": 231.37, \"options\": {\"switch type\": \"linear\", \"backlight\": \"none\", \"size\": \"full size\"}}, {\"name\": \"Pet Bed\", \"product_id\": \"2747247837\", \"item_id\": \"6857426243\", \"price\": 196.53, \"options\": {\"size\": \"medium\", \"material\": \"fleece\", \"color\": \"grey\"}}], \"status\": \"delivered\", \"fulfillments\": [{\"tracking_id\": [\"907614527588\"], \"item_ids\": [\"7602931732\", \"9570044148\", \"6857426243\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 581.15, \"payment_method_id\": \"paypal_3024827\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 13,
+      "timestamp": "2026-02-06T15:14:30.047140"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W2575533"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 14,
+      "timestamp": "2026-02-06T15:14:42.199012",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_order_details(order_id='#W2575533')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"order_id\": \"#W2575533\", \"user_id\": \"isabella_johansson_2152\", \"address\": {\"address1\": \"313 Chestnut Street\", \"address2\": \"Suite 537\", \"city\": \"Jacksonville\", \"country\": \"USA\", \"state\": \"FL\", \"zip\": \"32286\"}, \"items\": [{\"name\": \"Vacuum Cleaner\", \"product_id\": \"1762337868\", \"item_id\": \"4806644905\", \"price\": 658.89, \"options\": {\"type\": \"robotic\", \"bagged/bagless\": \"bagless\", \"features\": \"cordless\"}}, {\"name\": \"Portable Charger\", \"product_id\": \"6942297802\", \"item_id\": \"8349903180\", \"price\": 102.07, \"options\": {\"capacity\": \"20000mAh\", \"output\": \"Wireless\", \"color\": \"black\"}}, {\"name\": \"E-Reader\", \"product_id\": \"3801771308\", \"item_id\": \"9494281769\", \"price\": 252.06, \"options\": {\"screen size\": \"8-inch\", \"connectivity\": \"Wi-Fi\", \"storage\": \"8GB\"}}, {\"name\": \"Garden Hose\", \"product_id\": \"6679515468\", \"item_id\": \"5206946487\", \"price\": 95.08, \"options\": {\"length\": \"50ft\", \"material\": \"vinyl\", \"color\": \"black\"}}, {\"name\": \"Office Chair\", \"product_id\": \"4794339885\", \"item_id\": \"8323284863\", \"price\": 511.24, \"options\": {\"material\": \"fabric\", \"color\": \"blue\", \"armrest\": \"adjustable\", \"backrest height\": \"standard\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1619.34, \"payment_method_id\": \"paypal_3024827\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 15,
+      "timestamp": "2026-02-06T15:14:42.200184"
+    },
+    {
+      "role": "assistant",
+      "content": "i can not return the pending hose for you unless you can cel all, but i can return the Mechanical Keyboard and pet bed , refund to paypal_3024827,and then  Backpackand hose refund to paypal_3024827 and refund the Skateboard to paypal also?",
+      "tool_calls": null,
+      "turn_idx": 16,
+      "timestamp": "2026-02-06T15:15:21.936538",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "i can not return the pending hose for you unless you can cel all, but i can return the Mechanical Keyboard and pet bed , refund to paypal_3024827,and then  Backpackand hose refund to paypal_3024827 and refund the Skateboard to paypal also?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "Yes, that works. Please process the returns and refunds as you described.",
+      "tool_calls": null,
+      "turn_idx": 17,
+      "timestamp": "2026-02-06T15:15:23.298595",
+      "cost": 0.0012299999999999998,
+      "usage": {
+        "completion_tokens": 15,
+        "prompt_tokens": 555
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Yes, that works. Please process the returns and refunds as you described.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "return_delivered_order_items",
+          "arguments": {
+            "order_id": "#W3792453",
+            "item_ids": [
+              "4293355847"
+            ],
+            "payment_method_id": "paypal_3024827"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 18,
+      "timestamp": "2026-02-06T15:15:52.506939",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "return_delivered_order_items(order_id='#W3792453', item_ids=['4293355847'], payment_method_id='paypal_3024827')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"order_id\": \"#W3792453\", \"user_id\": \"isabella_johansson_2152\", \"address\": {\"address1\": \"313 Chestnut Street\", \"address2\": \"Suite 537\", \"city\": \"Jacksonville\", \"country\": \"USA\", \"state\": \"FL\", \"zip\": \"32286\"}, \"items\": [{\"name\": \"Skateboard\", \"product_id\": \"1968349452\", \"item_id\": \"4293355847\", \"price\": 200.8, \"options\": {\"deck material\": \"bamboo\", \"length\": \"31 inch\", \"design\": \"plain\"}}], \"status\": \"return requested\", \"fulfillments\": [{\"tracking_id\": [\"908856694334\"], \"item_ids\": [\"4293355847\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 200.8, \"payment_method_id\": \"paypal_3024827\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": [\"4293355847\"], \"return_payment_method_id\": \"paypal_3024827\"}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 19,
+      "timestamp": "2026-02-06T15:15:52.509663"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "return_delivered_order_items",
+          "arguments": {
+            "order_id": "#W7181492",
+            "item_ids": [
+              "5753502325",
+              "9851293632"
+            ],
+            "payment_method_id": "paypal_3024827"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 20,
+      "timestamp": "2026-02-06T15:16:20.789860",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "return_delivered_order_items(order_id='#W7181492', item_ids=['5753502325', '9851293632'], payment_method_id='paypal_3024827')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"order_id\": \"#W7181492\", \"user_id\": \"isabella_johansson_2152\", \"address\": {\"address1\": \"313 Chestnut Street\", \"address2\": \"Suite 537\", \"city\": \"Jacksonville\", \"country\": \"USA\", \"state\": \"FL\", \"zip\": \"32286\"}, \"items\": [{\"name\": \"Garden Hose\", \"product_id\": \"6679515468\", \"item_id\": \"5753502325\", \"price\": 96.35, \"options\": {\"length\": \"25ft\", \"material\": \"rubber\", \"color\": \"green\"}}, {\"name\": \"Backpack\", \"product_id\": \"2524789262\", \"item_id\": \"9851293632\", \"price\": 193.38, \"options\": {\"color\": \"green\", \"size\": \"small\", \"material\": \"polyester\", \"compartment\": \"camera\"}}, {\"name\": \"Bookshelf\", \"product_id\": \"8600330539\", \"item_id\": \"3778705663\", \"price\": 473.48, \"options\": {\"material\": \"metal\", \"color\": \"black\", \"height\": \"6 ft\"}}, {\"name\": \"Hiking Boots\", \"product_id\": \"7363354090\", \"item_id\": \"8118291112\", \"price\": 260.56, \"options\": {\"size\": \"12\", \"material\": \"leather\", \"waterproof\": \"no\"}}, {\"name\": \"Coffee Maker\", \"product_id\": \"7996920482\", \"item_id\": \"3020722515\", \"price\": 238.64, \"options\": {\"color\": \"black\", \"capacity\": \"1 cup\", \"type\": \"french press\", \"features\": \"auto shutoff\"}}], \"status\": \"return requested\", \"fulfillments\": [{\"tracking_id\": [\"418708581751\"], \"item_ids\": [\"5753502325\", \"9851293632\", \"3778705663\", \"8118291112\", \"3020722515\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 1262.41, \"payment_method_id\": \"paypal_3024827\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": [\"5753502325\", \"9851293632\"], \"return_payment_method_id\": \"paypal_3024827\"}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 21,
+      "timestamp": "2026-02-06T15:16:20.792433"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "return_delivered_order_items",
+          "arguments": {
+            "order_id": "#W5565470",
+            "item_ids": [
+              "9570044148",
+              "6857426243"
+            ],
+            "payment_method_id": "paypal_3024827"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 22,
+      "timestamp": "2026-02-06T15:17:27.943923",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "return_delivered_order_items(order_id='#W5565470', item_ids=['9570044148', '6857426243'], payment_method_id='paypal_3024827')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"order_id\": \"#W5565470\", \"user_id\": \"isabella_johansson_2152\", \"address\": {\"address1\": \"812 Cedar Avenue\", \"address2\": \"Suite 500\", \"city\": \"Houston\", \"country\": \"USA\", \"state\": \"TX\", \"zip\": \"77129\"}, \"items\": [{\"name\": \"Electric Kettle\", \"product_id\": \"1075968781\", \"item_id\": \"7602931732\", \"price\": 153.25, \"options\": {\"capacity\": \"1L\", \"material\": \"stainless steel\", \"color\": \"black\"}}, {\"name\": \"Mechanical Keyboard\", \"product_id\": \"1656367028\", \"item_id\": \"9570044148\", \"price\": 231.37, \"options\": {\"switch type\": \"linear\", \"backlight\": \"none\", \"size\": \"full size\"}}, {\"name\": \"Pet Bed\", \"product_id\": \"2747247837\", \"item_id\": \"6857426243\", \"price\": 196.53, \"options\": {\"size\": \"medium\", \"material\": \"fleece\", \"color\": \"grey\"}}], \"status\": \"return requested\", \"fulfillments\": [{\"tracking_id\": [\"907614527588\"], \"item_ids\": [\"7602931732\", \"9570044148\", \"6857426243\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 581.15, \"payment_method_id\": \"paypal_3024827\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": [\"6857426243\", \"9570044148\"], \"return_payment_method_id\": \"paypal_3024827\"}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 23,
+      "timestamp": "2026-02-06T15:17:27.946431"
+    },
+    {
+      "role": "assistant",
+      "content": "All done",
+      "tool_calls": null,
+      "turn_idx": 24,
+      "timestamp": "2026-02-06T15:17:39.971489",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "All done"
+      }
+    },
+    {
+      "role": "user",
+      "content": "Thank you! How much will I get back in total?",
+      "tool_calls": null,
+      "turn_idx": 25,
+      "timestamp": "2026-02-06T15:17:40.967732",
+      "cost": 0.001256,
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 580
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Thank you! How much will I get back in total?",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "calculate",
+          "arguments": {
+            "expression": "200.8 + 96.35 + 193.38 + 231.37 + 196.53"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 26,
+      "timestamp": "2026-02-06T15:17:52.587753",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "calculate(expression='200.8 + 96.35 + 193.38 + 231.37 + 196.53')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "918.43",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 27,
+      "timestamp": "2026-02-06T15:17:52.591790"
+    },
+    {
+      "role": "assistant",
+      "content": "you'll get back 918.43.",
+      "tool_calls": null,
+      "turn_idx": 28,
+      "timestamp": "2026-02-06T15:18:05.195479",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "you'll get back 918.43."
+      }
+    },
+    {
+      "role": "user",
+      "content": "Great, thanks for your help!",
+      "tool_calls": null,
+      "turn_idx": 29,
+      "timestamp": "2026-02-06T15:18:05.836092",
+      "cost": 0.001274,
+      "usage": {
+        "completion_tokens": 7,
+        "prompt_tokens": 609
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Great, thanks for your help!",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "is there anything else i can do?",
+      "tool_calls": null,
+      "turn_idx": 30,
+      "timestamp": "2026-02-06T15:18:16.413248",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "is there anything else i can do?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "No, that’s all. Thanks! ###STOP###",
+      "tool_calls": null,
+      "turn_idx": 31,
+      "timestamp": "2026-02-06T15:18:17.298143",
+      "cost": 0.001352,
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 632
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "No, that’s all. Thanks! ###STOP###",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    }
+  ],
+  "trial": null,
+  "seed": null
+}
