@@ -24,6 +24,9 @@ import sys
 from pathlib import Path
 from typing import List, Optional
 
+# Ensure experiments/ is on the path regardless of where the script is invoked from
+sys.path.insert(0, str(Path(__file__).parent))
+
 from dotenv import load_dotenv
 load_dotenv()
 
