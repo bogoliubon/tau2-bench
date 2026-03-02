@@ -458,6 +458,7 @@ def online_refine(
         # c. Add to batch buffer
         batch_buffer.append({"task_id": task_id, "trajectory_text": trajectory_text})
         is_last_task = step_idx == len(held_out_ids) - 1
+        print(f"  Batch buffer: {len(batch_buffer)}/{batch_size} trajectories accumulated")
 
         # d. Update policy when batch is full or on the last task
         policy_updated = False
