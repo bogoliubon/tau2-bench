@@ -2,8 +2,8 @@
 Online policy refinement from agent rollouts.
 
 Closed-loop approach: load an initial policy from batch_refine output,
-then iteratively refine it by running the agent on held-out tasks one-by-one
-and asking an LLM "do you want to update the policy?" after each rollout.
+then iteratively refine it by running the agent on held-out tasks in batches
+and asking an LLM to update the policy after each batch of rollouts.
 
 Usage:
     python3 online_refine.py \
@@ -11,6 +11,8 @@ Usage:
       --agent_llm gpt-4o \
       --user_llm gpt-4.1 \
       --refine_llm gpt-5-mini \
+      --batch_size 5 \
+      --start_batch 5 \
       --seed 42 \
       --output_path evaluations/shortened_prompt/online_refine_tudor_gpt5mini_seed42.json
 """
@@ -29,7 +31,7 @@ from loguru import logger
 logger.remove()
 logger.add(sys.stderr, level="ERROR")
 
-from tau2.run import run_task, get_tasks, load_policy
+from tau2.run import run_task, get_tasks
 from tau2.data_model.message import (
     AssistantMessage,
     UserMessage,
@@ -63,19 +65,70 @@ Each rule must be:
 Do not introduce domain-specific assumptions beyond the trajectory."""
 
 
-ONLINE_REFINE_PROMPT = """You are maintaining an operational policy for a customer service agent. Here is the current policy:
+ONLINE_REFINE_PROMPT = """You are maintaining an operational policy for a customer service agent.
 
+Current policy:
 {current_policy}
 
-The agent just completed a conversation using this policy:
+The agent just completed {num_traj} conversation(s) using this policy:
 
-{trajectory_text}
+{trajectories_text}
 
-Analyze the conversation closely. Pay attention to whether the user had to correct the agent, expressed dissatisfaction, or the agent made errors — these are signals that the policy is missing rules or has gaps.
+Identify genuine agent errors — where the agent's behavior was incorrect, not merely where
+the user was unhappy. A user requesting something against policy and being refused is NOT
+a policy gap.
 
-Output the COMPLETE updated policy. You MUST preserve all existing rules verbatim — only add new rules or modify the specific rules that need correction. Do not shorten, summarize, or reorganize unchanged parts. If the conversation reveals no issues, output the existing policy unchanged.
+Signals of a genuine error:
+- Agent took the wrong action when the correct one was unambiguous
+- Agent failed to act when action was clearly warranted
+- Agent asked unnecessary questions when the answer was retrievable
+- Agent was inconsistent with its own stated rules
 
-""" + EXTRACTION_INSTRUCTIONS
+Output the COMPLETE updated policy:
+- Correct rules that caused observed errors
+- Add rules only for genuinely uncovered situations
+- Merge overlapping or redundant rules into a single more general rule
+- Preserve all other rules exactly as written
+"""
+
+
+def load_policy_at_batch(refinement_data: dict, start_batch: int) -> tuple[str, List[str]]:
+    """Load policy from a specific batch iteration index (0-based).
+
+    Args:
+        refinement_data: The loaded batch_refine JSON data.
+        start_batch: 0-based index into iterations. -1 means the last iteration.
+
+    Returns:
+        (policy_str, training_task_ids) where training_task_ids are all task IDs
+        used in iterations 0..start_batch (i.e. the ones to exclude from held-out).
+    """
+    iterations = refinement_data.get("iterations", [])
+    if not iterations:
+        raise ValueError("No iterations found in refinement data")
+
+    if start_batch == -1:
+        start_batch = len(iterations) - 1
+
+    if start_batch >= len(iterations):
+        raise ValueError(
+            f"start_batch={start_batch} exceeds number of iterations ({len(iterations)}). "
+            f"Valid range: 0 to {len(iterations) - 1}."
+        )
+
+    policy = iterations[start_batch]["policy"]
+
+    # Collect deduplicated training task IDs from iterations 0..start_batch
+    seen = set()
+    training_task_ids = []
+    for it in iterations[: start_batch + 1]:
+        for tid in it.get("task_ids", []):
+            tid_str = str(tid)
+            if tid_str not in seen:
+                seen.add(tid_str)
+                training_task_ids.append(tid_str)
+
+    return policy, training_task_ids
 
 
 def format_simulation_messages(messages) -> str:
@@ -192,21 +245,21 @@ def online_refine(
     dry_run: bool = False,
     max_tasks: Optional[int] = None,
     max_policy_chars: Optional[int] = None,
+    batch_size: int = 1,
+    start_batch: int = -1,
 ):
     """Run online policy refinement loop."""
 
-    # 1. Load initial policy
-    print(f"Loading initial policy from: {refinement_path}")
-    current_policy = load_policy(refinement_path)
-    print(f"Initial policy length: {len(current_policy)} chars")
-
-    # Load config from refinement to get training task IDs
+    # 1. Load initial policy and training task IDs from the specified batch iteration
+    print(f"Loading initial policy from: {refinement_path} (start_batch={start_batch})")
     with open(refinement_path, "r") as f:
         refinement_data = json.load(f)
 
-    training_task_ids = refinement_data.get("config", {}).get("selected_task_ids", [])
-    # Ensure they're strings
-    training_task_ids = [str(tid) for tid in training_task_ids]
+    current_policy, training_task_ids = load_policy_at_batch(refinement_data, start_batch)
+
+    resolved_batch = start_batch if start_batch >= 0 else len(refinement_data.get("iterations", [])) - 1
+    print(f"Loaded policy from iteration {resolved_batch} ({resolved_batch + 1} batch(es) of training)")
+    print(f"Initial policy length: {len(current_policy)} chars")
     print(f"Policy was trained on {len(training_task_ids)} task IDs")
 
     # 2. Determine held-out tasks: train-held-out (shuffled) then test (shuffled)
@@ -232,10 +285,12 @@ def online_refine(
     # Load task objects
     tasks_by_id = {t.id: t for t in get_tasks(task_set_name=domain)}
 
-    # 4. Initialize output structure
+    # 3. Initialize output structure
     result = {
         "config": {
             "initial_policy_path": refinement_path,
+            "start_batch": start_batch,
+            "batch_size": batch_size,
             "agent_llm": agent_llm,
             "user_llm": user_llm,
             "refine_llm": refine_llm,
@@ -257,19 +312,50 @@ def online_refine(
 
     # Check for existing progress to resume
     start_step = 0
+    batch_buffer = []  # list of {"task_id": ..., "trajectory_text": ...}
     if Path(output_path).exists():
         with open(output_path, "r") as f:
             existing = json.load(f)
         if existing.get("steps"):
             start_step = len(existing["steps"])
             result["steps"] = existing["steps"]
-            # Resume policy from last step
-            current_policy = existing["steps"][-1]["policy"]
-            print(f"Resuming from step {start_step} (loaded {start_step} existing steps)")
+
+            # Current policy = policy from the last step that triggered an update
+            for s in reversed(existing["steps"]):
+                if s.get("policy_updated"):
+                    current_policy = s["policy"]
+                    break
+
+            # Reconstruct batch buffer: steps since the last policy update
+            last_update_step = -1
+            for s in existing["steps"]:
+                if s.get("policy_updated"):
+                    last_update_step = s["step"]
+
+            for s in existing["steps"]:
+                if s["step"] > last_update_step and s.get("trajectory_text"):
+                    batch_buffer.append({
+                        "task_id": s["task_id"],
+                        "trajectory_text": s["trajectory_text"],
+                    })
+
+            print(
+                f"Resuming from step {start_step} "
+                f"(batch buffer has {len(batch_buffer)} pending trajectories)"
+            )
 
     rewards = [s["reward"] for s in result["steps"]]
 
-    # 5. Main loop
+    # Build length constraint suffix (reused in every refinement call)
+    length_constraint = ""
+    if max_policy_chars is not None:
+        length_constraint = (
+            f"\n\nThe policy must not exceed {max_policy_chars} characters. "
+            "Be concise — use short bullet points, merge overlapping rules, "
+            "and drop details that can be inferred from general rules."
+        )
+
+    # 4. Main loop
     for step_idx in range(start_step, len(held_out_ids)):
         task_id = held_out_ids[step_idx]
         task = tasks_by_id.get(task_id)
@@ -305,6 +391,7 @@ def online_refine(
                 "policy_updated": False,
                 "policy_length": len(current_policy),
                 "policy": current_policy,
+                "trajectory_text": None,
                 "trajectory": None,
                 "error": str(e),
             }
@@ -317,34 +404,51 @@ def online_refine(
         running_mean = sum(rewards) / len(rewards)
         print(f"  Reward: {reward} | Running mean: {running_mean:.4f} ({sum(r > 0 for r in rewards)}/{len(rewards)})")
 
-        # b. Format rollout trajectory (no reward shown to LLM)
+        # b. Format rollout trajectory (reward not shown to LLM)
         trajectory_text = format_simulation_messages(sim.messages)
 
-        # c. Ask refinement LLM if policy should be updated
-        length_constraint = ""
-        if max_policy_chars is not None:
-            length_constraint = f"\n\nThe policy must not exceed {max_policy_chars} characters. Be concise — use short bullet points, merge overlapping rules, and drop details that can be inferred from general rules."
-        prompt = ONLINE_REFINE_PROMPT.format(
-            current_policy=current_policy,
-            trajectory_text=trajectory_text,
-        ) + length_constraint
-        print(f"  Calling {refine_llm} for refinement...")
-        response = call_llm(prompt, refine_llm)
+        # c. Add to batch buffer
+        batch_buffer.append({"task_id": task_id, "trajectory_text": trajectory_text})
+        is_last_task = step_idx == len(held_out_ids) - 1
 
-        # d. Enforce length limit — if over, ask LLM to compress
-        if max_policy_chars is not None and len(response) > max_policy_chars:
-            print(f"  Policy too long ({len(response)} chars), asking LLM to compress to {max_policy_chars}...")
-            compress_prompt = f"The following policy is {len(response)} characters but must not exceed {max_policy_chars} characters. Compress it by merging overlapping rules, using shorter bullet points, and dropping details that can be inferred. Provide ONLY the compressed policy.\n\n{response}"
-            response = call_llm(compress_prompt, refine_llm)
-            print(f"  Compressed to {len(response)} chars")
+        # d. Update policy when batch is full or on the last task
+        policy_updated = False
+        if len(batch_buffer) >= batch_size or is_last_task:
+            trajectories_text = ""
+            for i, entry in enumerate(batch_buffer, 1):
+                trajectories_text += (
+                    f"=== Conversation {i} (task_id={entry['task_id']}) ===\n"
+                    f"{entry['trajectory_text']}\n\n"
+                )
 
-        # d. Always update policy
-        old_len = len(current_policy)
-        current_policy = response
-        policy_updated = True
-        print(f"  Policy updated ({old_len} -> {len(current_policy)} chars)")
+            prompt = ONLINE_REFINE_PROMPT.format(
+                current_policy=current_policy,
+                num_traj=len(batch_buffer),
+                trajectories_text=trajectories_text,
+            ) + length_constraint
 
-        # e. Log step (include full trajectory for later analysis)
+            print(f"  Calling {refine_llm} for refinement ({len(batch_buffer)} trajectories in batch)...")
+            response = call_llm(prompt, refine_llm)
+
+            # Enforce length limit — if over, ask LLM to compress
+            if max_policy_chars is not None and len(response) > max_policy_chars:
+                print(f"  Policy too long ({len(response)} chars), compressing to {max_policy_chars}...")
+                compress_prompt = (
+                    f"The following policy is {len(response)} characters but must not exceed "
+                    f"{max_policy_chars} characters. Compress it by merging overlapping rules, "
+                    "using shorter bullet points, and dropping details that can be inferred. "
+                    f"Provide ONLY the compressed policy.\n\n{response}"
+                )
+                response = call_llm(compress_prompt, refine_llm)
+                print(f"  Compressed to {len(response)} chars")
+
+            old_len = len(current_policy)
+            current_policy = response
+            policy_updated = True
+            batch_buffer = []
+            print(f"  Policy updated ({old_len} -> {len(current_policy)} chars)")
+
+        # e. Log step (include trajectory_text for batch-buffer reconstruction on resume)
         step_record = {
             "step": step_idx,
             "task_id": task_id,
@@ -353,11 +457,11 @@ def online_refine(
             "policy_updated": policy_updated,
             "policy_length": len(current_policy),
             "policy": current_policy,
+            "trajectory_text": trajectory_text,
             "trajectory": sim.model_dump(),
         }
         result["steps"].append(step_record)
 
-        # Save incrementally
         _save_incremental(result, rewards, output_path)
 
     # Final save
@@ -474,6 +578,23 @@ def main():
         default=None,
         help="Max policy length in characters. Adds a length constraint to the refinement prompt.",
     )
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=1,
+        help="Number of rollouts to accumulate before calling the refine LLM (default: 1)",
+    )
+    parser.add_argument(
+        "--start_batch",
+        type=int,
+        default=-1,
+        help=(
+            "0-based index into the batch_refine iterations to use as the starting policy. "
+            "-1 (default) loads the last (final) iteration. "
+            "E.g. --start_batch 2 uses the policy after the 3rd batch and treats only "
+            "those task IDs as already trained."
+        ),
+    )
 
     args = parser.parse_args()
 
@@ -488,6 +609,8 @@ def main():
         dry_run=args.dry_run,
         max_tasks=args.max_tasks,
         max_policy_chars=args.max_policy_chars,
+        batch_size=args.batch_size,
+        start_batch=args.start_batch,
     )
 
 
