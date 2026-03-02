@@ -31,9 +31,12 @@ Usage:
 import json
 import argparse
 import sys
+import warnings
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
+
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic.*")
 
 from dotenv import load_dotenv
 load_dotenv()

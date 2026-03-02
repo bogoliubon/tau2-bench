@@ -24,10 +24,13 @@ import json
 import argparse
 import random
 import multiprocessing
+import warnings
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from concurrent.futures import ThreadPoolExecutor
+
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic.*")
 
 from dotenv import load_dotenv
 load_dotenv()
