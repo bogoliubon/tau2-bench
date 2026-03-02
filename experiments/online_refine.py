@@ -306,7 +306,15 @@ def online_refine(
 
     # Set up output path
     if output_path is None:
-        output_path = f"evaluations/online_refine_{refine_llm}_seed{seed}.json"
+        source_stem = Path(refinement_path).stem
+        output_path = (
+            f"evaluations/online_refine_{source_stem}"
+            f"_{domain}"
+            f"_startb{resolved_batch}"
+            f"_bs{batch_size}"
+            f"_agent-{agent_llm}"
+            f"_seed{seed}.json"
+        )
     output_dir = Path(output_path).parent
     output_dir.mkdir(parents=True, exist_ok=True)
 
