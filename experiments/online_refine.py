@@ -34,7 +34,13 @@ from loguru import logger
 logger.remove()
 logger.add(sys.stderr, level="ERROR")
 
-from tau2.run import run_task, get_tasks
+from tau2.run import get_tasks
+from tau2.agent.llm_agent import LLMAgent
+from tau2.data_model.tasks import Task
+from tau2.environment.environment import Environment
+from tau2.evaluator.evaluator import EvaluationType, evaluate_simulation
+from tau2.orchestrator.orchestrator import Orchestrator
+from tau2.registry import registry
 from tau2.data_model.message import (
     AssistantMessage,
     UserMessage,
@@ -379,19 +385,50 @@ def online_refine(
 
         # a. Run agent with current policy
         try:
-            sim = run_task(
+            environment_constructor = registry.get_env_constructor(domain)
+            environment = environment_constructor()
+
+            agent_obj = LLMAgent(
+                tools=environment.get_tools(),
+                domain_policy=current_policy,
+                llm=agent_llm,
+                llm_args={"temperature": 0.0},
+            )
+
+            try:
+                user_tools = environment.get_user_tools()
+            except Exception:
+                user_tools = None
+
+            UserConstructor = registry.get_user_constructor("user_simulator")
+            user_obj = UserConstructor(
+                tools=user_tools,
+                instructions=str(task.user_scenario),
+                llm=user_llm,
+                llm_args={"temperature": 0.0},
+            )
+
+            orchestrator = Orchestrator(
+                domain=domain,
+                agent=agent_obj,
+                user=user_obj,
+                environment=environment,
+                task=task,
+                max_steps=30,
+                max_errors=5,
+                seed=seed,
+            )
+            sim = orchestrator.run()
+
+            reward_info = evaluate_simulation(
                 domain=domain,
                 task=task,
-                agent="llm_agent",
-                user="user_simulator",
-                llm_agent=agent_llm,
-                llm_args_agent={"temperature": 0.0},
-                llm_user=user_llm,
-                llm_args_user={"temperature": 0.0},
-                seed=seed,
-                policy_override=current_policy,
+                simulation=sim,
+                evaluation_type=EvaluationType.ALL,
+                solo_mode=False,
             )
-            reward = sim.reward_info.reward
+            sim.reward_info = reward_info
+            reward = reward_info.reward
         except Exception as e:
             print(f"  Error running task {task_id}: {e}")
             step_record = {
