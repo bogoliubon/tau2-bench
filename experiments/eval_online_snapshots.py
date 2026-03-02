@@ -248,13 +248,49 @@ def main():
         policy = snap["policy"]
         step_info = f"step {snap['step']}" if snap["step"] is not None else "initial"
         print(f"\n[Batch {batch_num} ({label}, {step_info})] policy length: {len(policy)} chars")
-        print(f"  Evaluating on {args.task_split_name} split...")
+
+        batch_filename = f"batch{batch_num}_{args.domain}_{args.task_split_name}_agent-{args.agent_llm}_seed{args.seed}.json"
+        batch_path = output_dir / batch_filename
+
+        # Resume: load existing results and find task_ids with any errors
+        existing_task_results = []
+        failed_task_ids = None
+        if batch_path.exists():
+            with open(batch_path) as f:
+                existing = json.load(f)
+            existing_task_results = existing.get("task_results", [])
+            failed_task_ids = list({
+                r["task_id"] for r in existing_task_results if r.get("error")
+            })
+            if not failed_task_ids:
+                print(f"  Already complete (no errors) — skipping")
+                # Still add to summary
+                r_sec = existing.get("results", {})
+                pass_ks = {int(k.split("_")[1]): v for k, v in r_sec.items() if k.startswith("pass_")}
+                summary["batches"].append({
+                    "batch_num": batch_num,
+                    "label": label,
+                    "step": snap["step"],
+                    "policy_length": len(policy),
+                    "success_rate": r_sec.get("success_rate", 0),
+                    "mean_reward": r_sec.get("mean_reward", 0),
+                    "n_tasks": r_sec.get("n_tasks", 0),
+                    "n_successes": r_sec.get("n_successes", 0),
+                    **{f"pass_{k}": v for k, v in pass_ks.items()},
+                    "output_file": str(batch_path),
+                })
+                with open(summary_path, "w") as f:
+                    json.dump(summary, f, indent=2)
+                continue
+            print(f"  Resuming: {len(failed_task_ids)} task(s) with errors → re-running: {failed_task_ids}")
+        else:
+            print(f"  Evaluating on {args.task_split_name} split...")
 
         eval_results = evaluate_policy(
             policy=policy,
             domain=args.domain,
             task_split_name=args.task_split_name,
-            task_ids=args.task_ids,
+            task_ids=failed_task_ids if failed_task_ids is not None else args.task_ids,
             llm_agent=args.agent_llm,
             llm_args_agent={"temperature": 0.0},
             llm_user=args.user_llm,
@@ -264,9 +300,17 @@ def main():
             num_trials=args.num_trials,
         )
 
+        # Merge: replace failed task results with new results, keep good ones
+        if existing_task_results:
+            retry_by_task = {r["task_id"] for r in eval_results["task_results"]}
+            kept = [r for r in existing_task_results if r["task_id"] not in retry_by_task]
+            merged_task_results_raw = kept + eval_results["task_results"]
+        else:
+            merged_task_results_raw = eval_results["task_results"]
+
         # Compute pass^k using the tau2 formula (https://arxiv.org/pdf/2406.12045)
         task_trial_counts = defaultdict(lambda: {"successes": 0, "trials": 0})
-        for r in eval_results["task_results"]:
+        for r in merged_task_results_raw:
             tid = r["task_id"]
             task_trial_counts[tid]["trials"] += 1
             if r["success"]:
@@ -283,19 +327,22 @@ def main():
                 if n_tasks else 0.0
             )
         pass_str = "  ".join(f"pass^{k}={v:.2%}" for k, v in pass_ks.items())
-        print(f"  -> {pass_str}  mean_reward={eval_results['mean_reward']:.4f}")
+        n_successes = sum(1 for r in merged_task_results_raw if r["success"])
+        mean_reward = sum(r["reward"] for r in merged_task_results_raw) / len(merged_task_results_raw) if merged_task_results_raw else 0.0
+        print(f"  -> {pass_str}  mean_reward={mean_reward:.4f}")
 
-        # Build per-task results with full trajectories (SimulationRun.model_dump())
+        # Build per-task results with full trajectories
         task_results = []
-        for r in eval_results["task_results"]:
-            r_out = {k: v for k, v in r.items() if k != "_simulation"}
-            if r.get("_simulation") is not None:
-                r_out["trajectory"] = r["_simulation"].model_dump()
-            task_results.append(r_out)
+        for r in merged_task_results_raw:
+            # Results coming from existing file already have trajectory serialized
+            if "trajectory" in r:
+                task_results.append({k: v for k, v in r.items() if k != "_simulation"})
+            else:
+                r_out = {k: v for k, v in r.items() if k != "_simulation"}
+                if r.get("_simulation") is not None:
+                    r_out["trajectory"] = r["_simulation"].model_dump()
+                task_results.append(r_out)
 
-        # Save this batch to its own file inside the subdirectory
-        batch_filename = f"batch{batch_num}_{args.domain}_{args.task_split_name}_agent-{args.agent_llm}_seed{args.seed}.json"
-        batch_path = output_dir / batch_filename
         batch_output = {
             "source": {
                 "online_refine_path": args.online_refine_path,
@@ -314,12 +361,12 @@ def main():
                 "seed": args.seed,
             },
             "results": {
-                "n_tasks": eval_results["n_tasks"],
-                "n_trials": eval_results["n_trials"],
-                "n_total_runs": eval_results["n_total_runs"],
-                "n_successes": eval_results["n_successes"],
-                "success_rate": eval_results["success_rate"],
-                "mean_reward": eval_results["mean_reward"],
+                "n_tasks": n_tasks,
+                "n_trials": args.num_trials,
+                "n_total_runs": len(task_results),
+                "n_successes": n_successes,
+                "success_rate": n_successes / len(task_results) if task_results else 0.0,
+                "mean_reward": mean_reward,
                 **{f"pass_{k}": v for k, v in pass_ks.items()},
             },
             "task_results": task_results,
@@ -336,10 +383,10 @@ def main():
             "label": label,
             "step": snap["step"],
             "policy_length": len(policy),
-            "success_rate": eval_results["success_rate"],
-            "mean_reward": eval_results["mean_reward"],
-            "n_tasks": eval_results["n_tasks"],
-            "n_successes": eval_results["n_successes"],
+            "success_rate": n_successes / len(task_results) if task_results else 0.0,
+            "mean_reward": mean_reward,
+            "n_tasks": n_tasks,
+            "n_successes": n_successes,
             **{f"pass_{k}": v for k, v in pass_ks.items()},
             "output_file": str(batch_path),
         })
