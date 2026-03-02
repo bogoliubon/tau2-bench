@@ -9,7 +9,7 @@ import warnings
 from typing import Optional, List, Dict
 
 # Suppress noisy pydantic serialization warnings from litellm
-warnings.filterwarnings("ignore", message=".*serialized value may not be as expected.*")
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic.*")
 
 import openai
 

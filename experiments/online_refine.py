@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import List, Optional, Dict, Any
 
 # Suppress noisy pydantic serialization warnings from litellm
-warnings.filterwarnings("ignore", message=".*serialized value may not be as expected.*")
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic.*")
 
 # Ensure experiments/ is on the path regardless of where the script is invoked from
 sys.path.insert(0, str(Path(__file__).parent))
