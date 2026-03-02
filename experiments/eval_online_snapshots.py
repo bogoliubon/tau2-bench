@@ -42,7 +42,9 @@ from loguru import logger
 logger.remove()
 logger.add(sys.stderr, level="ERROR")
 
+from collections import defaultdict
 from evaluate_prompt import evaluate_policy
+from tau2.metrics.agent_metrics import pass_hat_k
 
 
 def extract_snapshots(online_refine_data: dict) -> List[dict]:
@@ -259,7 +261,26 @@ def main():
             num_trials=args.num_trials,
         )
 
-        print(f"  -> success_rate={eval_results['success_rate']:.2%}  mean_reward={eval_results['mean_reward']:.4f}")
+        # Compute pass^k using the tau2 formula (https://arxiv.org/pdf/2406.12045)
+        task_trial_counts = defaultdict(lambda: {"successes": 0, "trials": 0})
+        for r in eval_results["task_results"]:
+            tid = r["task_id"]
+            task_trial_counts[tid]["trials"] += 1
+            if r["success"]:
+                task_trial_counts[tid]["successes"] += 1
+        n_tasks = len(task_trial_counts)
+        pass_ks = {}
+        for k in range(1, args.num_trials + 1):
+            pass_ks[k] = (
+                sum(
+                    pass_hat_k(v["trials"], v["successes"], k)
+                    for v in task_trial_counts.values()
+                    if v["trials"] >= k
+                ) / n_tasks
+                if n_tasks else 0.0
+            )
+        pass_str = "  ".join(f"pass^{k}={v:.2%}" for k, v in pass_ks.items())
+        print(f"  -> {pass_str}  mean_reward={eval_results['mean_reward']:.4f}")
 
         # Build per-task results with full trajectories (SimulationRun.model_dump())
         task_results = []
@@ -296,6 +317,7 @@ def main():
                 "n_successes": eval_results["n_successes"],
                 "success_rate": eval_results["success_rate"],
                 "mean_reward": eval_results["mean_reward"],
+                **{f"pass_{k}": v for k, v in pass_ks.items()},
             },
             "task_results": task_results,
             "policy": policy,
@@ -315,6 +337,7 @@ def main():
             "mean_reward": eval_results["mean_reward"],
             "n_tasks": eval_results["n_tasks"],
             "n_successes": eval_results["n_successes"],
+            **{f"pass_{k}": v for k, v in pass_ks.items()},
             "output_file": str(batch_path),
         })
         with open(summary_path, "w") as f:
@@ -324,12 +347,15 @@ def main():
     print(f"\n{'='*70}")
     print("SNAPSHOT EVALUATION SUMMARY")
     print(f"{'='*70}")
-    print(f"{'Batch':<8} {'Label':<18} {'Step':<8} {'Success Rate':<15} {'Mean Reward'}")
-    print("-" * 65)
+    print(f"{'Batch':<8} {'Label':<18} {'Step':<8} {'pass^1':<10} {'pass^2':<10} {'pass^3':<10} {'Mean Reward'}")
+    print("-" * 75)
     for s in summary["batches"]:
         step_str = str(s["step"]) if s["step"] is not None else "—"
+        p1 = f"{s.get('pass_1', 0):.2%}"
+        p2 = f"{s.get('pass_2', 0):.2%}"
+        p3 = f"{s.get('pass_3', 0):.2%}"
         print(f"{s['batch_num']:<8} {s['label']:<18} {step_str:<8} "
-              f"{s['success_rate']:<15.2%} {s['mean_reward']:.4f}")
+              f"{p1:<10} {p2:<10} {p3:<10} {s['mean_reward']:.4f}")
 
     print(f"\nResults saved to: {output_dir}/")
     print(f"Summary: {summary_path}")
