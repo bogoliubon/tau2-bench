@@ -1,0 +1,605 @@
+{
+  "id": "d7d005dc-7317-4fbd-85df-80f4cfb941cb",
+  "task_id": "43",
+  "timestamp": "2026-02-19T11:51:37.994285",
+  "start_time": "2026-02-19T11:39:27.557242",
+  "end_time": "2026-02-19T11:51:37.994249",
+  "duration": 730.4329278888181,
+  "termination_reason": "user_stop",
+  "agent_cost": null,
+  "user_cost": null,
+  "reward_info": null,
+  "messages": [
+    {
+      "role": "assistant",
+      "content": "Hi! How can I help you today?",
+      "tool_calls": null,
+      "turn_idx": 0,
+      "timestamp": "2026-02-19T11:39:27.558150",
+      "cost": 0.0,
+      "usage": null,
+      "raw_data": null
+    },
+    {
+      "role": "user",
+      "content": "Hi there! I accidentally booked two flights for the same day, and I need some help sorting it out.",
+      "tool_calls": null,
+      "turn_idx": 1,
+      "timestamp": "2026-02-19T11:39:28.933799",
+      "cost": 0.0010659999999999999,
+      "usage": {
+        "completion_tokens": 22,
+        "prompt_tokens": 445
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Hi there! I accidentally booked two flights for the same day, and I need some help sorting it out.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "Hi, Can I have your used id please?",
+      "tool_calls": null,
+      "turn_idx": 2,
+      "timestamp": "2026-02-19T11:40:00.641984",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "Hi, Can I have your used id please?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "Sure, my user ID is mohamed_hernandez_5188.",
+      "tool_calls": null,
+      "turn_idx": 3,
+      "timestamp": "2026-02-19T11:40:01.395172",
+      "cost": 0.0010899999999999998,
+      "usage": {
+        "completion_tokens": 15,
+        "prompt_tokens": 485
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Sure, my user ID is mohamed_hernandez_5188.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "mohamed_hernandez_5188"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 4,
+      "timestamp": "2026-02-19T11:40:10.286713",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='mohamed_hernandez_5188')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "Error: Reservation mohamed_hernandez_5188 not found",
+      "requestor": "assistant",
+      "error": true,
+      "turn_idx": 5,
+      "timestamp": "2026-02-19T11:40:10.287210"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_user_details",
+          "arguments": {
+            "user_id": "mohamed_hernandez_5188"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 6,
+      "timestamp": "2026-02-19T11:40:22.275884",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_user_details(user_id='mohamed_hernandez_5188')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"user_id\": \"mohamed_hernandez_5188\", \"name\": {\"first_name\": \"Mohamed\", \"last_name\": \"Hernandez\"}, \"address\": {\"address1\": \"916 River Road\", \"address2\": \"Suite 153\", \"city\": \"Dallas\", \"country\": \"USA\", \"state\": \"TX\", \"zip\": \"75236\"}, \"email\": \"mohamed.hernandez8983@example.com\", \"dob\": \"1996-10-16\", \"payment_methods\": {\"credit_card_5417084\": {\"source\": \"credit_card\", \"id\": \"credit_card_5417084\", \"brand\": \"mastercard\", \"last_four\": \"7393\"}, \"certificate_6623588\": {\"source\": \"certificate\", \"id\": \"certificate_6623588\", \"amount\": 250.0}, \"certificate_6969088\": {\"source\": \"certificate\", \"id\": \"certificate_6969088\", \"amount\": 500.0}}, \"saved_passengers\": [{\"first_name\": \"Evelyn\", \"last_name\": \"Rossi\", \"dob\": \"1972-09-13\"}, {\"first_name\": \"James\", \"last_name\": \"Sanchez\", \"dob\": \"1952-09-13\"}], \"membership\": \"silver\", \"reservations\": [\"35V5SM\", \"XXDC1M\", \"V5EMZH\", \"D1EW9B\", \"9HBUV8\", \"DGZSYX\"]}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 7,
+      "timestamp": "2026-02-19T11:40:22.276712"
+    },
+    {
+      "role": "assistant",
+      "content": "I have found your account.  Let me check your reservations now.  what is the reservation number you are looking at?",
+      "tool_calls": null,
+      "turn_idx": 8,
+      "timestamp": "2026-02-19T11:40:38.682984",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "I have found your account.  Let me check your reservations now.  what is the reservation number you are looking at?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "I don’t have the reservation number handy right now, but I do know that I have two flights booked for May 17. I’d like to cancel the one going from Atlanta (ATL) to New York (JFK).",
+      "tool_calls": null,
+      "turn_idx": 9,
+      "timestamp": "2026-02-19T11:40:40.930959",
+      "cost": 0.001434,
+      "usage": {
+        "completion_tokens": 46,
+        "prompt_tokens": 533
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "I don’t have the reservation number handy right now, but I do know that I have two flights booked for May 17. I’d like to cancel the one going from Atlanta (ATL) to New York (JFK).",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "okay. let me take a look.",
+      "tool_calls": null,
+      "turn_idx": 10,
+      "timestamp": "2026-02-19T11:41:08.781613",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "okay. let me take a look."
+      }
+    },
+    {
+      "role": "user",
+      "content": "Thank you! Let me know if you need any more details from me.",
+      "tool_calls": null,
+      "turn_idx": 11,
+      "timestamp": "2026-02-19T11:41:09.737266",
+      "cost": 0.00131,
+      "usage": {
+        "completion_tokens": 15,
+        "prompt_tokens": 595
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Thank you! Let me know if you need any more details from me.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "DGZSYX"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 12,
+      "timestamp": "2026-02-19T11:41:15.709629",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='DGZSYX')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"DGZSYX\", \"user_id\": \"mohamed_hernandez_5188\", \"origin\": \"JFK\", \"destination\": \"LAS\", \"flight_type\": \"one_way\", \"cabin\": \"business\", \"flights\": [{\"flight_number\": \"HAT014\", \"origin\": \"JFK\", \"destination\": \"MIA\", \"date\": \"2024-05-06\", \"price\": 1678}, {\"flight_number\": \"HAT288\", \"origin\": \"MIA\", \"destination\": \"LAS\", \"date\": \"2024-05-06\", \"price\": 1690}], \"passengers\": [{\"first_name\": \"Mohamed\", \"last_name\": \"Hernandez\", \"dob\": \"1996-10-16\"}], \"payment_history\": [{\"payment_id\": \"credit_card_5417084\", \"amount\": 3368}], \"created_at\": \"2024-05-04T19:48:34\", \"total_baggages\": 1, \"nonfree_baggages\": 0, \"insurance\": \"no\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 13,
+      "timestamp": "2026-02-19T11:41:15.710395"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "9HBUV8"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 14,
+      "timestamp": "2026-02-19T11:41:26.947043",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='9HBUV8')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"9HBUV8\", \"user_id\": \"mohamed_hernandez_5188\", \"origin\": \"DEN\", \"destination\": \"BOS\", \"flight_type\": \"one_way\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT130\", \"origin\": \"DEN\", \"destination\": \"MIA\", \"date\": \"2024-05-17\", \"price\": 57}, {\"flight_number\": \"HAT184\", \"origin\": \"MIA\", \"destination\": \"BOS\", \"date\": \"2024-05-17\", \"price\": 72}], \"passengers\": [{\"first_name\": \"Mohamed\", \"last_name\": \"Hernandez\", \"dob\": \"1996-10-16\"}], \"payment_history\": [{\"payment_id\": \"credit_card_5417084\", \"amount\": 159}], \"created_at\": \"2024-05-12T17:08:42\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 15,
+      "timestamp": "2026-02-19T11:41:26.947739"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "D1EW9B"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 16,
+      "timestamp": "2026-02-19T11:41:39.180890",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='D1EW9B')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"D1EW9B\", \"user_id\": \"mohamed_hernandez_5188\", \"origin\": \"ATL\", \"destination\": \"JFK\", \"flight_type\": \"one_way\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT285\", \"origin\": \"ATL\", \"destination\": \"JFK\", \"date\": \"2024-05-17\", \"price\": 54}], \"passengers\": [{\"first_name\": \"Mohamed\", \"last_name\": \"Hernandez\", \"dob\": \"1996-10-16\"}], \"payment_history\": [{\"payment_id\": \"credit_card_5417084\", \"amount\": 54}], \"created_at\": \"2024-05-04T07:38:29\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"no\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 17,
+      "timestamp": "2026-02-19T11:41:39.181597"
+    },
+    {
+      "role": "assistant",
+      "content": "I found your flight which is one way from ATL to JFK.  it was booked 2024-05-04T07:38:29 and now it's 2024-05-15 15:00:00 so it's been over 24 hours. Your cabin is basic_economy not business, and you don't have insurance. so i cannot cancel the flight for you.",
+      "tool_calls": null,
+      "turn_idx": 18,
+      "timestamp": "2026-02-19T11:42:39.323857",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "I found your flight which is one way from ATL to JFK.  it was booked 2024-05-04T07:38:29 and now it's 2024-05-15 15:00:00 so it's been over 24 hours. Your cabin is basic_economy not business, and you don't have insurance. so i cannot cancel the flight for you."
+      }
+    },
+    {
+      "role": "user",
+      "content": "I understand, but I’m a silver member with your airline. Isn’t there any way I can get some priority treatment or an exception in this case?",
+      "tool_calls": null,
+      "turn_idx": 19,
+      "timestamp": "2026-02-19T11:42:40.616295",
+      "cost": 0.0016419999999999998,
+      "usage": {
+        "completion_tokens": 31,
+        "prompt_tokens": 697
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "I understand, but I’m a silver member with your airline. Isn’t there any way I can get some priority treatment or an exception in this case?",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "sorry. I know you are a silver member, but according our policy it doesn't change the eligibility of flight cancellation I'm sorry.",
+      "tool_calls": null,
+      "turn_idx": 20,
+      "timestamp": "2026-02-19T11:48:01.134412",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "sorry. I know you are a silver member, but according our policy it doesn't change the eligibility of flight cancellation I'm sorry."
+      }
+    },
+    {
+      "role": "user",
+      "content": "Alright, if that’s the case, could you please cancel my other flight on May 17 instead?",
+      "tool_calls": null,
+      "turn_idx": 21,
+      "timestamp": "2026-02-19T11:48:02.627360",
+      "cost": 0.0016899999999999999,
+      "usage": {
+        "completion_tokens": 21,
+        "prompt_tokens": 761
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Alright, if that’s the case, could you please cancel my other flight on May 17 instead?",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "V5EMZH"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 22,
+      "timestamp": "2026-02-19T11:48:47.348818",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='V5EMZH')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"V5EMZH\", \"user_id\": \"mohamed_hernandez_5188\", \"origin\": \"CLT\", \"destination\": \"BOS\", \"flight_type\": \"round_trip\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT064\", \"origin\": \"CLT\", \"destination\": \"BOS\", \"date\": \"2024-05-27\", \"price\": 58}, {\"flight_number\": \"HAT277\", \"origin\": \"BOS\", \"destination\": \"CLT\", \"date\": \"2024-05-29\", \"price\": 80}], \"passengers\": [{\"first_name\": \"Mohamed\", \"last_name\": \"Hernandez\", \"dob\": \"1996-10-16\"}], \"payment_history\": [{\"payment_id\": \"credit_card_5417084\", \"amount\": 168}], \"created_at\": \"2024-05-08T22:33:35\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 23,
+      "timestamp": "2026-02-19T11:48:47.349541"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "XXDC1M"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 24,
+      "timestamp": "2026-02-19T11:48:57.680146",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='XXDC1M')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"XXDC1M\", \"user_id\": \"mohamed_hernandez_5188\", \"origin\": \"DEN\", \"destination\": \"PHX\", \"flight_type\": \"round_trip\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT084\", \"origin\": \"DEN\", \"destination\": \"LAS\", \"date\": \"2024-05-21\", \"price\": 76}, {\"flight_number\": \"HAT244\", \"origin\": \"LAS\", \"destination\": \"PHX\", \"date\": \"2024-05-21\", \"price\": 62}, {\"flight_number\": \"HAT027\", \"origin\": \"PHX\", \"destination\": \"LAS\", \"date\": \"2024-05-22\", \"price\": 53}, {\"flight_number\": \"HAT162\", \"origin\": \"LAS\", \"destination\": \"DEN\", \"date\": \"2024-05-22\", \"price\": 87}], \"passengers\": [{\"first_name\": \"Mohamed\", \"last_name\": \"Hernandez\", \"dob\": \"1996-10-16\"}, {\"first_name\": \"Olivia\", \"last_name\": \"Smith\", \"dob\": \"1974-06-23\"}, {\"first_name\": \"Harper\", \"last_name\": \"Li\", \"dob\": \"1967-01-23\"}], \"payment_history\": [{\"payment_id\": \"credit_card_5417084\", \"amount\": 834}], \"created_at\": \"2024-05-04T17:06:02\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"no\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 25,
+      "timestamp": "2026-02-19T11:48:57.680910"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "35V5SM"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 26,
+      "timestamp": "2026-02-19T11:49:06.270074",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='35V5SM')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"35V5SM\", \"user_id\": \"mohamed_hernandez_5188\", \"origin\": \"LAX\", \"destination\": \"SFO\", \"flight_type\": \"round_trip\", \"cabin\": \"business\", \"flights\": [{\"flight_number\": \"HAT155\", \"origin\": \"LAX\", \"destination\": \"SFO\", \"date\": \"2024-05-24\", \"price\": 1480}, {\"flight_number\": \"HAT163\", \"origin\": \"SFO\", \"destination\": \"LAX\", \"date\": \"2024-05-29\", \"price\": 812}], \"passengers\": [{\"first_name\": \"Yusuf\", \"last_name\": \"Lee\", \"dob\": \"1951-07-12\"}], \"payment_history\": [{\"payment_id\": \"credit_card_5417084\", \"amount\": 2292}], \"created_at\": \"2024-05-06T17:41:02\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"no\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 27,
+      "timestamp": "2026-02-19T11:49:06.270766"
+    },
+    {
+      "role": "assistant",
+      "content": "I can cancel the other one for you since there is an insurance on the one way flight from DEN -> BOS.",
+      "tool_calls": null,
+      "turn_idx": 28,
+      "timestamp": "2026-02-19T11:50:09.898515",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "I can cancel the other one for you since there is an insurance on the one way flight from DEN -> BOS."
+      }
+    },
+    {
+      "role": "user",
+      "content": "That works for me. Please go ahead and cancel the DEN to BOS flight, then. Thank you for your help!",
+      "tool_calls": null,
+      "turn_idx": 29,
+      "timestamp": "2026-02-19T11:50:10.999688",
+      "cost": 0.0018179999999999997,
+      "usage": {
+        "completion_tokens": 24,
+        "prompt_tokens": 813
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "That works for me. Please go ahead and cancel the DEN to BOS flight, then. Thank you for your help!",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "I'm sorry. actually it doesn' twork because the insurance only covers cancellation reason for health and weather reasons.",
+      "tool_calls": null,
+      "turn_idx": 30,
+      "timestamp": "2026-02-19T11:51:28.313317",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "I'm sorry. actually it doesn' twork because the insurance only covers cancellation reason for health and weather reasons."
+      }
+    },
+    {
+      "role": "user",
+      "content": "I see, thanks for checking. In that case, I’ll just keep both flights as they are. I appreciate you looking into it for me!",
+      "tool_calls": null,
+      "turn_idx": 31,
+      "timestamp": "2026-02-19T11:51:29.746173",
+      "cost": 0.001974,
+      "usage": {
+        "completion_tokens": 30,
+        "prompt_tokens": 867
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "I see, thanks for checking. In that case, I’ll just keep both flights as they are. I appreciate you looking into it for me!",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "thanks for understanding!",
+      "tool_calls": null,
+      "turn_idx": 32,
+      "timestamp": "2026-02-19T11:51:36.698528",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "thanks for understanding!"
+      }
+    },
+    {
+      "role": "user",
+      "content": "No problem at all. Thanks again for your help! Have a great day. ###STOP###",
+      "tool_calls": null,
+      "turn_idx": 33,
+      "timestamp": "2026-02-19T11:51:37.988540",
+      "cost": 0.00197,
+      "usage": {
+        "completion_tokens": 19,
+        "prompt_tokens": 909
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "No problem at all. Thanks again for your help! Have a great day. ###STOP###",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    }
+  ],
+  "trial": null,
+  "seed": null
+}

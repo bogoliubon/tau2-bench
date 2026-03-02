@@ -1,0 +1,622 @@
+{
+  "id": "3f50e353-c6a2-4ebe-9d61-ee8901ef5573",
+  "task_id": "22",
+  "timestamp": "2026-02-17T13:45:03.748864",
+  "start_time": "2026-02-17T13:38:32.857746",
+  "end_time": "2026-02-17T13:45:03.748826",
+  "duration": 390.88787705870345,
+  "termination_reason": "user_stop",
+  "agent_cost": null,
+  "user_cost": null,
+  "reward_info": null,
+  "messages": [
+    {
+      "role": "assistant",
+      "content": "Hi! How can I help you today?",
+      "tool_calls": null,
+      "turn_idx": 0,
+      "timestamp": "2026-02-17T13:38:32.858715",
+      "cost": 0.0,
+      "usage": null,
+      "raw_data": null
+    },
+    {
+      "role": "user",
+      "content": "Hi, I need to update my address on my account and for my orders.",
+      "tool_calls": null,
+      "turn_idx": 1,
+      "timestamp": "2026-02-17T13:38:34.954594",
+      "cost": 0.000926,
+      "usage": {
+        "completion_tokens": 16,
+        "prompt_tokens": 399
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Hi, I need to update my address on my account and for my orders.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "Hi. Can I have your first name, last name and zip please?",
+      "tool_calls": null,
+      "turn_idx": 2,
+      "timestamp": "2026-02-17T13:38:56.189548",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "Hi. Can I have your first name, last name and zip please?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "Sure, it's Ethan Garcia, and the zip code is 80280.",
+      "tool_calls": null,
+      "turn_idx": 3,
+      "timestamp": "2026-02-17T13:38:57.025294",
+      "cost": 0.000996,
+      "usage": {
+        "completion_tokens": 15,
+        "prompt_tokens": 438
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Sure, it's Ethan Garcia, and the zip code is 80280.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Ethan",
+            "last_name": "Garcia",
+            "zip": "80280"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 4,
+      "timestamp": "2026-02-17T13:39:06.855643",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "find_user_id_by_name_zip(first_name='Ethan', last_name='Garcia', zip='80280')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "ethan_garcia_1261",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 5,
+      "timestamp": "2026-02-17T13:39:06.856330"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_user_details",
+          "arguments": {
+            "user_id": "ethan_garcia_1261"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 6,
+      "timestamp": "2026-02-17T13:39:15.535783",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_user_details(user_id='ethan_garcia_1261')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"user_id\": \"ethan_garcia_1261\", \"name\": {\"first_name\": \"Ethan\", \"last_name\": \"Garcia\"}, \"address\": {\"address1\": \"667 Highland Drive\", \"address2\": \"Suite 865\", \"city\": \"Denver\", \"country\": \"USA\", \"state\": \"CO\", \"zip\": \"80280\"}, \"email\": \"ethan.garcia8085@example.com\", \"payment_methods\": {\"paypal_3798357\": {\"source\": \"paypal\", \"id\": \"paypal_3798357\"}, \"gift_card_4332117\": {\"source\": \"gift_card\", \"id\": \"gift_card_4332117\", \"balance\": 86.0}}, \"orders\": [\"#W4967593\", \"#W9911714\", \"#W5733668\"]}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 7,
+      "timestamp": "2026-02-17T13:39:15.536516"
+    },
+    {
+      "role": "assistant",
+      "content": "I found your account, let me look at your orders now.",
+      "tool_calls": null,
+      "turn_idx": 8,
+      "timestamp": "2026-02-17T13:39:29.875283",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "I found your account, let me look at your orders now."
+      }
+    },
+    {
+      "role": "user",
+      "content": "Alright, thanks. I’d like to change the address to 101 Highway, New York, 10001 for everything.",
+      "tool_calls": null,
+      "turn_idx": 9,
+      "timestamp": "2026-02-17T13:39:30.996183",
+      "cost": 0.001148,
+      "usage": {
+        "completion_tokens": 25,
+        "prompt_tokens": 474
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Alright, thanks. I’d like to change the address to 101 Highway, New York, 10001 for everything.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W5733668"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 10,
+      "timestamp": "2026-02-17T13:40:03.878218",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_order_details(order_id='#W5733668')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"order_id\": \"#W5733668\", \"user_id\": \"ethan_garcia_1261\", \"address\": {\"address1\": \"667 Highland Drive\", \"address2\": \"Suite 865\", \"city\": \"Denver\", \"country\": \"USA\", \"state\": \"CO\", \"zip\": \"80280\"}, \"items\": [{\"name\": \"Office Chair\", \"product_id\": \"4794339885\", \"item_id\": \"8323284863\", \"price\": 511.24, \"options\": {\"material\": \"fabric\", \"color\": \"blue\", \"armrest\": \"adjustable\", \"backrest height\": \"standard\"}}, {\"name\": \"Portable Charger\", \"product_id\": \"6942297802\", \"item_id\": \"7866854614\", \"price\": 105.49, \"options\": {\"capacity\": \"5000mAh\", \"output\": \"USB-C\", \"color\": \"white\"}}, {\"name\": \"Electric Kettle\", \"product_id\": \"1075968781\", \"item_id\": \"4064702754\", \"price\": 159.78, \"options\": {\"capacity\": \"2L\", \"material\": \"glass\", \"color\": \"white\"}}], \"status\": \"processed\", \"fulfillments\": [{\"tracking_id\": [\"365054630723\"], \"item_ids\": [\"8323284863\", \"7866854614\", \"4064702754\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 776.51, \"payment_method_id\": \"paypal_3798357\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 11,
+      "timestamp": "2026-02-17T13:40:03.879073"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W9911714"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 12,
+      "timestamp": "2026-02-17T13:40:28.797749",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_order_details(order_id='#W9911714')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"order_id\": \"#W9911714\", \"user_id\": \"ethan_garcia_1261\", \"address\": {\"address1\": \"667 Highland Drive\", \"address2\": \"Suite 865\", \"city\": \"Denver\", \"country\": \"USA\", \"state\": \"CO\", \"zip\": \"80280\"}, \"items\": [{\"name\": \"Water Bottle\", \"product_id\": \"8310926033\", \"item_id\": \"2366567022\", \"price\": 54.04, \"options\": {\"capacity\": \"1000ml\", \"material\": \"stainless steel\", \"color\": \"blue\"}}, {\"name\": \"Mechanical Keyboard\", \"product_id\": \"1656367028\", \"item_id\": \"1340995114\", \"price\": 235.13, \"options\": {\"switch type\": \"tactile\", \"backlight\": \"none\", \"size\": \"full size\"}}, {\"name\": \"Running Shoes\", \"product_id\": \"6938111410\", \"item_id\": \"9791469541\", \"price\": 147.05, \"options\": {\"size\": \"9\", \"color\": \"yellow\", \"material\": \"synthetic\", \"sole\": \"rubber\"}}, {\"name\": \"Makeup Kit\", \"product_id\": \"5149340237\", \"item_id\": \"1763705424\", \"price\": 235.44, \"options\": {\"skin tone\": \"dark\", \"kit size\": \"professional\", \"brand\": \"Brand C\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 671.66, \"payment_method_id\": \"paypal_3798357\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 13,
+      "timestamp": "2026-02-17T13:40:28.798520"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W4967593"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 14,
+      "timestamp": "2026-02-17T13:40:40.049058",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_order_details(order_id='#W4967593')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"order_id\": \"#W4967593\", \"user_id\": \"ethan_garcia_1261\", \"address\": {\"address1\": \"667 Highland Drive\", \"address2\": \"Suite 865\", \"city\": \"Denver\", \"country\": \"USA\", \"state\": \"CO\", \"zip\": \"80280\"}, \"items\": [{\"name\": \"Office Chair\", \"product_id\": \"4794339885\", \"item_id\": \"4168944673\", \"price\": 471.82, \"options\": {\"material\": \"leather\", \"color\": \"blue\", \"armrest\": \"none\", \"backrest height\": \"standard\"}}, {\"name\": \"Electric Toothbrush\", \"product_id\": \"7352963235\", \"item_id\": \"3320557165\", \"price\": 188.67, \"options\": {\"color\": \"blue\", \"speed settings\": \"high\", \"battery type\": \"AA batteries\"}}, {\"name\": \"Backpack\", \"product_id\": \"2524789262\", \"item_id\": \"8054888773\", \"price\": 206.03, \"options\": {\"color\": \"grey\", \"size\": \"small\", \"material\": \"nylon\", \"compartment\": \"laptop\"}}, {\"name\": \"Wristwatch\", \"product_id\": \"6066914160\", \"item_id\": \"1355937109\", \"price\": 1985.3, \"options\": {\"strap material\": \"leather\", \"dial color\": \"white\"}}], \"status\": \"processed\", \"fulfillments\": [{\"tracking_id\": [\"663395959263\"], \"item_ids\": [\"4168944673\", \"3320557165\", \"8054888773\", \"1355937109\"]}], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 2851.82, \"payment_method_id\": \"gift_card_4332117\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 15,
+      "timestamp": "2026-02-17T13:40:40.049817"
+    },
+    {
+      "role": "assistant",
+      "content": "I have found your pending order. should i change the address for both the order and your user address?",
+      "tool_calls": null,
+      "turn_idx": 16,
+      "timestamp": "2026-02-17T13:41:17.456232",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "I have found your pending order. should i change the address for both the order and your user address?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "Yes, please update both to the new address.",
+      "tool_calls": null,
+      "turn_idx": 17,
+      "timestamp": "2026-02-17T13:41:18.199045",
+      "cost": 0.0011359999999999999,
+      "usage": {
+        "completion_tokens": 10,
+        "prompt_tokens": 528
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Yes, please update both to the new address.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "modify_pending_order_address",
+          "arguments": {
+            "order_id": "#W9911714",
+            "address1": "101 Highway",
+            "address2": "",
+            "city": "New York",
+            "state": "NY",
+            "country": "USA",
+            "zip": "10001"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 18,
+      "timestamp": "2026-02-17T13:41:51.617077",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "modify_pending_order_address(order_id='#W9911714', address1='101 Highway', address2='', city='New York', state='NY', country='USA', zip='10001')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"order_id\": \"#W9911714\", \"user_id\": \"ethan_garcia_1261\", \"address\": {\"address1\": \"101 Highway\", \"address2\": \"\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10001\"}, \"items\": [{\"name\": \"Water Bottle\", \"product_id\": \"8310926033\", \"item_id\": \"2366567022\", \"price\": 54.04, \"options\": {\"capacity\": \"1000ml\", \"material\": \"stainless steel\", \"color\": \"blue\"}}, {\"name\": \"Mechanical Keyboard\", \"product_id\": \"1656367028\", \"item_id\": \"1340995114\", \"price\": 235.13, \"options\": {\"switch type\": \"tactile\", \"backlight\": \"none\", \"size\": \"full size\"}}, {\"name\": \"Running Shoes\", \"product_id\": \"6938111410\", \"item_id\": \"9791469541\", \"price\": 147.05, \"options\": {\"size\": \"9\", \"color\": \"yellow\", \"material\": \"synthetic\", \"sole\": \"rubber\"}}, {\"name\": \"Makeup Kit\", \"product_id\": \"5149340237\", \"item_id\": \"1763705424\", \"price\": 235.44, \"options\": {\"skin tone\": \"dark\", \"kit size\": \"professional\", \"brand\": \"Brand C\"}}], \"status\": \"pending\", \"fulfillments\": [], \"payment_history\": [{\"transaction_type\": \"payment\", \"amount\": 671.66, \"payment_method_id\": \"paypal_3798357\"}], \"cancel_reason\": null, \"exchange_items\": null, \"exchange_new_items\": null, \"exchange_payment_method_id\": null, \"exchange_price_difference\": null, \"return_items\": null, \"return_payment_method_id\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 19,
+      "timestamp": "2026-02-17T13:41:51.618021"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "modify_user_address",
+          "arguments": {
+            "user_id": "user_id\": \"ethan_garcia_1261\",",
+            "address1": "101 Highway",
+            "address2": "",
+            "city": "New York",
+            "state": "NY",
+            "country": "USA",
+            "zip": "10001"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 20,
+      "timestamp": "2026-02-17T13:43:38.045214",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "modify_user_address(user_id='user_id\": \"ethan_garcia_1261\",', address1='101 Highway', address2='', city='New York', state='NY', country='USA', zip='10001')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "Error: User not found",
+      "requestor": "assistant",
+      "error": true,
+      "turn_idx": 21,
+      "timestamp": "2026-02-17T13:43:38.046054"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "modify_user_address",
+          "arguments": {
+            "user_id": "ethan_garcia_1261",
+            "address1": "101 Highway",
+            "address2": "",
+            "city": "New York",
+            "state": "NY",
+            "country": "USA",
+            "zip": "10001"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 22,
+      "timestamp": "2026-02-17T13:44:08.379125",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "modify_user_address(user_id='ethan_garcia_1261', address1='101 Highway', address2='', city='New York', state='NY', country='USA', zip='10001')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"user_id\": \"ethan_garcia_1261\", \"name\": {\"first_name\": \"Ethan\", \"last_name\": \"Garcia\"}, \"address\": {\"address1\": \"101 Highway\", \"address2\": \"\", \"city\": \"New York\", \"country\": \"USA\", \"state\": \"NY\", \"zip\": \"10001\"}, \"email\": \"ethan.garcia8085@example.com\", \"payment_methods\": {\"paypal_3798357\": {\"source\": \"paypal\", \"id\": \"paypal_3798357\"}, \"gift_card_4332117\": {\"source\": \"gift_card\", \"id\": \"gift_card_4332117\", \"balance\": 86.0}}, \"orders\": [\"#W4967593\", \"#W9911714\", \"#W5733668\"]}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 23,
+      "timestamp": "2026-02-17T13:44:08.380015"
+    },
+    {
+      "role": "assistant",
+      "content": "I have processed both changes for you.",
+      "tool_calls": null,
+      "turn_idx": 24,
+      "timestamp": "2026-02-17T13:44:19.999336",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "I have processed both changes for you."
+      }
+    },
+    {
+      "role": "user",
+      "content": "Actually, I’d like to switch my user address back to what it was before. Can you help with that?",
+      "tool_calls": null,
+      "turn_idx": 25,
+      "timestamp": "2026-02-17T13:44:21.024716",
+      "cost": 0.001292,
+      "usage": {
+        "completion_tokens": 23,
+        "prompt_tokens": 554
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Actually, I’d like to switch my user address back to what it was before. Can you help with that?",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "oh yes. let me process.",
+      "tool_calls": null,
+      "turn_idx": 26,
+      "timestamp": "2026-02-17T13:44:26.603703",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "oh yes. let me process."
+      }
+    },
+    {
+      "role": "user",
+      "content": "Thank you. Let me know when it’s done.",
+      "tool_calls": null,
+      "turn_idx": 27,
+      "timestamp": "2026-02-17T13:44:27.255689",
+      "cost": 0.001272,
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 592
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Thank you. Let me know when it’s done.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "modify_user_address",
+          "arguments": {
+            "user_id": "ethan_garcia_1261",
+            "address1": "667 Highland Drive",
+            "address2": "Suite 865",
+            "city": "Denver",
+            "state": "CO",
+            "country": "USA",
+            "zip": "80280"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 28,
+      "timestamp": "2026-02-17T13:44:54.851439",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "modify_user_address(user_id='ethan_garcia_1261', address1='667 Highland Drive', address2='Suite 865', city='Denver', state='CO', country='USA', zip='80280')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"user_id\": \"ethan_garcia_1261\", \"name\": {\"first_name\": \"Ethan\", \"last_name\": \"Garcia\"}, \"address\": {\"address1\": \"667 Highland Drive\", \"address2\": \"Suite 865\", \"city\": \"Denver\", \"country\": \"USA\", \"state\": \"CO\", \"zip\": \"80280\"}, \"email\": \"ethan.garcia8085@example.com\", \"payment_methods\": {\"paypal_3798357\": {\"source\": \"paypal\", \"id\": \"paypal_3798357\"}, \"gift_card_4332117\": {\"source\": \"gift_card\", \"id\": \"gift_card_4332117\", \"balance\": 86.0}}, \"orders\": [\"#W4967593\", \"#W9911714\", \"#W5733668\"]}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 29,
+      "timestamp": "2026-02-17T13:44:54.852225"
+    },
+    {
+      "role": "assistant",
+      "content": "I changed it back.",
+      "tool_calls": null,
+      "turn_idx": 30,
+      "timestamp": "2026-02-17T13:44:59.307871",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "I changed it back."
+      }
+    },
+    {
+      "role": "user",
+      "content": "Great, thanks for your help. That’s all I needed.",
+      "tool_calls": null,
+      "turn_idx": 31,
+      "timestamp": "2026-02-17T13:45:00.007196",
+      "cost": 0.001336,
+      "usage": {
+        "completion_tokens": 13,
+        "prompt_tokens": 616
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Great, thanks for your help. That’s all I needed.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "thanks!",
+      "tool_calls": null,
+      "turn_idx": 32,
+      "timestamp": "2026-02-17T13:45:02.867486",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "thanks!"
+      }
+    },
+    {
+      "role": "user",
+      "content": "You're welcome. Have a good day. ###STOP###",
+      "tool_calls": null,
+      "turn_idx": 33,
+      "timestamp": "2026-02-17T13:45:03.743993",
+      "cost": 0.0013659999999999998,
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 639
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "You're welcome. Have a good day. ###STOP###",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    }
+  ],
+  "trial": null,
+  "seed": null
+}
