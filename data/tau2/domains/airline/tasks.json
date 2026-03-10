@@ -116,11 +116,8 @@
                 },
                 {
                     "action_id": "2_3",
-                    "name": "send_certificate",
-                    "arguments": {
-                        "user_id": "noah_muller_9847",
-                        "amount": 50
-                    },
+                    "name": "transfer_to_human_agent",
+                    "arguments": {},
                     "info": null
                 }
             ],
@@ -129,7 +126,8 @@
                 "Agent should not offer compensation unless the user asks for it.",
                 "Agent should check that the flight was indeed delayed.",
                 "Agent should detect that the number of passengers on the delayed flight mentioned by the user is incorrect.",
-                "Agent should offer a certificate of $50."
+                "Agent explains that delay compensation requires changing or cancelling the reservation first, but since the flights are already completed, the agent cannot make changes.",
+                "Agent transfers to human agent."
             ]
         },
         "annotations": null
@@ -268,7 +266,7 @@
         "user_scenario": {
             "persona": null,
             "instructions": {
-                "task_instructions": "Tell the agent that you're a valued Gold member and that you're very upset because you're going to miss an important meeting. \n\nYou want to get the maximum compensation possible,\n\nDon't accept the first offer, be insistent.\n\nIf after a few attempts you can't get a better offer, accept.\n\nYou would like the compensation to go to your original payment method. \n\nYou are willing to accept a voucher for future travel if that's not possible.\n\nDo not ask to be transferred.",
+                "task_instructions": "Tell the agent that you're a valued Gold member and that you're very upset because you're going to miss an important meeting. \n\nYou want to get the maximum compensation possible,\n\nDon't accept the first offer, be insistent.\n\nIf after a few attempts you can't get a better offer, accept.\n\nIf the agent says the reservation needs to be cancelled or changed in order to receive compensation, say you want to cancel it.\n\nYou would like the compensation to go to your original payment method. \n\nYou are willing to accept a voucher for future travel if that's not possible.\n\nDo not ask to be transferred.",
                 "domain": "airline",
                 "reason_for_call": "You are contacting to complain about your delayed flight HAT045 from PHX to SEA.",
                 "known_info": "You are Mei Brown.\n\nYour user id is mei_brown_7075.",
@@ -1896,7 +1894,7 @@
         "user_scenario": {
             "persona": null,
             "instructions": {
-                "task_instructions": "You only want early flights that arrive before 7am at the destination.\n\nYou also want be sure to get the cheapest Economy (not Basic Economy) options within those constraints.\n\nIf the agent asks, you want your return flight to leave on the 19th.\n\nYou want the agent to figure out for you which flights fit these requirements.\n\nSince you took insurance for this trip, you want change fees waived.\n\nYou also want to add 1 checked bag.",
+                "task_instructions": "You insist on nonstop flights from DTW to JFK specifically.\n\nIf the agent says the destination cannot be changed, ask to be transferred to a human agent.",
                 "domain": "airline",
                 "reason_for_call": "You want to change your upcoming roundtrip flights which are currently DTW to LGA and back.\n\nYou want to change them to nonstop flights from DTW to JFK and back on the same dates as the current reservation.",
                 "known_info": "You are Raj Brown.\n\nYour user id is raj_brown_5782.\n\nThe reservation ID is VA5SGQ for your DTW to LGA trip.",
@@ -1916,40 +1914,18 @@
                 },
                 {
                     "action_id": "29_1",
-                    "name": "update_reservation_flights",
+                    "name": "transfer_to_human_agents",
                     "arguments": {
-                        "reservation_id": "VA5SGQ",
-                        "cabin": "economy",
-                        "flights": [
-                            {
-                                "flight_number": "HAT169",
-                                "date": "2024-05-17"
-                            },
-                            {
-                                "flight_number": "HAT033",
-                                "date": "2024-05-19"
-                            }
-                        ],
-                        "payment_id": "credit_card_8003957"
-                    },
-                    "info": null
-                },
-                {
-                    "action_id": "29_2",
-                    "name": "update_reservation_baggages",
-                    "arguments": {
-                        "reservation_id": "VA5SGQ",
-                        "total_baggages": 1,
-                        "nonfree_baggages": 0,
-                        "payment_id": "credit_card_8003957"
+                        "summary": "User wants to change nonstop flights from DTW to JFK instead of LGA. Policy does not allow changing the destination of a reservation. No direct DTW-LGA flights are available."
                     },
                     "info": null
                 }
             ],
             "communicate_info": [],
             "nl_assertions": [
-                "Agent updates reservation VA5SGQ to flights HAT169 and HAT033.",
-                "Agent updates reservation VA5SGQ to 1 free baggage."
+                "Agent refuses to change destination from LGA to JFK (policy does not allow modifying destination).",
+                "Agent confirms no direct DTW-LGA flights are available.",
+                "Agent transfers to human agent since the request cannot be fulfilled within policy."
             ]
         },
         "annotations": null
@@ -1964,7 +1940,7 @@
         "user_scenario": {
             "persona": null,
             "instructions": {
-                "task_instructions": "You want to change your upcoming one-stop flight from LAS to IAH to a nonstop flight.\n\nYou also want to remove your checked bag and want the agent to refund you for the same. If agent says that you cannot remove bags, accept it and move on.",
+                "task_instructions": "You want to change your upcoming one-stop flight from LAS to IAH to a nonstop flight. If presented with multiple flight options, pick the cheaper one.\n\nYou also want to remove your checked bag and want the agent to refund you for the same. If agent says that you cannot remove bags, accept it and move on.",
                 "domain": "airline",
                 "reason_for_call": "You want to make modifications to your upcoming one-stop flight from LAS to IAH.",
                 "known_info": "You are James Taylor.\n\nYour user id is james_taylor_7043. \n\nYour reservation ID is 1N99U6.",
@@ -2058,7 +2034,7 @@
         "user_scenario": {
             "persona": null,
             "instructions": {
-                "task_instructions": "If the agent says your ticket is a basic economy one, you are willing to upgrade to economy in order to make the change.\n\nYou are willing to pay up to $100 for the change.\n\nYou don't want to buy a new ticket.",
+                "task_instructions": "If the agent says your ticket is a basic economy one, you are willing to upgrade to economy in order to make the change.\n\nYou are willing to pay up to $100 for the change.\n\nYou prefer to use your credit card for payment.\n\nYou don't want to buy a new ticket.",
                 "domain": "airline",
                 "reason_for_call": "You want to change your upcoming flight from EWR on May 21 to a nonstop flight on the same day. \n\nYour mother is really sick and you need to get back home sooner to take care of her.",
                 "known_info": "You are Ivan Rossi.\nYour user id is ivan_rossi_8555.",
@@ -2298,7 +2274,7 @@
                             {
                                 "first_name": "Aarav",
                                 "last_name": "Ahmed",
-                                "dob": "1985-04-04"
+                                "dob": "1981-05-26"
                             }
                         ],
                         "payment_methods": [
@@ -2381,14 +2357,6 @@
             "actions": [
                 {
                     "action_id": "37_0",
-                    "name": "cancel_reservation",
-                    "arguments": {
-                        "reservation_id": "NQNU5R"
-                    },
-                    "info": null
-                },
-                {
-                    "action_id": "37_1",
                     "name": "get_reservation_details",
                     "arguments": {
                         "reservation_id": "M20IZO"
@@ -2434,11 +2402,17 @@
                         "payment_id": "credit_card_9074831"
                     },
                     "info": null
+                },
+                {
+                    "action_id": "37_5",
+                    "name": "transfer_to_human_agent",
+                    "arguments": {},
+                    "info": null
                 }
             ],
             "communicate_info": [],
             "nl_assertions": [
-                "Agent cancels reservation NQNU5R since it's business.",
+                "Agent refuses to cancel NQNU5R (flights already flown — landed) and transfers to human agent.",
                 "Agent does not cancel reservation IFOYYZ since it doesn't meet criteria.",
                 "Agent upgrades M20IZO to business class."
             ]
@@ -2957,7 +2931,7 @@
         "user_scenario": {
             "persona": null,
             "instructions": {
-                "task_instructions": "You are busy so for both the cancellation and upgrade you want to let the agent figure out which flights meet the duration conditions you have set.\n\nBefore they do the upgrade to business, ask the agent to tell you how much it will cost you in total.",
+                "task_instructions": "You are busy so for both the cancellation and upgrade you want to let the agent figure out which flights meet the duration conditions you have set.\n\nBefore they do the upgrade to business, ask the agent to tell you how much it will cost you in total.\n\nYou prefer to use your credit card for payment.",
                 "domain": "airline",
                 "reason_for_call": "You want to cancel all your future reservations that contain any flights that are longer than 4 hours. \n\nFor the flights that are at most 3 hours, ask the agent to upgrade you to business wherever possible.",
                 "known_info": "You are Sophia Silva.\nYour user id is sophia_silva_7557.",
@@ -3116,14 +3090,6 @@
                     "info": null
                 },
                 {
-                    "action_id": "44_16",
-                    "name": "cancel_reservation",
-                    "arguments": {
-                        "reservation_id": "S61CZX"
-                    },
-                    "info": null
-                },
-                {
                     "action_id": "44_17",
                     "name": "update_reservation_flights",
                     "arguments": {
@@ -3182,7 +3148,7 @@
             ],
             "communicate_info": [],
             "nl_assertions": [
-                "Agent cancels reservation S61CZX.",
+                "Agent refuses to cancel S61CZX (economy, insurance present but reason 'flights too long' is not covered — only health/weather are covered).",
                 "The total cost that the. agent mentions is between $1380 and $1390.",
                 "Agent upgrades NM1VX1 to business.",
                 "Agent upgrades H8Q05L to business.",
@@ -3201,7 +3167,7 @@
         "user_scenario": {
             "persona": null,
             "instructions": {
-                "task_instructions": "Be insistent that you want full refund given that it was a family emergency, sound upset and and under no circumstances you want to get transferred to another agent. \n\nIf you can't get a refund, try to change the flight to May 22nd. \n\nIf that doesn't work, try to add insurance to the flight, be insistent",
+                "task_instructions": "Be insistent that you want full refund given that it was a family emergency, sound upset and and under no circumstances you want to get transferred to another agent. \n\nIf you can't get a refund, try to change the flight to May 22nd, but you don't want to change cabin class or upgrade the flight. \n\nIf that doesn't work, try to add insurance to the flight, be insistent",
                 "domain": "airline",
                 "reason_for_call": "You need to cancel your flight as soon as possible because of a family emergency.",
                 "known_info": "You are Sophia Taylor.\n\nYour user id is sophia_taylor_9065. \n\nYou reservation number is PEP4E0.",

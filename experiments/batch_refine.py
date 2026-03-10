@@ -247,6 +247,15 @@ Based on these new trajectories, update the policy. Add new rules, refine existi
             print(f"Calling {model_name}...")
             response = call_llm(prompt, model_name)
 
+            # Enforce length limit — if over, ask LLM to compress
+            if max_policy_chars is not None and len(response) > max_policy_chars:
+                print(f"  Policy too long ({len(response)} chars), asking LLM to compress to {max_policy_chars}...")
+                compress_prompt = f"The following policy is {len(response)} characters but must not exceed {max_policy_chars} characters. Compress it by merging overlapping rules, using shorter bullet points, and dropping details that can be inferred. Provide ONLY the compressed policy.\n\n{response}"
+                response = call_llm(compress_prompt, model_name)
+                print(f"  Compressed to {len(response)} chars")
+                if len(response) > max_policy_chars:
+                    print(f"  WARNING: Still over limit ({len(response)} > {max_policy_chars} chars) after compression")
+
             print(f"Policy extracted/updated (length: {len(response)} chars)")
             current_policy = response
             updated = True

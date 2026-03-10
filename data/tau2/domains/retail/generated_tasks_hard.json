@@ -1,0 +1,2728 @@
+[
+  {
+    "id": "500",
+    "description": {
+      "purpose": "User provides user_id directly - agent must still authenticate via email or name+zip",
+      "relevant_policies": null,
+      "notes": "Policy lines 10-14: agent must authenticate even when user provides user_id"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are friendly but firm \u2014 you know what you want and won't settle.",
+        "domain": "retail",
+        "reason_for_call": "You want to check the status of your order. Your user ID is chen_moore_6080 and your order is #W9205196.",
+        "known_info": "Your user ID is chen_moore_6080. If the agent asks for other info, you are Chen Moore in zip code 91087.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "500_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Chen",
+            "last_name": "Moore",
+            "zip": "91087"
+          },
+          "info": null
+        },
+        {
+          "action_id": "500_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W9205196"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "501",
+    "description": {
+      "purpose": "User provides user_id directly - agent must still authenticate via email or name+zip",
+      "relevant_policies": null,
+      "notes": "Policy lines 10-14: agent must authenticate even when user provides user_id"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are a no-nonsense person who states exactly what you want.",
+        "domain": "retail",
+        "reason_for_call": "You want to check the status of your order. Your user ID is chen_lopez_3345 and your order is #W1790752.",
+        "known_info": "Your user ID is chen_lopez_3345. If the agent asks for other info, you are Chen Lopez in zip code 98155.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "501_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Chen",
+            "last_name": "Lopez",
+            "zip": "98155"
+          },
+          "info": null
+        },
+        {
+          "action_id": "501_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W1790752"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "502",
+    "description": {
+      "purpose": "User authenticates via email path",
+      "relevant_policies": null,
+      "notes": "Testing email auth path; user only knows email"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are impatient and want things resolved immediately.",
+        "domain": "retail",
+        "reason_for_call": "You want to check on your order #W5432440.",
+        "known_info": "Your email is emma.martin1207@example.com. You do not remember your name or zip code on file.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "502_0",
+          "name": "find_user_id_by_email",
+          "arguments": {
+            "email": "emma.martin1207@example.com"
+          },
+          "info": null
+        },
+        {
+          "action_id": "502_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W5432440"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "503",
+    "description": {
+      "purpose": "User authenticates via email path",
+      "relevant_policies": null,
+      "notes": "Testing email auth path; user only knows email"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You want to check on your order #W1941216.",
+        "known_info": "Your email is harper.ito2682@example.com. You do not remember your name or zip code on file.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "503_0",
+          "name": "find_user_id_by_email",
+          "arguments": {
+            "email": "harper.ito2682@example.com"
+          },
+          "info": null
+        },
+        {
+          "action_id": "503_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W1941216"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "504",
+    "description": {
+      "purpose": "Cancel a delivered order - should be refused",
+      "relevant_policies": null,
+      "notes": "Policy line 88: cancel only for pending orders"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You want to cancel order #W8495163.",
+        "known_info": "You are Ava Moore in zip code 85032.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "504_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Ava",
+            "last_name": "Moore",
+            "zip": "85032"
+          },
+          "info": null
+        },
+        {
+          "action_id": "504_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W8495163"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that a delivered order cannot be cancelled",
+        "The agent suggested returning the order instead or offered alternatives"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "505",
+    "description": {
+      "purpose": "Cancel a delivered order - should be refused",
+      "relevant_policies": null,
+      "notes": "Policy line 88: cancel only for pending orders"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are confused and may provide contradictory information at first.",
+        "domain": "retail",
+        "reason_for_call": "You want to cancel order #W1605168.",
+        "known_info": "You are Yara Moore in zip code 92162.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "505_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Yara",
+            "last_name": "Moore",
+            "zip": "92162"
+          },
+          "info": null
+        },
+        {
+          "action_id": "505_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W1605168"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that a delivered order cannot be cancelled",
+        "The agent suggested returning the order instead or offered alternatives"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "506",
+    "description": {
+      "purpose": "Return a pending order - should be refused",
+      "relevant_policies": null,
+      "notes": "Policy line 118: return only for delivered orders"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are confused and may provide contradictory information at first.",
+        "domain": "retail",
+        "reason_for_call": "You want to return the glass tea kettle from order #W2818151.",
+        "known_info": "You are Sofia Rossi in zip code 78784.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "506_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Sofia",
+            "last_name": "Rossi",
+            "zip": "78784"
+          },
+          "info": null
+        },
+        {
+          "action_id": "506_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W2818151"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that a pending order cannot be returned",
+        "The agent suggested cancelling the order or waiting for delivery"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "507",
+    "description": {
+      "purpose": "Return a pending order - should be refused",
+      "relevant_policies": null,
+      "notes": "Policy line 118: return only for delivered orders"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are impatient and want things resolved immediately.",
+        "domain": "retail",
+        "reason_for_call": "You want to return the 128GB tablet from order #W9077472.",
+        "known_info": "You are Amelia Patel in zip code 85051.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "507_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Amelia",
+            "last_name": "Patel",
+            "zip": "85051"
+          },
+          "info": null
+        },
+        {
+          "action_id": "507_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W9077472"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that a pending order cannot be returned",
+        "The agent suggested cancelling the order or waiting for delivery"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "508",
+    "description": {
+      "purpose": "Modify a processed order - should be refused",
+      "relevant_policies": null,
+      "notes": "Policy line 96: modify only for pending orders"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You want to change the shipping address for order #W4744949 to a new address.",
+        "known_info": "You are Mia Smith in zip code 80246.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "508_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Mia",
+            "last_name": "Smith",
+            "zip": "80246"
+          },
+          "info": null
+        },
+        {
+          "action_id": "508_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W4744949"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that a processed order cannot be modified"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "509",
+    "description": {
+      "purpose": "Modify a processed order - should be refused",
+      "relevant_policies": null,
+      "notes": "Policy line 96: modify only for pending orders"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are impatient and want things resolved immediately.",
+        "domain": "retail",
+        "reason_for_call": "You want to change the shipping address for order #W5353646 to a new address.",
+        "known_info": "You are Olivia Ito in zip code 80218.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "509_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Olivia",
+            "last_name": "Ito",
+            "zip": "80218"
+          },
+          "info": null
+        },
+        {
+          "action_id": "509_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W5353646"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that a processed order cannot be modified"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "510",
+    "description": {
+      "purpose": "Exchange a pending order - should be refused",
+      "relevant_policies": null,
+      "notes": "Policy line 130: exchange only for delivered orders"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W3746173 and want to exchange the medium makeup kit for a different variant.",
+        "known_info": "You are Evelyn Ahmed in zip code 80256.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "510_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Evelyn",
+            "last_name": "Ahmed",
+            "zip": "80256"
+          },
+          "info": null
+        },
+        {
+          "action_id": "510_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W3746173"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that a pending order cannot be exchanged",
+        "The agent suggested modifying the order or waiting for delivery"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "511",
+    "description": {
+      "purpose": "Exchange a pending order - should be refused",
+      "relevant_policies": null,
+      "notes": "Policy line 130: exchange only for delivered orders"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W7048824 and want to exchange the 1.5L espresso machine for a different variant.",
+        "known_info": "You are Raj Moore in zip code 20566.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "511_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Raj",
+            "last_name": "Moore",
+            "zip": "20566"
+          },
+          "info": null
+        },
+        {
+          "action_id": "511_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W7048824"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that a pending order cannot be exchanged",
+        "The agent suggested modifying the order or waiting for delivery"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "512",
+    "description": {
+      "purpose": "Invalid cancel reason - agent must ask for valid reason",
+      "relevant_policies": null,
+      "notes": "Policy lines 88-92: reason must be 'no longer needed' or 'ordered by mistake'"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You want to cancel order #W2230795. Your initial reason is: \"I changed my mind about the color\". When the agent tells you the valid reasons, you pick \"ordered by mistake\".",
+        "known_info": "You are Yusuf Gonzalez in zip code 91455.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "512_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Yusuf",
+            "last_name": "Gonzalez",
+            "zip": "91455"
+          },
+          "info": null
+        },
+        {
+          "action_id": "512_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W2230795"
+          },
+          "info": null
+        },
+        {
+          "action_id": "512_2",
+          "name": "cancel_pending_order",
+          "arguments": {
+            "order_id": "#W2230795",
+            "reason": "ordered by mistake"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "513",
+    "description": {
+      "purpose": "Invalid cancel reason - agent must ask for valid reason",
+      "relevant_policies": null,
+      "notes": "Policy lines 88-92: reason must be 'no longer needed' or 'ordered by mistake'"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are friendly but firm \u2014 you know what you want and won't settle.",
+        "domain": "retail",
+        "reason_for_call": "You want to cancel order #W2079779. Your initial reason is: \"it's too expensive\". When the agent tells you the valid reasons, you pick \"no longer needed\".",
+        "known_info": "You are Amelia Patel in zip code 85051.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "513_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Amelia",
+            "last_name": "Patel",
+            "zip": "85051"
+          },
+          "info": null
+        },
+        {
+          "action_id": "513_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W2079779"
+          },
+          "info": null
+        },
+        {
+          "action_id": "513_2",
+          "name": "cancel_pending_order",
+          "arguments": {
+            "order_id": "#W2079779",
+            "reason": "no longer needed"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "514",
+    "description": {
+      "purpose": "Partial cancel of multi-item order - not possible",
+      "relevant_policies": null,
+      "notes": "Cancel applies to entire order, not individual items"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You want to cancel just the leather smart watch from order #W9440076, not the whole order.",
+        "known_info": "You are Noah Kovacs in zip code 20566.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "514_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Noah",
+            "last_name": "Kovacs",
+            "zip": "20566"
+          },
+          "info": null
+        },
+        {
+          "action_id": "514_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W9440076"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that partial cancellation is not possible and the entire order must be cancelled"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "515",
+    "description": {
+      "purpose": "Partial cancel of multi-item order - not possible",
+      "relevant_policies": null,
+      "notes": "Cancel applies to entire order, not individual items"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are a no-nonsense person who states exactly what you want.",
+        "domain": "retail",
+        "reason_for_call": "You want to cancel just the tactile mechanical keyboard from order #W6447372, not the whole order.",
+        "known_info": "You are Sophia Garcia in zip code 28212.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "515_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Sophia",
+            "last_name": "Garcia",
+            "zip": "28212"
+          },
+          "info": null
+        },
+        {
+          "action_id": "515_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W6447372"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that partial cancellation is not possible and the entire order must be cancelled"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "516",
+    "description": {
+      "purpose": "Modify item to different product type - should be refused",
+      "relevant_policies": null,
+      "notes": "Policy line 112: cannot change product types"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are confused and may provide contradictory information at first.",
+        "domain": "retail",
+        "reason_for_call": "You want to modify order #W9132840. You want to change the bamboo skateboard (Skateboard) to a LED Light Bulb instead.",
+        "known_info": "You are Lei Ahmed in zip code 19128.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "516_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Lei",
+            "last_name": "Ahmed",
+            "zip": "19128"
+          },
+          "info": null
+        },
+        {
+          "action_id": "516_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W9132840"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that items can only be modified to a different variant of the same product, not a different product type"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "517",
+    "description": {
+      "purpose": "Modify item to different product type - should be refused",
+      "relevant_policies": null,
+      "notes": "Policy line 112: cannot change product types"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are skeptical and will question the agent's responses.",
+        "domain": "retail",
+        "reason_for_call": "You want to modify order #W6805991. You want to change the 1L espresso machine (Espresso Machine) to a Garden Hose instead.",
+        "known_info": "You are Ava Silva in zip code 76109.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "517_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Ava",
+            "last_name": "Silva",
+            "zip": "76109"
+          },
+          "info": null
+        },
+        {
+          "action_id": "517_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W6805991"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that items can only be modified to a different variant of the same product, not a different product type"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "518",
+    "description": {
+      "purpose": "Modify payment to same method - not allowed",
+      "relevant_policies": null,
+      "notes": "Policy line 102: must choose a different payment method"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are skeptical and will question the agent's responses.",
+        "domain": "retail",
+        "reason_for_call": "You want to update the payment method on order #W7941031. You want to use your visa card ending in 9182 (which is actually the same one already on the order).",
+        "known_info": "You are Olivia Ito in zip code 80218.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "518_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Olivia",
+            "last_name": "Ito",
+            "zip": "80218"
+          },
+          "info": null
+        },
+        {
+          "action_id": "518_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W7941031"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that the new payment method must be different from the original"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "519",
+    "description": {
+      "purpose": "Modify payment to same method - not allowed",
+      "relevant_policies": null,
+      "notes": "Policy line 102: must choose a different payment method"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are confused and may provide contradictory information at first.",
+        "domain": "retail",
+        "reason_for_call": "You want to update the payment method on order #W8465042. You want to use your gift card (which is actually the same one already on the order).",
+        "known_info": "You are Ethan Thomas in zip code 43188.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "519_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Ethan",
+            "last_name": "Thomas",
+            "zip": "43188"
+          },
+          "info": null
+        },
+        {
+          "action_id": "519_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W8465042"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that the new payment method must be different from the original"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "520",
+    "description": {
+      "purpose": "Modify payment to gift card with insufficient balance",
+      "relevant_policies": null,
+      "notes": "Policy line 104: gift card must have enough balance"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are confused and may provide contradictory information at first.",
+        "domain": "retail",
+        "reason_for_call": "You want to change the payment method on order #W8327915 to your gift card (balance $6.00).",
+        "known_info": "You are Ava Lopez in zip code 92168.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "520_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Ava",
+            "last_name": "Lopez",
+            "zip": "92168"
+          },
+          "info": null
+        },
+        {
+          "action_id": "520_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W8327915"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that the gift card balance is insufficient to cover the order total"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "521",
+    "description": {
+      "purpose": "Return with refund to invalid payment method",
+      "relevant_policies": null,
+      "notes": "Policy line 124: refund must be original PM or gift card"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are a no-nonsense person who states exactly what you want.",
+        "domain": "retail",
+        "reason_for_call": "You want to return the adjustable dumbbell set from order #W6026015. You want the refund sent to your visa card ending in 6169.",
+        "known_info": "You are Ethan Moore in zip code 75339.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "521_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Ethan",
+            "last_name": "Moore",
+            "zip": "75339"
+          },
+          "info": null
+        },
+        {
+          "action_id": "521_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W6026015"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that the refund must go to the original payment method or an existing gift card"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "522",
+    "description": {
+      "purpose": "Return with refund to invalid payment method",
+      "relevant_policies": null,
+      "notes": "Policy line 124: refund must be original PM or gift card"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You want to return the 60% mechanical keyboard from order #W1341845. You want the refund sent to your mastercard card ending in 5715.",
+        "known_info": "You are Yara Lee in zip code 77243.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "522_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Yara",
+            "last_name": "Lee",
+            "zip": "77243"
+          },
+          "info": null
+        },
+        {
+          "action_id": "522_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W1341845"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that the refund must go to the original payment method or an existing gift card"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "523",
+    "description": {
+      "purpose": "Return insisting on PayPal refund (no gift card) \u2192 transfer to human",
+      "relevant_policies": null,
+      "notes": "Policy line 124 + line 24: refund options exhausted, must transfer"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You want to return the nylon backpack from order #W7303089. You insist on the refund going to your PayPal account. You do not want the refund on your credit card. If the agent says this is not possible, ask to speak to a human agent.",
+        "known_info": "You are Mei Gonzalez in zip code 95170.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "523_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Mei",
+            "last_name": "Gonzalez",
+            "zip": "95170"
+          },
+          "info": null
+        },
+        {
+          "action_id": "523_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W7303089"
+          },
+          "info": null
+        },
+        {
+          "action_id": "523_2",
+          "name": "transfer_to_human_agents",
+          "arguments": {
+            "summary": ""
+          },
+          "info": null,
+          "compare_args": []
+        }
+      ],
+      "communicate_info": [
+        "TRANSFERRED",
+        "HUMAN AGENT"
+      ],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "524",
+    "description": {
+      "purpose": "Exchange to different product type - should be refused",
+      "relevant_policies": null,
+      "notes": "Policy line 132: cannot change product types in exchange"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W4892278 and want to exchange the blue cycling helmet (Cycling Helmet) for a Sneakers instead.",
+        "known_info": "You are Isabella Taylor in zip code 60646.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "524_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Isabella",
+            "last_name": "Taylor",
+            "zip": "60646"
+          },
+          "info": null
+        },
+        {
+          "action_id": "524_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W4892278"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that exchanges can only be for the same product type with different options, not a different product type"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "525",
+    "description": {
+      "purpose": "Exchange to different product type - should be refused",
+      "relevant_policies": null,
+      "notes": "Policy line 132: cannot change product types in exchange"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are friendly but firm \u2014 you know what you want and won't settle.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W9833379 and want to exchange the blue t-shirt (T-Shirt) for a Wall Clock instead.",
+        "known_info": "You are Aarav Thomas in zip code 32175.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "525_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Aarav",
+            "last_name": "Thomas",
+            "zip": "32175"
+          },
+          "info": null
+        },
+        {
+          "action_id": "525_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W9833379"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that exchanges can only be for the same product type with different options, not a different product type"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "526",
+    "description": {
+      "purpose": "Exchange to unavailable variant",
+      "relevant_policies": null,
+      "notes": "Policy line 132: can only exchange to available items"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are skeptical and will question the agent's responses.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W4680317 and want to exchange the over-ear headphones for the variant with type: in-ear, connectivity: wireless, color: blue.",
+        "known_info": "You are Daiki Johansson in zip code 46248.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "526_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Daiki",
+            "last_name": "Johansson",
+            "zip": "46248"
+          },
+          "info": null
+        },
+        {
+          "action_id": "526_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W4680317"
+          },
+          "info": null
+        },
+        {
+          "action_id": "526_2",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "6992792935"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that the requested variant is not available"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "527",
+    "description": {
+      "purpose": "Exchange to unavailable variant",
+      "relevant_policies": null,
+      "notes": "Policy line 132: can only exchange to available items"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W8336711 and want to exchange the 20MP digital camera for the variant with resolution: 30MP, zoom: 10x, storage: CF card.",
+        "known_info": "You are Yara Moore in zip code 92162.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "527_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Yara",
+            "last_name": "Moore",
+            "zip": "92162"
+          },
+          "info": null
+        },
+        {
+          "action_id": "527_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W8336711"
+          },
+          "info": null
+        },
+        {
+          "action_id": "527_2",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "8940227892"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that the requested variant is not available"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "528",
+    "description": {
+      "purpose": "Exchange with gift card insufficient for price difference",
+      "relevant_policies": null,
+      "notes": "Policy line 134: gift card must have enough balance"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are skeptical and will question the agent's responses.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W8727985 and want to exchange the 128GB tablet (change the variant with screen size: 10-inch, storage: 32GB, color: black). You want to pay the difference with your gift card.",
+        "known_info": "You are Sophia Garcia in zip code 78263.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "528_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Sophia",
+            "last_name": "Garcia",
+            "zip": "78263"
+          },
+          "info": null
+        },
+        {
+          "action_id": "528_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W8727985"
+          },
+          "info": null
+        },
+        {
+          "action_id": "528_2",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "8024098596"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent informed the user that the gift card balance is insufficient to cover the price difference"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "529",
+    "description": {
+      "purpose": "Out of scope request \u2192 transfer to human",
+      "relevant_policies": null,
+      "notes": "Policy line 24: transfer for requests outside agent scope"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are confused and may provide contradictory information at first.",
+        "domain": "retail",
+        "reason_for_call": "You want the agent to place a new order for you. If the agent says they cannot help with this, insist that you need this resolved and ask to speak to someone who can.",
+        "known_info": "You are Sophia Smith in zip code 28204.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "529_0",
+          "name": "transfer_to_human_agents",
+          "arguments": {
+            "summary": ""
+          },
+          "info": null,
+          "compare_args": []
+        }
+      ],
+      "communicate_info": [
+        "TRANSFERRED",
+        "HUMAN AGENT"
+      ],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "530",
+    "description": {
+      "purpose": "Out of scope request \u2192 transfer to human",
+      "relevant_policies": null,
+      "notes": "Policy line 24: transfer for requests outside agent scope"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are confused and may provide contradictory information at first.",
+        "domain": "retail",
+        "reason_for_call": "You want to merge two of your accounts into one. If the agent says they cannot help with this, insist that you need this resolved and ask to speak to someone who can.",
+        "known_info": "You are Isabella Garcia in zip code 78275.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "530_0",
+          "name": "transfer_to_human_agents",
+          "arguments": {
+            "summary": ""
+          },
+          "info": null,
+          "compare_args": []
+        }
+      ],
+      "communicate_info": [
+        "TRANSFERRED",
+        "HUMAN AGENT"
+      ],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "531",
+    "description": {
+      "purpose": "Impossible demand (refund + free replacement) \u2192 transfer",
+      "relevant_policies": null,
+      "notes": "Damaged item + free replacement is outside agent scope"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W9588597 and one item arrived damaged. You want a full refund AND a free replacement. If the agent says this isn't possible, insist and ask for a human agent.",
+        "known_info": "You are Isabella Anderson in zip code 95125.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "531_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Isabella",
+            "last_name": "Anderson",
+            "zip": "95125"
+          },
+          "info": null
+        },
+        {
+          "action_id": "531_1",
+          "name": "transfer_to_human_agents",
+          "arguments": {
+            "summary": ""
+          },
+          "info": null,
+          "compare_args": []
+        }
+      ],
+      "communicate_info": [
+        "TRANSFERRED",
+        "HUMAN AGENT"
+      ],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "532",
+    "description": {
+      "purpose": "Impossible demand (refund + free replacement) \u2192 transfer",
+      "relevant_policies": null,
+      "notes": "Damaged item + free replacement is outside agent scope"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are friendly but firm \u2014 you know what you want and won't settle.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W2274128 and one item arrived damaged. You want a full refund AND a free replacement. If the agent says this isn't possible, insist and ask for a human agent.",
+        "known_info": "You are Yusuf Patel in zip code 94117.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "532_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Yusuf",
+            "last_name": "Patel",
+            "zip": "94117"
+          },
+          "info": null
+        },
+        {
+          "action_id": "532_1",
+          "name": "transfer_to_human_agents",
+          "arguments": {
+            "summary": ""
+          },
+          "info": null,
+          "compare_args": []
+        }
+      ],
+      "communicate_info": [
+        "TRANSFERRED",
+        "HUMAN AGENT"
+      ],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "533",
+    "description": {
+      "purpose": "Multi-flow: cancel pending + return delivered",
+      "relevant_policies": null,
+      "notes": "Two separate actions on two orders in one conversation"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You have two issues: First, you want to cancel order #W6385395 because you this order was placed by mistake. Second, you want to return the yes bluetooth speaker from order #W9158156. Refund to your PayPal account.",
+        "known_info": "You are Evelyn Patel in zip code 28262.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "533_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Evelyn",
+            "last_name": "Patel",
+            "zip": "28262"
+          },
+          "info": null
+        },
+        {
+          "action_id": "533_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W6385395"
+          },
+          "info": null
+        },
+        {
+          "action_id": "533_2",
+          "name": "cancel_pending_order",
+          "arguments": {
+            "order_id": "#W6385395",
+            "reason": "ordered by mistake"
+          },
+          "info": null
+        },
+        {
+          "action_id": "533_3",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W9158156"
+          },
+          "info": null
+        },
+        {
+          "action_id": "533_4",
+          "name": "return_delivered_order_items",
+          "arguments": {
+            "order_id": "#W9158156",
+            "item_ids": [
+              "7751905257"
+            ],
+            "payment_method_id": "paypal_3704667"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "534",
+    "description": {
+      "purpose": "Multi-flow: cancel pending + return delivered",
+      "relevant_policies": null,
+      "notes": "Two separate actions on two orders in one conversation"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are skeptical and will question the agent's responses.",
+        "domain": "retail",
+        "reason_for_call": "You have two issues: First, you want to cancel order #W6811468 because you you changed your mind and no longer need the items. Second, you want to return the not resistant wireless earbuds from order #W5671546. Refund to your mastercard card ending in 2786.",
+        "known_info": "You are Olivia Hernandez in zip code 20395.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "534_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Olivia",
+            "last_name": "Hernandez",
+            "zip": "20395"
+          },
+          "info": null
+        },
+        {
+          "action_id": "534_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W6811468"
+          },
+          "info": null
+        },
+        {
+          "action_id": "534_2",
+          "name": "cancel_pending_order",
+          "arguments": {
+            "order_id": "#W6811468",
+            "reason": "no longer needed"
+          },
+          "info": null
+        },
+        {
+          "action_id": "534_3",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W5671546"
+          },
+          "info": null
+        },
+        {
+          "action_id": "534_4",
+          "name": "return_delivered_order_items",
+          "arguments": {
+            "order_id": "#W5671546",
+            "item_ids": [
+              "4063058357"
+            ],
+            "payment_method_id": "credit_card_2583849"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "535",
+    "description": {
+      "purpose": "Multi-flow: exchange delivered + modify pending",
+      "relevant_policies": null,
+      "notes": "Two different action types across two orders"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are skeptical and will question the agent's responses.",
+        "domain": "retail",
+        "reason_for_call": "You have two requests: First, exchange the black water bottle from delivered order #W4998173 (change the variant with capacity: 1000ml, material: stainless steel, color: red), use your mastercard card ending in 8198 for any price difference. Second, modify the art jigsaw puzzle in pending order #W5502903 (change the variant with pieces: 500, theme: art, difficulty level: intermediate), use your mastercard card ending in 8198 for any price difference.",
+        "known_info": "You are Lucas Martin in zip code 78753.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "535_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Lucas",
+            "last_name": "Martin",
+            "zip": "78753"
+          },
+          "info": null
+        },
+        {
+          "action_id": "535_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W4998173"
+          },
+          "info": null
+        },
+        {
+          "action_id": "535_2",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "8310926033"
+          },
+          "info": null
+        },
+        {
+          "action_id": "535_3",
+          "name": "exchange_delivered_order_items",
+          "arguments": {
+            "order_id": "#W4998173",
+            "item_ids": [
+              "7199146548"
+            ],
+            "new_item_ids": [
+              "2439754078"
+            ],
+            "payment_method_id": "credit_card_2325059"
+          },
+          "info": null
+        },
+        {
+          "action_id": "535_4",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W5502903"
+          },
+          "info": null
+        },
+        {
+          "action_id": "535_5",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "1808611083"
+          },
+          "info": null
+        },
+        {
+          "action_id": "535_6",
+          "name": "modify_pending_order_items",
+          "arguments": {
+            "order_id": "#W5502903",
+            "item_ids": [
+              "9030221155"
+            ],
+            "new_item_ids": [
+              "4068787148"
+            ],
+            "payment_method_id": "credit_card_2325059"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "536",
+    "description": {
+      "purpose": "Multi-flow: exchange delivered + modify pending",
+      "relevant_policies": null,
+      "notes": "Two different action types across two orders"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are friendly but firm \u2014 you know what you want and won't settle.",
+        "domain": "retail",
+        "reason_for_call": "You have two requests: First, exchange the 7-inch tablet from delivered order #W9495141 (change the variant with screen size: 10-inch, storage: 32GB, color: black), use your gift card for any price difference. Second, modify the medium makeup kit in pending order #W2047423 (change the variant with skin tone: dark, kit size: professional, brand: Brand A), use your gift card for any price difference.",
+        "known_info": "You are Harper Li in zip code 32253.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "536_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Harper",
+            "last_name": "Li",
+            "zip": "32253"
+          },
+          "info": null
+        },
+        {
+          "action_id": "536_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W9495141"
+          },
+          "info": null
+        },
+        {
+          "action_id": "536_2",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "8024098596"
+          },
+          "info": null
+        },
+        {
+          "action_id": "536_3",
+          "name": "exchange_delivered_order_items",
+          "arguments": {
+            "order_id": "#W9495141",
+            "item_ids": [
+              "6501071631"
+            ],
+            "new_item_ids": [
+              "2235648106"
+            ],
+            "payment_method_id": "gift_card_8862145"
+          },
+          "info": null
+        },
+        {
+          "action_id": "536_4",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W2047423"
+          },
+          "info": null
+        },
+        {
+          "action_id": "536_5",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "5149340237"
+          },
+          "info": null
+        },
+        {
+          "action_id": "536_6",
+          "name": "modify_pending_order_items",
+          "arguments": {
+            "order_id": "#W2047423",
+            "item_ids": [
+              "3017803871"
+            ],
+            "new_item_ids": [
+              "1573035764"
+            ],
+            "payment_method_id": "gift_card_8862145"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "537",
+    "description": {
+      "purpose": "Multi-flow: modify address + modify items on same order",
+      "relevant_policies": null,
+      "notes": "Address must be changed before items (items locks order)"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You need two changes to order #W6711349: First, change the shipping address to 229 Oak Street, Austin, TX 73301. Second, modify the CF card digital camera (change to the variant with resolution: 30MP, zoom: 10x, storage: SD card), use your PayPal account for any price difference.",
+        "known_info": "You are Ethan Smith in zip code 10280.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "537_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Ethan",
+            "last_name": "Smith",
+            "zip": "10280"
+          },
+          "info": null
+        },
+        {
+          "action_id": "537_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W6711349"
+          },
+          "info": null
+        },
+        {
+          "action_id": "537_2",
+          "name": "modify_pending_order_address",
+          "arguments": {
+            "order_id": "#W6711349",
+            "address1": "229 Oak Street",
+            "address2": "",
+            "city": "Austin",
+            "state": "TX",
+            "country": "USA",
+            "zip": "73301"
+          },
+          "info": null
+        },
+        {
+          "action_id": "537_3",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "8940227892"
+          },
+          "info": null
+        },
+        {
+          "action_id": "537_4",
+          "name": "modify_pending_order_items",
+          "arguments": {
+            "order_id": "#W6711349",
+            "item_ids": [
+              "4326528037"
+            ],
+            "new_item_ids": [
+              "9228757377"
+            ],
+            "payment_method_id": "paypal_3296755"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "538",
+    "description": {
+      "purpose": "Branching: exchange if available, else return",
+      "relevant_policies": null,
+      "notes": "Variant is available so exchange should proceed"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are skeptical and will question the agent's responses.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W4887592 and want to exchange the black fleece jacket (change the variant with size: XL, color: navy, zipper: full). If the variant you want isn't available, you'd rather just return it instead. Use your PayPal account for any price difference.",
+        "known_info": "You are Mohamed Khan in zip code 60651.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "538_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Mohamed",
+            "last_name": "Khan",
+            "zip": "60651"
+          },
+          "info": null
+        },
+        {
+          "action_id": "538_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W4887592"
+          },
+          "info": null
+        },
+        {
+          "action_id": "538_2",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "8560156827"
+          },
+          "info": null
+        },
+        {
+          "action_id": "538_3",
+          "name": "exchange_delivered_order_items",
+          "arguments": {
+            "order_id": "#W4887592",
+            "item_ids": [
+              "9385662952"
+            ],
+            "new_item_ids": [
+              "7528037711"
+            ],
+            "payment_method_id": "paypal_1249653"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "539",
+    "description": {
+      "purpose": "Branching: exchange unavailable \u2192 fallback to return",
+      "relevant_policies": null,
+      "notes": "Desired variant is unavailable so agent should do return"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W6977171 and want to exchange the 128GB tablet for the variant with screen size: 10-inch, storage: 128GB, color: black. If that variant isn't available, just return it instead. Refund to your gift card.",
+        "known_info": "You are Sophia Jackson in zip code 60651.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "539_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Sophia",
+            "last_name": "Jackson",
+            "zip": "60651"
+          },
+          "info": null
+        },
+        {
+          "action_id": "539_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W6977171"
+          },
+          "info": null
+        },
+        {
+          "action_id": "539_2",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "8024098596"
+          },
+          "info": null
+        },
+        {
+          "action_id": "539_3",
+          "name": "return_delivered_order_items",
+          "arguments": {
+            "order_id": "#W6977171",
+            "item_ids": [
+              "4131464125"
+            ],
+            "payment_method_id": "gift_card_6052478"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "540",
+    "description": {
+      "purpose": "Branching: cancel fails on delivered \u2192 fallback to return",
+      "relevant_policies": null,
+      "notes": "Order is delivered so cancel is impossible; should return instead"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are friendly but firm \u2014 you know what you want and won't settle.",
+        "domain": "retail",
+        "reason_for_call": "You want to cancel order #W8580621. If the agent says it can't be cancelled, you want to return all items instead. Refund to your gift card.",
+        "known_info": "You are Mia Davis in zip code 28229.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "540_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Mia",
+            "last_name": "Davis",
+            "zip": "28229"
+          },
+          "info": null
+        },
+        {
+          "action_id": "540_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W8580621"
+          },
+          "info": null
+        },
+        {
+          "action_id": "540_2",
+          "name": "return_delivered_order_items",
+          "arguments": {
+            "order_id": "#W8580621",
+            "item_ids": [
+              "2993891288",
+              "5606522780"
+            ],
+            "payment_method_id": "gift_card_5897764"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "541",
+    "description": {
+      "purpose": "Branching: exchange A (unavail) \u2192 try B (avail) \u2192 keep",
+      "relevant_policies": null,
+      "notes": "Option A unavailable, option B available \u2192 should exchange with B"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are skeptical and will question the agent's responses.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W8595443 and want to exchange the clicky mechanical keyboard. Your first choice is the variant with switch type: clicky, backlight: white, size: 80%. If that's not available, your second choice is to change the variant with switch type: linear, backlight: none, size: full size. If neither is available, just keep the original. Use your gift card for any price difference.",
+        "known_info": "You are Raj Kovacs in zip code 19104.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "541_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Raj",
+            "last_name": "Kovacs",
+            "zip": "19104"
+          },
+          "info": null
+        },
+        {
+          "action_id": "541_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W8595443"
+          },
+          "info": null
+        },
+        {
+          "action_id": "541_2",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "1656367028"
+          },
+          "info": null
+        },
+        {
+          "action_id": "541_3",
+          "name": "exchange_delivered_order_items",
+          "arguments": {
+            "order_id": "#W8595443",
+            "item_ids": [
+              "9025753381"
+            ],
+            "new_item_ids": [
+              "9570044148"
+            ],
+            "payment_method_id": "gift_card_7032928"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "542",
+    "description": {
+      "purpose": "Single-item order: cancel item = cancel order",
+      "relevant_policies": null,
+      "notes": "Only 1 item in order, so cancelling the item means cancelling the order"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are confused and may provide contradictory information at first.",
+        "domain": "retail",
+        "reason_for_call": "You want to cancel the black electric kettle from order #W3579467 because you you realized you ordered the wrong thing. You're asking to cancel just the item, not knowing it's the only one.",
+        "known_info": "You are Yusuf Khan in zip code 75313.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "542_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Yusuf",
+            "last_name": "Khan",
+            "zip": "75313"
+          },
+          "info": null
+        },
+        {
+          "action_id": "542_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W3579467"
+          },
+          "info": null
+        },
+        {
+          "action_id": "542_2",
+          "name": "cancel_pending_order",
+          "arguments": {
+            "order_id": "#W3579467",
+            "reason": "ordered by mistake"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "543",
+    "description": {
+      "purpose": "Single-item order: cancel item = cancel order",
+      "relevant_policies": null,
+      "notes": "Only 1 item in order, so cancelling the item means cancelling the order"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are a no-nonsense person who states exactly what you want.",
+        "domain": "retail",
+        "reason_for_call": "You want to cancel the side burner grill from order #W3482034 because you this order was placed by mistake. You're asking to cancel just the item, not knowing it's the only one.",
+        "known_info": "You are Evelyn Hernandez in zip code 92139.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "543_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Evelyn",
+            "last_name": "Hernandez",
+            "zip": "92139"
+          },
+          "info": null
+        },
+        {
+          "action_id": "543_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W3482034"
+          },
+          "info": null
+        },
+        {
+          "action_id": "543_2",
+          "name": "cancel_pending_order",
+          "arguments": {
+            "order_id": "#W3482034",
+            "reason": "ordered by mistake"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "544",
+    "description": {
+      "purpose": "Exchange with minimal price difference",
+      "relevant_policies": null,
+      "notes": "Price difference is only $0.19"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are a no-nonsense person who states exactly what you want.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W9360566 and want to exchange the 500 jigsaw puzzle (change the variant with pieces: 1000, theme: animals, difficulty level: expert). Use your PayPal account for any price difference.",
+        "known_info": "You are Chen Lopez in zip code 98155.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "544_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Chen",
+            "last_name": "Lopez",
+            "zip": "98155"
+          },
+          "info": null
+        },
+        {
+          "action_id": "544_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W9360566"
+          },
+          "info": null
+        },
+        {
+          "action_id": "544_2",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "1808611083"
+          },
+          "info": null
+        },
+        {
+          "action_id": "544_3",
+          "name": "exchange_delivered_order_items",
+          "arguments": {
+            "order_id": "#W9360566",
+            "item_ids": [
+              "9237024510"
+            ],
+            "new_item_ids": [
+              "4572024853"
+            ],
+            "payment_method_id": "paypal_2833385"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": null,
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "545",
+    "description": {
+      "purpose": "Access another user's order - should be denied",
+      "relevant_policies": null,
+      "notes": "Policy line 14: can only help one user, must deny other user's data"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are friendly but firm \u2014 you know what you want and won't settle.",
+        "domain": "retail",
+        "reason_for_call": "You want to check on order #W2611340 (this is actually your friend's order, but you don't mention that). You just provide the order number.",
+        "known_info": "You are Omar Kim in zip code 32214.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "545_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Omar",
+            "last_name": "Kim",
+            "zip": "32214"
+          },
+          "info": null
+        },
+        {
+          "action_id": "545_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W2611340"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent denied the user's request to view order details because the order belongs to a different user"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "546",
+    "description": {
+      "purpose": "Access another user's order - should be denied",
+      "relevant_policies": null,
+      "notes": "Policy line 14: can only help one user, must deny other user's data"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are impatient and want things resolved immediately.",
+        "domain": "retail",
+        "reason_for_call": "You want to check on order #W2611340 (this is actually your friend's order, but you don't mention that). You just provide the order number.",
+        "known_info": "You are Noah Brown in zip code 80279.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "546_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Noah",
+            "last_name": "Brown",
+            "zip": "80279"
+          },
+          "info": null
+        },
+        {
+          "action_id": "546_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W2611340"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent denied the user's request to view order details because the order belongs to a different user"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "547",
+    "description": {
+      "purpose": "User backs out at confirmation",
+      "relevant_policies": null,
+      "notes": "Agent must respect user's decision to not proceed; DB should be unchanged"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are skeptical and will question the agent's responses.",
+        "domain": "retail",
+        "reason_for_call": "You initially want to cancel order #W1080318 because you don't need it. When the agent asks you to confirm the cancellation, you change your mind and say you want to keep the order after all.",
+        "known_info": "You are Omar Kim in zip code 32214.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "547_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Omar",
+            "last_name": "Kim",
+            "zip": "32214"
+          },
+          "info": null
+        },
+        {
+          "action_id": "547_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W1080318"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent did not cancel the order after the user changed their mind"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  },
+  {
+    "id": "548",
+    "description": {
+      "purpose": "User backs out at confirmation",
+      "relevant_policies": null,
+      "notes": "Agent must respect user's decision to not proceed; DB should be unchanged"
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite but insistent and will push back if told something can't be done.",
+        "domain": "retail",
+        "reason_for_call": "You initially want to cancel order #W7017301 because you don't need it. When the agent asks you to confirm the cancellation, you change your mind and say you want to keep the order after all.",
+        "known_info": "You are Mei Martin in zip code 32124.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "548_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Mei",
+            "last_name": "Martin",
+            "zip": "32124"
+          },
+          "info": null
+        },
+        {
+          "action_id": "548_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W7017301"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "The agent did not cancel the order after the user changed their mind"
+      ],
+      "reward_basis": [
+        "DB",
+        "COMMUNICATE"
+      ]
+    }
+  }
+]

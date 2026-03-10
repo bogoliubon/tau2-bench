@@ -1,0 +1,711 @@
+{
+  "id": "263a3c59-0551-452b-9438-0cc9266b75f6",
+  "task_id": "38",
+  "timestamp": "2026-02-28T19:58:57.126984",
+  "start_time": "2026-02-28T19:49:09.489554",
+  "end_time": "2026-02-28T19:58:57.126924",
+  "duration": 587.6268870001659,
+  "termination_reason": "user_stop",
+  "agent_cost": null,
+  "user_cost": null,
+  "reward_info": null,
+  "messages": [
+    {
+      "role": "assistant",
+      "content": "Hi! How can I help you today?",
+      "tool_calls": null,
+      "turn_idx": 0,
+      "timestamp": "2026-02-28T19:49:09.490142",
+      "cost": 0.0,
+      "usage": null,
+      "raw_data": null
+    },
+    {
+      "role": "user",
+      "content": "Hi, I’m calling because I’m really frustrated about a delayed flight I had with one of my older reservations. It caused me a lot of inconvenience, and I’d like to talk to someone about it.",
+      "tool_calls": null,
+      "turn_idx": 1,
+      "timestamp": "2026-02-28T19:49:10.782842",
+      "cost": 0.001274,
+      "usage": {
+        "completion_tokens": 42,
+        "prompt_tokens": 469
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Hi, I’m calling because I’m really frustrated about a delayed flight I had with one of my older reservations. It caused me a lot of inconvenience, and I’d like to talk to someone about it.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "Yes I can. What is your user_id",
+      "tool_calls": null,
+      "turn_idx": 2,
+      "timestamp": "2026-02-28T19:49:19.738539",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "Yes I can. What is your user_id"
+      }
+    },
+    {
+      "role": "user",
+      "content": "My user ID is noah_muller_9847.",
+      "tool_calls": null,
+      "turn_idx": 3,
+      "timestamp": "2026-02-28T19:49:21.020079",
+      "cost": 0.0011519999999999998,
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 528
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "My user ID is noah_muller_9847.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_user_details",
+          "arguments": {
+            "user_id": "noah_muller_9847"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 4,
+      "timestamp": "2026-02-28T19:49:30.833203",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_user_details(user_id=\"noah_muller_9847\")"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"user_id\": \"noah_muller_9847\", \"name\": {\"first_name\": \"Noah\", \"last_name\": \"Muller\"}, \"address\": {\"address1\": \"889 Hillcrest Drive\", \"address2\": \"Suite 254\", \"city\": \"Denver\", \"country\": \"USA\", \"state\": \"CO\", \"zip\": \"80243\"}, \"email\": \"noah.muller2290@example.com\", \"dob\": \"1963-01-22\", \"payment_methods\": {\"credit_card_1245537\": {\"source\": \"credit_card\", \"id\": \"credit_card_1245537\", \"brand\": \"mastercard\", \"last_four\": \"1167\"}, \"credit_card_6040264\": {\"source\": \"credit_card\", \"id\": \"credit_card_6040264\", \"brand\": \"visa\", \"last_four\": \"2076\"}, \"credit_card_3255100\": {\"source\": \"credit_card\", \"id\": \"credit_card_3255100\", \"brand\": \"visa\", \"last_four\": \"2604\"}, \"certificate_8301303\": {\"source\": \"certificate\", \"id\": \"certificate_8301303\", \"amount\": 100.0}, \"credit_card_3983998\": {\"source\": \"credit_card\", \"id\": \"credit_card_3983998\", \"brand\": \"visa\", \"last_four\": \"8413\"}, \"credit_card_7574394\": {\"source\": \"credit_card\", \"id\": \"credit_card_7574394\", \"brand\": \"visa\", \"last_four\": \"1798\"}, \"credit_card_6873705\": {\"source\": \"credit_card\", \"id\": \"credit_card_6873705\", \"brand\": \"visa\", \"last_four\": \"2267\"}}, \"saved_passengers\": [{\"first_name\": \"Lei\", \"last_name\": \"Patel\", \"dob\": \"1959-11-15\"}], \"membership\": \"gold\", \"reservations\": [\"SDZQKO\", \"4OG6T3\"]}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 5,
+      "timestamp": "2026-02-28T19:49:30.834053"
+    },
+    {
+      "role": "assistant",
+      "content": "You know which reservation it is?",
+      "tool_calls": null,
+      "turn_idx": 6,
+      "timestamp": "2026-02-28T19:49:45.789098",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "You know which reservation it is?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "It’s not my most recent reservation—it’s the one before that. I’m sorry, but I don’t remember the reservation ID.",
+      "tool_calls": null,
+      "turn_idx": 7,
+      "timestamp": "2026-02-28T19:49:46.730497",
+      "cost": 0.001326,
+      "usage": {
+        "completion_tokens": 27,
+        "prompt_tokens": 555
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "It’s not my most recent reservation—it’s the one before that. I’m sorry, but I don’t remember the reservation ID.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "SDZQKO"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 8,
+      "timestamp": "2026-02-28T19:50:05.143105",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id=\"SDZQKO\")"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"SDZQKO\", \"user_id\": \"noah_muller_9847\", \"origin\": \"LAX\", \"destination\": \"MIA\", \"flight_type\": \"round_trip\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT228\", \"origin\": \"LAX\", \"destination\": \"EWR\", \"date\": \"2024-05-27\", \"price\": 76}, {\"flight_number\": \"HAT202\", \"origin\": \"EWR\", \"destination\": \"MIA\", \"date\": \"2024-05-28\", \"price\": 54}, {\"flight_number\": \"HAT192\", \"origin\": \"MIA\", \"destination\": \"EWR\", \"date\": \"2024-05-28\", \"price\": 67}, {\"flight_number\": \"HAT041\", \"origin\": \"EWR\", \"destination\": \"LAX\", \"date\": \"2024-05-29\", \"price\": 58}], \"passengers\": [{\"first_name\": \"Noah\", \"last_name\": \"Muller\", \"dob\": \"1963-01-22\"}, {\"first_name\": \"Lucas\", \"last_name\": \"Anderson\", \"dob\": \"1971-04-05\"}], \"payment_history\": [{\"payment_id\": \"credit_card_3983998\", \"amount\": 510}], \"created_at\": \"2024-05-13T03:26:54\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"no\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 9,
+      "timestamp": "2026-02-28T19:50:05.143459"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "4OG6T3"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 10,
+      "timestamp": "2026-02-28T19:50:14.727889",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id=\"4OG6T3\")"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"4OG6T3\", \"user_id\": \"noah_muller_9847\", \"origin\": \"BOS\", \"destination\": \"LAS\", \"flight_type\": \"round_trip\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT006\", \"origin\": \"BOS\", \"destination\": \"SEA\", \"date\": \"2024-05-11\", \"price\": 87}, {\"flight_number\": \"HAT018\", \"origin\": \"SEA\", \"destination\": \"LAS\", \"date\": \"2024-05-11\", \"price\": 96}, {\"flight_number\": \"HAT040\", \"origin\": \"LAS\", \"destination\": \"SEA\", \"date\": \"2024-05-17\", \"price\": 63}, {\"flight_number\": \"HAT253\", \"origin\": \"SEA\", \"destination\": \"BOS\", \"date\": \"2024-05-17\", \"price\": 52}], \"passengers\": [{\"first_name\": \"Noah\", \"last_name\": \"Muller\", \"dob\": \"1963-01-22\"}], \"payment_history\": [{\"payment_id\": \"credit_card_7574394\", \"amount\": 328}], \"created_at\": \"2024-05-09T15:14:07\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 11,
+      "timestamp": "2026-02-28T19:50:14.728294"
+    },
+    {
+      "role": "assistant",
+      "content": "So the later one is the one from Boston to Las vegas that sound right?",
+      "tool_calls": null,
+      "turn_idx": 12,
+      "timestamp": "2026-02-28T19:52:00.643201",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "So the later one is the one from Boston to Las vegas that sound right?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "Yes, that sounds right. The delayed flight was from Boston to Las Vegas.",
+      "tool_calls": null,
+      "turn_idx": 13,
+      "timestamp": "2026-02-28T19:52:02.199987",
+      "cost": 0.00134,
+      "usage": {
+        "completion_tokens": 16,
+        "prompt_tokens": 606
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Yes, that sounds right. The delayed flight was from Boston to Las Vegas.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "et_flight_details",
+          "arguments": {
+            "flight_number": "HAT006",
+            "date": "2024-05-11"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 14,
+      "timestamp": "2026-02-28T19:52:56.848159",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "et_flight_details(flight_number=\"HAT006\", date=\"2024-05-11\")"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "Error: Tool 'et_flight_details' not found.",
+      "requestor": "assistant",
+      "error": true,
+      "turn_idx": 15,
+      "timestamp": "2026-02-28T19:52:56.849135"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_flight_details",
+          "arguments": {
+            "flight_number": "HAT006",
+            "date": "2024-05-11"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 16,
+      "timestamp": "2026-02-28T19:53:00.157127",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_flight_details(flight_number=\"HAT006\", date=\"2024-05-11\")"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "Error: Tool 'get_flight_details' not found.",
+      "requestor": "assistant",
+      "error": true,
+      "turn_idx": 17,
+      "timestamp": "2026-02-28T19:53:00.157407"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_flight_status",
+          "arguments": {
+            "flight_number": "HAT006",
+            "date": "2024-05-11"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 18,
+      "timestamp": "2026-02-28T19:53:20.185528",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_flight_status(flight_number=\"HAT006\", date=\"2024-05-11\")"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "landed",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 19,
+      "timestamp": "2026-02-28T19:53:20.185926"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_flight_status",
+          "arguments": {
+            "flight_number": "HAT018",
+            "date": "2024-05-11"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 20,
+      "timestamp": "2026-02-28T19:53:38.377826",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_flight_status(flight_number=\"HAT018\", date=\"2024-05-11\")"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "delayed",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 21,
+      "timestamp": "2026-02-28T19:53:38.378126"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_flight_status",
+          "arguments": {
+            "flight_number": "HAT040",
+            "date": "2024-05-17"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 22,
+      "timestamp": "2026-02-28T19:53:46.414563",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_flight_status(flight_number=\"HAT040\", date=\"2024-05-17\")"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "available",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 23,
+      "timestamp": "2026-02-28T19:53:46.414978"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_flight_status",
+          "arguments": {
+            "flight_number": "HAT253",
+            "date": "2024-05-17"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 24,
+      "timestamp": "2026-02-28T19:53:50.484851",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_flight_status(flight_number=\"HAT253\", date=\"2024-05-17\")"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "available",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 25,
+      "timestamp": "2026-02-28T19:53:50.485123"
+    },
+    {
+      "role": "assistant",
+      "content": "Ok so the original flight was scheduled for May 11th and it is delayed. It's flight HAT018 from Seattle to Las Vegas. It's May 15th now so it's delayed by a lot. I apologize for the inconvenience. Is there anything I can do?",
+      "tool_calls": null,
+      "turn_idx": 26,
+      "timestamp": "2026-02-28T19:55:06.373870",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "Ok so the original flight was scheduled for May 11th and it is delayed. It's flight HAT018 from Seattle to Las Vegas. It's May 15th now so it's delayed by a lot. I apologize for the inconvenience. Is there anything I can do?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "Yes, I’d really appreciate it if you could offer some compensation for this delay. It’s been a huge inconvenience for me.",
+      "tool_calls": null,
+      "turn_idx": 27,
+      "timestamp": "2026-02-28T19:55:07.656633",
+      "cost": 0.001576,
+      "usage": {
+        "completion_tokens": 26,
+        "prompt_tokens": 684
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Yes, I’d really appreciate it if you could offer some compensation for this delay. It’s been a huge inconvenience for me.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "How many passangers are on this flight?",
+      "tool_calls": null,
+      "turn_idx": 28,
+      "timestamp": "2026-02-28T19:56:03.030309",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "How many passangers are on this flight?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "There are 3 passengers on this reservation.",
+      "tool_calls": null,
+      "turn_idx": 29,
+      "timestamp": "2026-02-28T19:56:04.729619",
+      "cost": 0.001526,
+      "usage": {
+        "completion_tokens": 9,
+        "prompt_tokens": 727
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "There are 3 passengers on this reservation.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "I only see one on that flight",
+      "tool_calls": null,
+      "turn_idx": 30,
+      "timestamp": "2026-02-28T19:57:22.609070",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "I only see one on that flight"
+      }
+    },
+    {
+      "role": "user",
+      "content": "I’m pretty sure there were 3 passengers on that reservation. Could you double-check for me?",
+      "tool_calls": null,
+      "turn_idx": 31,
+      "timestamp": "2026-02-28T19:57:23.846986",
+      "cost": 0.0016619999999999998,
+      "usage": {
+        "completion_tokens": 20,
+        "prompt_tokens": 751
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "I’m pretty sure there were 3 passengers on that reservation. Could you double-check for me?",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "Yup. It's 1",
+      "tool_calls": null,
+      "turn_idx": 32,
+      "timestamp": "2026-02-28T19:57:28.565664",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "Yup. It's 1"
+      }
+    },
+    {
+      "role": "user",
+      "content": "Oh, maybe I made a mistake then. Sorry about that—it must have just been me on that flight.",
+      "tool_calls": null,
+      "turn_idx": 33,
+      "timestamp": "2026-02-28T19:57:29.580577",
+      "cost": 0.001746,
+      "usage": {
+        "completion_tokens": 22,
+        "prompt_tokens": 785
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Oh, maybe I made a mistake then. Sorry about that—it must have just been me on that flight.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "I can compensate you since you are a gold member. I can offer you a 50 travel certificate as compensation for the delayed flight. Would you like me to issue that?",
+      "tool_calls": null,
+      "turn_idx": 34,
+      "timestamp": "2026-02-28T19:58:17.312879",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "I can compensate you since you are a gold member. I can offer you a 50 travel certificate as compensation for the delayed flight. Would you like me to issue that?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "Yes, that would be great. Please go ahead and issue the $50 travel certificate. Thank you for your help!",
+      "tool_calls": null,
+      "turn_idx": 35,
+      "timestamp": "2026-02-28T19:58:18.530561",
+      "cost": 0.001892,
+      "usage": {
+        "completion_tokens": 24,
+        "prompt_tokens": 850
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Yes, that would be great. Please go ahead and issue the $50 travel certificate. Thank you for your help!",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "send_certificate",
+          "arguments": {
+            "user_id": "noah_muller_9847",
+            "amount": 50
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 36,
+      "timestamp": "2026-02-28T19:58:46.878293",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "send_certificate(user_id=\"noah_muller_9847\", amount=50)"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "Certificate certificate_3221322 added to user noah_muller_9847 with amount 50.",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 37,
+      "timestamp": "2026-02-28T19:58:46.878831"
+    },
+    {
+      "role": "assistant",
+      "content": "Anythign else I can do for you today?",
+      "tool_calls": null,
+      "turn_idx": 38,
+      "timestamp": "2026-02-28T19:58:56.276505",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "Anythign else I can do for you today?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "No, that’s all I needed. Thanks again for your assistance!###STOP###",
+      "tool_calls": null,
+      "turn_idx": 39,
+      "timestamp": "2026-02-28T19:58:57.123379",
+      "cost": 0.0019219999999999999,
+      "usage": {
+        "completion_tokens": 17,
+        "prompt_tokens": 893
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "No, that’s all I needed. Thanks again for your assistance!###STOP###",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    }
+  ],
+  "trial": null,
+  "seed": null
+}

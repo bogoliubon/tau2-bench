@@ -1,0 +1,33 @@
+Online Refine Comparison: Human vs LLM Seed Trajectories (Retail)
+
+Question: Does the quality of seed trajectories matter for online policy learning?
+
+Setup:
+- 41 retail training tasks where both human (Tudor) and LLM rollouts succeeded
+- 10 of those tasks (seed=42) used for batch_refine initial policies (batch_size=2)
+- Online refine runs on remaining 31 train + 40 test tasks, same order for both arms
+- Policy refined every 5 tasks (refine_batch_size=5)
+
+Two arms:
+- Human arm: initial policy from Tudor's human trajectories
+- LLM arm: initial policy from LLM rollout trajectories
+
+Models:
+- Agent: gpt-4o
+- User simulator: gpt-4.1
+- Batch refine (initial policy): gpt-4o
+- Online refine (policy updates): gpt-4o
+
+Files:
+- Filtered trajectories: experiments/retail/human_tudor_10_common.json, llm_rollouts_10_common.json
+- Initial policies: initial_policy_human_10.json, initial_policy_llm_10.json
+- Online refine logs: online_refine_human_seed.json, online_refine_llm_seed.json
+
+Future experiments:
+1. Different refine LLM: swap gpt-4o for Claude or gpt-5 for the online refinement step
+2. Different N for initial policy: try fewer or more than 10 seed trajectories
+3. Different seed: vary the random seed to check robustness of results
+4. Task-flow-aware sampling: instead of random 10, pick 1 trajectory per task flow
+   (exchange, modify, return, general inquiry — 4 flows) so the initial policy has
+   coverage of every flow type. Try N=4 with one per flow, see if broader coverage
+   beats random sampling

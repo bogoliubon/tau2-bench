@@ -1,0 +1,2638 @@
+{
+  "source": {
+    "policy_path": "data/tau2/domains/airline/policy.md",
+    "policy_length": 7676
+  },
+  "config": {
+    "domain": "airline",
+    "task_split_name": "base",
+    "task_ids": null,
+    "agent_llm": "gpt-4o",
+    "agent_temperature": 0.0,
+    "user_llm": "gpt-4.1",
+    "user_temperature": 0.0,
+    "max_steps": 30,
+    "max_errors": 5,
+    "seed": 42,
+    "num_trials": 3
+  },
+  "results": {
+    "n_tasks": 50,
+    "n_trials": 3,
+    "n_total_runs": 150,
+    "n_successes": 60,
+    "success_rate": 0.4,
+    "mean_reward": 0.4
+  },
+  "task_results": [
+    {
+      "task_id": "0",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "1",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "2",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "send_certificate"
+      ],
+      "n_messages": 23,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "3",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "calculate"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "4",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "5",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_flight_status",
+        "send_certificate",
+        "send_certificate"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "6",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 22,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "7",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "calculate"
+      ],
+      "n_messages": 21,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "8",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "book_reservation"
+      ],
+      "n_messages": 26,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "9",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "cancel_reservation",
+        "search_direct_flight",
+        "search_direct_flight"
+      ],
+      "n_messages": 21,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "10",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "calculate",
+        "calculate"
+      ],
+      "n_messages": 35,
+      "termination_reason": "max_steps",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "11",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "calculate",
+        "update_reservation_flights"
+      ],
+      "n_messages": 23,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "12",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "update_reservation_flights",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 17,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "13",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "search_direct_flight",
+        "search_direct_flight",
+        "get_reservation_details",
+        "calculate",
+        "calculate",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 30,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "14",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 10,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "15",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ],
+      "n_messages": 25,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "16",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ],
+      "n_messages": 18,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "17",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details"
+      ],
+      "n_messages": 17,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "18",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "update_reservation_flights",
+        "update_reservation_flights",
+        "update_reservation_flights",
+        "update_reservation_flights",
+        "update_reservation_flights"
+      ],
+      "n_messages": 40,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "19",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation"
+      ],
+      "n_messages": 22,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "20",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "calculate",
+        "book_reservation"
+      ],
+      "n_messages": 26,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "21",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_onestop_flight",
+        "update_reservation_flights",
+        "update_reservation_baggages",
+        "update_reservation_flights",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 33,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "22",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details"
+      ],
+      "n_messages": 17,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "23",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "calculate",
+        "calculate",
+        "get_reservation_details",
+        "search_onestop_flight",
+        "search_onestop_flight",
+        "calculate",
+        "calculate",
+        "calculate",
+        "update_reservation_flights",
+        "update_reservation_flights"
+      ],
+      "n_messages": 32,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "24",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "get_user_details",
+        "book_reservation",
+        "calculate",
+        "book_reservation",
+        "search_direct_flight",
+        "book_reservation",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 32,
+      "termination_reason": "max_steps",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "25",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "calculate",
+        "calculate",
+        "book_reservation",
+        "calculate",
+        "book_reservation"
+      ],
+      "n_messages": 26,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "26",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 15,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "27",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_flight_status",
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details"
+      ],
+      "n_messages": 30,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "28",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "29",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "30",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "update_reservation_flights",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 19,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "31",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "32",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details"
+      ],
+      "n_messages": 15,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "33",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "update_reservation_flights",
+        "get_user_details",
+        "calculate",
+        "calculate",
+        "update_reservation_flights",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 31,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "34",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 19,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "35",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "book_reservation"
+      ],
+      "n_messages": 31,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "36",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 12,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "37",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_user_details",
+        "cancel_reservation",
+        "get_reservation_details",
+        "update_reservation_flights"
+      ],
+      "n_messages": 21,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "38",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_flight_status",
+        "get_flight_status",
+        "send_certificate",
+        "send_certificate"
+      ],
+      "n_messages": 28,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "39",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "cancel_reservation",
+        "cancel_reservation",
+        "cancel_reservation",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 29,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "40",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "update_reservation_passengers"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "41",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "cancel_reservation"
+      ],
+      "n_messages": 21,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "42",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 24,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "43",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation"
+      ],
+      "n_messages": 19,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "44",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 30,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "45",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents",
+        "search_onestop_flight"
+      ],
+      "n_messages": 22,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "46",
+      "success": true,
+      "reward": 1.0,
+      "actions": [],
+      "n_messages": 6,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "47",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "cancel_reservation"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "48",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "cancel_reservation"
+      ],
+      "n_messages": 12,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "49",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 12,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "0",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "1",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "2",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "send_certificate"
+      ],
+      "n_messages": 23,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "3",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 16,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "4",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "5",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_flight_status",
+        "send_certificate",
+        "send_certificate"
+      ],
+      "n_messages": 24,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "6",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details"
+      ],
+      "n_messages": 12,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "7",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "calculate"
+      ],
+      "n_messages": 23,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "8",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "book_reservation",
+        "calculate",
+        "book_reservation",
+        "calculate"
+      ],
+      "n_messages": 30,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "9",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "get_reservation_details",
+        "search_direct_flight"
+      ],
+      "n_messages": 23,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "10",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_onestop_flight",
+        "calculate",
+        "calculate",
+        "calculate",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "search_onestop_flight",
+        "calculate",
+        "calculate",
+        "calculate"
+      ],
+      "n_messages": 39,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "11",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "calculate",
+        "update_reservation_flights"
+      ],
+      "n_messages": 25,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "12",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "calculate",
+        "calculate",
+        "update_reservation_flights",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 27,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "13",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "14",
+      "success": false,
+      "reward": 0.0,
+      "actions": [],
+      "n_messages": 6,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "15",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "search_onestop_flight",
+        "calculate",
+        "update_reservation_flights"
+      ],
+      "n_messages": 23,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "16",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ],
+      "n_messages": 18,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "17",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "book_reservation",
+        "calculate",
+        "book_reservation",
+        "book_reservation"
+      ],
+      "n_messages": 34,
+      "termination_reason": "max_steps",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "18",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "calculate",
+        "update_reservation_flights",
+        "update_reservation_flights",
+        "update_reservation_flights",
+        "update_reservation_flights",
+        "update_reservation_flights"
+      ],
+      "n_messages": 38,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "19",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "20",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "calculate",
+        "book_reservation"
+      ],
+      "n_messages": 26,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "21",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_onestop_flight",
+        "update_reservation_flights",
+        "update_reservation_baggages",
+        "update_reservation_flights"
+      ],
+      "n_messages": 32,
+      "termination_reason": "max_steps",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "22",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "update_reservation_passengers",
+        "update_reservation_flights",
+        "update_reservation_baggages",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 31,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "23",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "calculate",
+        "calculate",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "calculate",
+        "calculate",
+        "update_reservation_flights"
+      ],
+      "n_messages": 33,
+      "termination_reason": "max_steps",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "24",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "search_direct_flight",
+        "search_direct_flight",
+        "get_reservation_details",
+        "search_onestop_flight",
+        "search_onestop_flight",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "search_onestop_flight",
+        "search_onestop_flight",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "search_onestop_flight",
+        "search_onestop_flight"
+      ],
+      "n_messages": 41,
+      "termination_reason": "max_steps",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "25",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "calculate",
+        "calculate",
+        "book_reservation",
+        "calculate",
+        "book_reservation"
+      ],
+      "n_messages": 26,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "26",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details"
+      ],
+      "n_messages": 15,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "27",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_flight_status",
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "send_certificate"
+      ],
+      "n_messages": 32,
+      "termination_reason": "max_steps",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "28",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details"
+      ],
+      "n_messages": 12,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "29",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "update_reservation_flights"
+      ],
+      "n_messages": 19,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "30",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "search_direct_flight",
+        "search_direct_flight"
+      ],
+      "n_messages": 18,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "31",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "32",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 16,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "33",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "update_reservation_flights",
+        "search_direct_flight",
+        "search_direct_flight",
+        "calculate",
+        "calculate",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 30,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "34",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "calculate",
+        "update_reservation_flights",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 22,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "35",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "search_direct_flight",
+        "book_reservation"
+      ],
+      "n_messages": 25,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "36",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 12,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "37",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "update_reservation_flights"
+      ],
+      "n_messages": 16,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "38",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_flight_status",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 22,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "39",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "cancel_reservation",
+        "cancel_reservation",
+        "cancel_reservation",
+        "cancel_reservation",
+        "cancel_reservation",
+        "cancel_reservation"
+      ],
+      "n_messages": 26,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "40",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "update_reservation_passengers"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "41",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "cancel_reservation"
+      ],
+      "n_messages": 23,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "42",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation"
+      ],
+      "n_messages": 24,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "43",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "send_certificate"
+      ],
+      "n_messages": 26,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "44",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 30,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "45",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ],
+      "n_messages": 26,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "46",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 10,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "47",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details"
+      ],
+      "n_messages": 18,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "48",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "cancel_reservation"
+      ],
+      "n_messages": 12,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "49",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "get_user_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 16,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 0
+    },
+    {
+      "task_id": "0",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "1",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation"
+      ],
+      "n_messages": 22,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "2",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "send_certificate"
+      ],
+      "n_messages": 23,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "3",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 16,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "4",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "5",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_flight_status",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "6",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 26,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "7",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "calculate"
+      ],
+      "n_messages": 27,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "8",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "calculate",
+        "book_reservation"
+      ],
+      "n_messages": 22,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "9",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "cancel_reservation",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ],
+      "n_messages": 27,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "10",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_onestop_flight",
+        "calculate"
+      ],
+      "n_messages": 32,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "11",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "calculate",
+        "update_reservation_flights"
+      ],
+      "n_messages": 26,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "12",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "calculate",
+        "calculate",
+        "update_reservation_flights",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 27,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "13",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "calculate",
+        "update_reservation_flights",
+        "update_reservation_flights",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 28,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "14",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "calculate",
+        "calculate",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "calculate",
+        "update_reservation_flights",
+        "cancel_reservation",
+        "calculate"
+      ],
+      "n_messages": 36,
+      "termination_reason": "max_steps",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "15",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ],
+      "n_messages": 23,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "16",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "search_onestop_flight",
+        "update_reservation_flights"
+      ],
+      "n_messages": 18,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "17",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "update_reservation_passengers",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 22,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "18",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "update_reservation_flights",
+        "update_reservation_flights",
+        "update_reservation_flights",
+        "update_reservation_flights",
+        "update_reservation_flights"
+      ],
+      "n_messages": 38,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "19",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation"
+      ],
+      "n_messages": 22,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "20",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "search_direct_flight",
+        "search_onestop_flight",
+        "get_user_details",
+        "book_reservation"
+      ],
+      "n_messages": 28,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "21",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "search_onestop_flight",
+        "update_reservation_flights",
+        "update_reservation_baggages",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 31,
+      "termination_reason": "max_steps",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "22",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "update_reservation_flights",
+        "update_reservation_passengers",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 33,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "23",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "calculate",
+        "calculate",
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "calculate",
+        "calculate",
+        "update_reservation_flights"
+      ],
+      "n_messages": 27,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "24",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "get_user_details",
+        "cancel_reservation",
+        "book_reservation"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "25",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "calculate",
+        "book_reservation",
+        "book_reservation"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "26",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details"
+      ],
+      "n_messages": 13,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "27",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_flight_status",
+        "get_user_details",
+        "get_reservation_details",
+        "send_certificate"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "28",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details"
+      ],
+      "n_messages": 12,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "29",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "update_reservation_flights"
+      ],
+      "n_messages": 19,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "30",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "update_reservation_flights"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "31",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 16,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "32",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "search_direct_flight",
+        "book_reservation"
+      ],
+      "n_messages": 26,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "33",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "update_reservation_flights",
+        "calculate",
+        "calculate",
+        "update_reservation_baggages"
+      ],
+      "n_messages": 28,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "34",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "search_direct_flight",
+        "calculate"
+      ],
+      "n_messages": 28,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "35",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "search_direct_flight",
+        "search_onestop_flight",
+        "book_reservation"
+      ],
+      "n_messages": 29,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "36",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 12,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "37",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "update_reservation_flights"
+      ],
+      "n_messages": 16,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "38",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "send_certificate"
+      ],
+      "n_messages": 25,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "39",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "cancel_reservation",
+        "cancel_reservation",
+        "cancel_reservation",
+        "cancel_reservation"
+      ],
+      "n_messages": 24,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "40",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "update_reservation_passengers"
+      ],
+      "n_messages": 14,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "41",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "cancel_reservation"
+      ],
+      "n_messages": 21,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "42",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation",
+        "cancel_reservation"
+      ],
+      "n_messages": 23,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "43",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "cancel_reservation"
+      ],
+      "n_messages": 27,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "44",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "get_user_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_reservation_details",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "get_flight_status",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 30,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "45",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details"
+      ],
+      "n_messages": 18,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "46",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 8,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "47",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 20,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "48",
+      "success": false,
+      "reward": 0.0,
+      "actions": [
+        "cancel_reservation"
+      ],
+      "n_messages": 12,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    },
+    {
+      "task_id": "49",
+      "success": true,
+      "reward": 1.0,
+      "actions": [
+        "get_reservation_details",
+        "transfer_to_human_agents"
+      ],
+      "n_messages": 12,
+      "termination_reason": "user_stop",
+      "error": null,
+      "trial": 1
+    }
+  ]
+}

@@ -156,3 +156,104 @@ CODE CHANGES:
      direct flight exists on any date for a given route. This is needed when modifying
      reservations where the user wants a nonstop flight but doesn't specify a date.
    - Backward compatible: Non-wildcard date queries behave exactly as before.
+
+
+FOR TEST CASES: 
+
+12. Task 2: Changed from send_certificate to transfer_to_human_agent (CHANGES REWARD)
+   - Removed action: send_certificate(user_id="noah_muller_9847", amount=50)
+   - Added action: transfer_to_human_agent
+   - Updated nl_assertions: removed "$50 certificate" assertion, added explanation that delay
+     compensation requires changing/cancelling first but flights are already completed.
+   - Reason: Policy line 165 requires changing or cancelling the reservation before issuing delay
+     compensation. But reservation 4OG6T3's outbound flights are already flown (HAT006 status=landed).
+     Basic economy flights cannot be modified (line 110), cabin cannot be changed with flown flights
+     (line 116), and cancellation is blocked when flights are already flown (line 141).
+     Since compensation cannot be issued within policy constraints, agent must transfer to human agent.
+   - Same pattern as Task 27 (modification #8).
+
+13. Task 29: Changed from flight modification to transfer_to_human_agents (CHANGES REWARD/USER BEHAVIOUR)
+   - Removed actions: update_reservation_flights (DTW↔JFK), update_reservation_baggages
+   - Added action: transfer_to_human_agents
+   - Updated nl_assertions: agent refuses destination change, confirms no direct DTW-LGA flights, transfers
+   - Updated task_instructions: simplified to insist on JFK nonstop, ask for transfer if refused
+   - Reason: Original GT expected changing flights from DTW↔LGA to nonstop DTW↔JFK. But policy line 111
+     says modifications cannot change origin, destination, or trip type. LGA→JFK is a destination change.
+     No direct DTW↔LGA flights exist, so the nonstop request cannot be fulfilled within the same destination.
+     Agent must transfer to human agent since the request is outside policy scope.
+
+14. Task 30: Added flight selection preference to user instruction (CHANGES USER BEHAVIOUR)
+   - Added: "If presented with multiple flight options, pick the cheaper one."
+   - Reason: Two direct LAS→IAH flights exist on May 19 (HAT266 $146, HAT175 $155).
+     GT expects HAT266. Without guidance, user simulator might pick either.
+     Added preference to ensure deterministic choice matching GT.
+
+15. Task 32: Added payment method preference to user instruction (CHANGES USER BEHAVIOUR)
+   - Added: "You prefer to use your credit card for payment."
+   - Reason: User has two gift cards and one credit card. GT expects credit_card_9659780.
+     Without guidance, user simulator might pick any payment method. Added preference
+     to ensure deterministic choice matching GT.
+
+16. Task 35: Fixed passenger DOB in ground truth (CHANGES REWARD)
+   - Changed: dob "1985-04-04" → "1981-05-26"
+   - Reason: GT had DOB 1985-04-04 for Aarav Ahmed, but user profile shows DOB 1981-05-26.
+     User instruction doesn't specify a DOB, so simulator would provide the profile DOB.
+     GT DOB was incorrect.
+
+17. Task 5: Added cancellation acceptance to user instruction (CHANGES USER BEHAVIOUR)
+   - Added: "If the agent says the reservation needs to be cancelled or changed in order to receive compensation, say you want to cancel it."
+   - Reason: GT expects cancel_reservation before send_certificate (policy line 165 requires
+     changing/cancelling before delay compensation). But user instruction never told the
+     customer to agree to cancellation. Without this, simulator might refuse cancellation,
+     preventing the compensation flow.
+
+18. Task 37: Removed NQNU5R cancellation, added transfer_to_human_agent (CHANGES REWARD)
+   - Removed action: cancel_reservation(reservation_id="NQNU5R")
+   - Added action: transfer_to_human_agent
+   - Updated nl_assertion: "Agent cancels reservation NQNU5R since it's business." →
+     "Agent refuses to cancel NQNU5R (flights already flown — landed) and transfers to human agent."
+   - Reason: NQNU5R flights HAT214 (May 13) and HAT045 (May 14) both have status "landed".
+     Policy line 141: "If any portion of the flight has already been flown, the agent cannot
+     help and transfer is needed." Same pattern as Tasks 9 and 2.
+
+19. Task 44: Removed S61CZX cancellation and added payment preference (CHANGES REWARD/USER BEHAVIOUR)
+   - Removed action: cancel_reservation(reservation_id="S61CZX")
+   - Updated nl_assertion: "Agent cancels reservation S61CZX." →
+     "Agent refuses to cancel S61CZX (economy, insurance present but reason 'flights too long' is not covered — only health/weather are covered)."
+   - Reason: S61CZX is economy with insurance, created 2024-05-02 (past 24hrs), flights all "available"
+     (not cancelled by airline). Customer's reason for cancellation is "flights too long" — not a covered
+     insurance reason (only health/weather are covered per policy line 147).
+     No cancellation criterion is met: not within 24hrs, not cancelled by airline, not business class,
+     insurance reason not covered. Same pattern as Task 39 (modification #11).
+   - Added to task_instructions: "You prefer to use your credit card for payment."
+   - Reason: User has credit_card_4196779, gift_card_5094406 ($274). Gift card could cover H8Q05L
+     upgrade ($163). GT expects credit card for all three upgrades. Added preference for deterministic choice.
+
+20. Task 45: Added cabin upgrade refusal to user instruction (CHANGES USER BEHAVIOUR)
+   - Added to task_instructions: "but you don't want to change cabin class or upgrade the flight"
+     (appended to the May 22nd flight change instruction)
+   - Reason: Agent might suggest upgrading from basic economy to economy as a workaround to enable
+     flight modification. GT asserts "Agent should not change PEP4E0 flight." — customer must refuse
+     the upgrade workaround to ensure the agent cannot change the flight.
+
+NOTES (no changes made):
+-------------------------
+
+1. Task 22: User instruction says "You prefer gift card payment" but user has two gift cards
+   (gift_card_8190333 $280, gift_card_6490722 $127). GT expects gift_card_8190333. No fix needed
+   because the cabin upgrade costs $209, which exceeds gift_card_6490722's $127 balance — only
+   gift_card_8190333 can cover it. For baggage, nonfree_baggages=0 (all free), so the payment_id
+   doesn't affect the reward (verified: using either gift card results in same reward).
+   Note: the user simulator may hallucinate a different gift card for baggage payment,
+   but since bags are free it doesn't impact the reward.
+
+2. Task 17: Modification #5 (gift card preference) was technically unnecessary. The cabin upgrade
+   costs $209 in a single command, which exceeds gift_card_6490722's $127 balance — only
+   gift_card_8190333 ($280) can cover it. Same situation as Task 22 (note #1). The modification
+   is harmless but the choice was already forced by cost constraint.
+
+3. Policy loophole: Upgrading cabin to business enables cancellation (business class is a cancellation
+   criterion). An agent could theoretically upgrade a basic economy/economy reservation to business
+   and then cancel it. No policy rule explicitly prevents this. Not fixed because: (a) the loophole
+   is self-defeating — upgrade cost exceeds the refund amount, (b) no task tests for this scenario,
+   (c) modifying the policy changes the benchmark definition.

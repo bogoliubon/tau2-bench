@@ -122,7 +122,7 @@ def display_welcome():
 • Provide excellent customer service
 
 [bold]How It Works:[/bold]
-• You'll practice with 30 training scenarios
+• You'll practice with customer service scenarios
 • You'll see customer messages and can respond with text or tool calls
 • Type messages naturally to communicate with customers
 • Use tool calls like: [cyan]get_reservation_details(reservation_id='ABC123')[/cyan]
@@ -974,7 +974,7 @@ def get_user_action(step_count: int, tools, policy: str) -> Optional[str]:
         return action
 
 
-def main():
+def main(split: str = "train"):
     """Main function for the human agent airline interface."""
     disable_logging()
 
@@ -986,7 +986,7 @@ def main():
 
         # Step 1: Choose a task
         console.print("\n[bold]Step 1: Choose a Customer Service Scenario[/bold]")
-        task = display_tasks(domain="airline", completed_tasks=completed_tasks)
+        task = display_tasks(domain="airline", task_split_set=split, completed_tasks=completed_tasks)
         console.print(f"\n[green]✅ Selected:[/green] Task {task.id}")
 
         # Check if task is already completed
@@ -1096,7 +1096,7 @@ def main():
                             # Mark task as completed
                             completed_tasks.add(task.id)
                             save_progress(completed_tasks)
-                            total = 30  # training set size
+                            total = len(load_tasks("airline", split))
                             console.print(f"[green]✅ Progress updated: {len(completed_tasks)}/{total} tasks completed[/green]")
                     else:
                         console.print("[yellow]⏭️  Trajectory not saved. You can redo this task later.[/yellow]")
