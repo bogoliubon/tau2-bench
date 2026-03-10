@@ -5,7 +5,11 @@ import argparse
 import os
 import sys
 import textwrap
+import warnings
 from typing import Optional, List, Dict
+
+# Suppress noisy pydantic serialization warnings from litellm
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic.*")
 
 import openai
 

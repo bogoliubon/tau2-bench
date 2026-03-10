@@ -1,0 +1,617 @@
+{
+  "id": "50e2346c-f128-45e5-add7-39477f102220",
+  "task_id": "39",
+  "timestamp": "2026-03-01T22:30:07.158630",
+  "start_time": "2026-03-01T22:23:59.301868",
+  "end_time": "2026-03-01T22:30:07.158603",
+  "duration": 367.8535653539002,
+  "termination_reason": "user_stop",
+  "agent_cost": null,
+  "user_cost": null,
+  "reward_info": null,
+  "messages": [
+    {
+      "role": "assistant",
+      "content": "Hi! How can I help you today?",
+      "tool_calls": null,
+      "turn_idx": 0,
+      "timestamp": "2026-03-01T22:23:59.302841",
+      "cost": 0.0,
+      "usage": null,
+      "raw_data": null
+    },
+    {
+      "role": "user",
+      "content": "Bonjour! I would like to cancel all of my upcoming flights, s'il vous plaît. I don’t have the reservation numbers, désolée. Can you help me with that?",
+      "tool_calls": null,
+      "turn_idx": 1,
+      "timestamp": "2026-03-01T22:24:00.941529",
+      "cost": 0.00113,
+      "usage": {
+        "completion_tokens": 37,
+        "prompt_tokens": 417
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Bonjour! I would like to cancel all of my upcoming flights, s'il vous plaît. I don’t have the reservation numbers, désolée. Can you help me with that?",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "okay. can i have your user_id pls?",
+      "tool_calls": null,
+      "turn_idx": 2,
+      "timestamp": "2026-03-01T22:24:22.734380",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "okay. can i have your user_id pls?"
+      }
+    },
+    {
+      "role": "user",
+      "content": "Oui, bien sûr! My user id is amelia_davis_8890.",
+      "tool_calls": null,
+      "turn_idx": 3,
+      "timestamp": "2026-03-01T22:24:25.718274",
+      "cost": 0.00108,
+      "usage": {
+        "completion_tokens": 17,
+        "prompt_tokens": 472
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Oui, bien sûr! My user id is amelia_davis_8890.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "amelia_davis_8890"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 4,
+      "timestamp": "2026-03-01T22:24:33.848824",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='amelia_davis_8890')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "Error: Reservation amelia_davis_8890 not found",
+      "requestor": "assistant",
+      "error": true,
+      "turn_idx": 5,
+      "timestamp": "2026-03-01T22:24:33.849297"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_user_details",
+          "arguments": {
+            "user_id": "amelia_davis_8890"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 6,
+      "timestamp": "2026-03-01T22:24:41.198175",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_user_details(user_id='amelia_davis_8890')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"user_id\": \"amelia_davis_8890\", \"name\": {\"first_name\": \"Amelia\", \"last_name\": \"Davis\"}, \"address\": {\"address1\": \"442 Sunset Drive\", \"address2\": \"Suite 708\", \"city\": \"San Diego\", \"country\": \"USA\", \"state\": \"CA\", \"zip\": \"92125\"}, \"email\": \"amelia.davis1624@example.com\", \"dob\": \"1984-03-05\", \"payment_methods\": {\"gift_card_7397998\": {\"source\": \"gift_card\", \"id\": \"gift_card_7397998\", \"amount\": 74.0}, \"gift_card_1647044\": {\"source\": \"gift_card\", \"id\": \"gift_card_1647044\", \"amount\": 236.0}, \"credit_card_4074252\": {\"source\": \"credit_card\", \"id\": \"credit_card_4074252\", \"brand\": \"mastercard\", \"last_four\": \"5435\"}, \"credit_card_6738701\": {\"source\": \"credit_card\", \"id\": \"credit_card_6738701\", \"brand\": \"visa\", \"last_four\": \"5308\"}, \"credit_card_5799376\": {\"source\": \"credit_card\", \"id\": \"credit_card_5799376\", \"brand\": \"mastercard\", \"last_four\": \"9326\"}, \"gift_card_5251654\": {\"source\": \"gift_card\", \"id\": \"gift_card_5251654\", \"amount\": 179.0}}, \"saved_passengers\": [{\"first_name\": \"Amelia\", \"last_name\": \"Jackson\", \"dob\": \"1999-04-26\"}], \"membership\": \"silver\", \"reservations\": [\"8C8K4E\", \"UDMOP1\", \"XAZ3C0\", \"LU15PA\", \"MSJ4OA\", \"I6M8JQ\", \"4XGCCM\"]}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 7,
+      "timestamp": "2026-03-01T22:24:41.199024"
+    },
+    {
+      "role": "assistant",
+      "content": "okay. let me check your reservations.",
+      "tool_calls": null,
+      "turn_idx": 8,
+      "timestamp": "2026-03-01T22:25:53.890689",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "okay. let me check your reservations."
+      }
+    },
+    {
+      "role": "user",
+      "content": "Merci beaucoup! Take your time, I will wait.",
+      "tool_calls": null,
+      "turn_idx": 9,
+      "timestamp": "2026-03-01T22:25:54.698748",
+      "cost": 0.001098,
+      "usage": {
+        "completion_tokens": 11,
+        "prompt_tokens": 505
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Merci beaucoup! Take your time, I will wait.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "4XGCCM"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 10,
+      "timestamp": "2026-03-01T22:26:09.291543",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='4XGCCM')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"4XGCCM\", \"user_id\": \"amelia_davis_8890\", \"origin\": \"IAH\", \"destination\": \"DTW\", \"flight_type\": \"round_trip\", \"cabin\": \"business\", \"flights\": [{\"flight_number\": \"HAT116\", \"origin\": \"IAH\", \"destination\": \"ORD\", \"date\": \"2024-05-03\", \"price\": 1359}, {\"flight_number\": \"HAT020\", \"origin\": \"ORD\", \"destination\": \"DTW\", \"date\": \"2024-05-03\", \"price\": 1292}, {\"flight_number\": \"HAT169\", \"origin\": \"DTW\", \"destination\": \"JFK\", \"date\": \"2024-05-04\", \"price\": 1115}, {\"flight_number\": \"HAT279\", \"origin\": \"JFK\", \"destination\": \"IAH\", \"date\": \"2024-05-04\", \"price\": 1278}], \"passengers\": [{\"first_name\": \"Amelia\", \"last_name\": \"Davis\", \"dob\": \"1984-03-05\"}], \"payment_history\": [{\"payment_id\": \"credit_card_4074252\", \"amount\": 5074}], \"created_at\": \"2024-05-02T14:48:47\", \"total_baggages\": 2, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 11,
+      "timestamp": "2026-03-01T22:26:09.292330"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "I6M8JQ"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 12,
+      "timestamp": "2026-03-01T22:26:20.065700",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='I6M8JQ')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"I6M8JQ\", \"user_id\": \"amelia_davis_8890\", \"origin\": \"LAS\", \"destination\": \"EWR\", \"flight_type\": \"one_way\", \"cabin\": \"economy\", \"flights\": [{\"flight_number\": \"HAT115\", \"origin\": \"LAS\", \"destination\": \"MIA\", \"date\": \"2024-05-09\", \"price\": 153}, {\"flight_number\": \"HAT192\", \"origin\": \"MIA\", \"destination\": \"EWR\", \"date\": \"2024-05-09\", \"price\": 193}], \"passengers\": [{\"first_name\": \"Amelia\", \"last_name\": \"Davis\", \"dob\": \"1984-03-05\"}, {\"first_name\": \"Juan\", \"last_name\": \"Sanchez\", \"dob\": \"1972-06-04\"}], \"payment_history\": [{\"payment_id\": \"credit_card_5799376\", \"amount\": 752}], \"created_at\": \"2024-05-08T14:58:17\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 13,
+      "timestamp": "2026-03-01T22:26:20.066397"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "MSJ4OA"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 14,
+      "timestamp": "2026-03-01T22:26:30.264448",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='MSJ4OA')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"MSJ4OA\", \"user_id\": \"amelia_davis_8890\", \"origin\": \"DFW\", \"destination\": \"SFO\", \"flight_type\": \"one_way\", \"cabin\": \"economy\", \"flights\": [{\"flight_number\": \"HAT099\", \"origin\": \"DFW\", \"destination\": \"SEA\", \"date\": \"2024-05-22\", \"price\": 176}, {\"flight_number\": \"HAT274\", \"origin\": \"SEA\", \"destination\": \"SFO\", \"date\": \"2024-05-22\", \"price\": 122}], \"passengers\": [{\"first_name\": \"Amelia\", \"last_name\": \"Jackson\", \"dob\": \"1999-04-26\"}, {\"first_name\": \"Anya\", \"last_name\": \"Brown\", \"dob\": \"1980-07-26\"}, {\"first_name\": \"Mei\", \"last_name\": \"Wilson\", \"dob\": \"1963-05-09\"}], \"payment_history\": [{\"payment_id\": \"gift_card_1647044\", \"amount\": 984}], \"created_at\": \"2024-05-05T14:36:15\", \"total_baggages\": 3, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 15,
+      "timestamp": "2026-03-01T22:26:30.265167"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "LU15PA"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 16,
+      "timestamp": "2026-03-01T22:26:55.467526",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='LU15PA')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"LU15PA\", \"user_id\": \"amelia_davis_8890\", \"origin\": \"SFO\", \"destination\": \"SFO\", \"flight_type\": \"one_way\", \"cabin\": \"business\", \"flights\": [{\"flight_number\": \"HAT144\", \"origin\": \"SFO\", \"destination\": \"PHX\", \"date\": \"2024-05-23\", \"price\": 740}, {\"flight_number\": \"HAT009\", \"origin\": \"PHX\", \"destination\": \"SFO\", \"date\": \"2024-05-23\", \"price\": 443}], \"passengers\": [{\"first_name\": \"Amelia\", \"last_name\": \"Davis\", \"dob\": \"1984-03-05\"}, {\"first_name\": \"Amelia\", \"last_name\": \"Jackson\", \"dob\": \"1999-04-26\"}], \"payment_history\": [{\"payment_id\": \"gift_card_7397998\", \"amount\": 2366}], \"created_at\": \"2024-05-01T00:08:44\", \"total_baggages\": 4, \"nonfree_baggages\": 0, \"insurance\": \"no\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 17,
+      "timestamp": "2026-03-01T22:26:55.468278"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "XAZ3C0"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 18,
+      "timestamp": "2026-03-01T22:27:06.143020",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='XAZ3C0')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"XAZ3C0\", \"user_id\": \"amelia_davis_8890\", \"origin\": \"ATL\", \"destination\": \"CLT\", \"flight_type\": \"one_way\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT110\", \"origin\": \"ATL\", \"destination\": \"LGA\", \"date\": \"2024-05-27\", \"price\": 70}, {\"flight_number\": \"HAT272\", \"origin\": \"LGA\", \"destination\": \"CLT\", \"date\": \"2024-05-27\", \"price\": 78}], \"passengers\": [{\"first_name\": \"Fatima\", \"last_name\": \"Johnson\", \"dob\": \"1989-12-05\"}, {\"first_name\": \"Amelia\", \"last_name\": \"Jackson\", \"dob\": \"1999-04-26\"}], \"payment_history\": [{\"payment_id\": \"credit_card_4074252\", \"amount\": 296}], \"created_at\": \"2024-05-06T15:43:54\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"no\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 19,
+      "timestamp": "2026-03-01T22:27:06.143708"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "UDMOP1"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 20,
+      "timestamp": "2026-03-01T22:27:13.606872",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='UDMOP1')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"UDMOP1\", \"user_id\": \"amelia_davis_8890\", \"origin\": \"SFO\", \"destination\": \"SFO\", \"flight_type\": \"round_trip\", \"cabin\": \"basic_economy\", \"flights\": [{\"flight_number\": \"HAT134\", \"origin\": \"SFO\", \"destination\": \"PHX\", \"date\": \"2024-05-28\", \"price\": 89}, {\"flight_number\": \"HAT032\", \"origin\": \"PHX\", \"destination\": \"SFO\", \"date\": \"2024-05-28\", \"price\": 52}, {\"flight_number\": \"HAT280\", \"origin\": \"SFO\", \"destination\": \"PHL\", \"date\": \"2024-05-29\", \"price\": 55}, {\"flight_number\": \"HAT199\", \"origin\": \"PHL\", \"destination\": \"SFO\", \"date\": \"2024-05-29\", \"price\": 55}], \"passengers\": [{\"first_name\": \"Amelia\", \"last_name\": \"Davis\", \"dob\": \"1984-03-05\"}], \"payment_history\": [{\"payment_id\": \"gift_card_7397998\", \"amount\": 251}], \"created_at\": \"2024-05-09T11:34:16\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"no\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 21,
+      "timestamp": "2026-03-01T22:27:13.607516"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "get_reservation_details",
+          "arguments": {
+            "reservation_id": "8C8K4E"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 22,
+      "timestamp": "2026-03-01T22:27:20.893782",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "get_reservation_details(reservation_id='8C8K4E')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"8C8K4E\", \"user_id\": \"amelia_davis_8890\", \"origin\": \"BOS\", \"destination\": \"DEN\", \"flight_type\": \"one_way\", \"cabin\": \"business\", \"flights\": [{\"flight_number\": \"HAT247\", \"origin\": \"BOS\", \"destination\": \"MIA\", \"date\": \"2024-05-24\", \"price\": 904}, {\"flight_number\": \"HAT193\", \"origin\": \"MIA\", \"destination\": \"DEN\", \"date\": \"2024-05-24\", \"price\": 1906}], \"passengers\": [{\"first_name\": \"Amelia\", \"last_name\": \"Davis\", \"dob\": \"1984-03-05\"}, {\"first_name\": \"Amelia\", \"last_name\": \"Jackson\", \"dob\": \"1999-04-26\"}], \"payment_history\": [{\"payment_id\": \"gift_card_1647044\", \"amount\": 5680}], \"created_at\": \"2024-05-08T10:31:36\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": null}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 23,
+      "timestamp": "2026-03-01T22:27:20.894459"
+    },
+    {
+      "role": "assistant",
+      "content": "You have 3 upcoming flights. 8C8K4E LU15PA MSJ4OA",
+      "tool_calls": null,
+      "turn_idx": 24,
+      "timestamp": "2026-03-01T22:27:40.584557",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "You have 3 upcoming flights. 8C8K4E LU15PA MSJ4OA"
+      }
+    },
+    {
+      "role": "user",
+      "content": "Merci! Please cancel all of them for me, even if I cannot get a refund. I want to free up my seats for others, d’accord?",
+      "tool_calls": null,
+      "turn_idx": 25,
+      "timestamp": "2026-03-01T22:27:41.876453",
+      "cost": 0.001338,
+      "usage": {
+        "completion_tokens": 31,
+        "prompt_tokens": 545
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Merci! Please cancel all of them for me, even if I cannot get a refund. I want to free up my seats for others, d’accord?",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "Our policy is that you can cancel a flight if 1, it was made within 24 hours (now is  2024-05-24 1500 or 2. it is business class. 3. you have an insurance and it's because of health or weather reason. so I can cancel 8C8K4E LU15PA but not MSJ4OA since you don't offere a reason covered by the insurance.",
+      "tool_calls": null,
+      "turn_idx": 26,
+      "timestamp": "2026-03-01T22:29:23.355545",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "Our policy is that you can cancel a flight if 1, it was made within 24 hours (now is  2024-05-24 1500 or 2. it is business class. 3. you have an insurance and it's because of health or weather reason. so I can cancel 8C8K4E LU15PA but not MSJ4OA since you don't offere a reason covered by the insurance."
+      }
+    },
+    {
+      "role": "user",
+      "content": "C’est bon, please go ahead and cancel 8C8K4E and LU15PA for me. For MSJ4OA, even if I cannot get a refund, I still want to cancel it to give up my seat. Can you do that, s’il vous plaît?",
+      "tool_calls": null,
+      "turn_idx": 27,
+      "timestamp": "2026-03-01T22:29:24.985518",
+      "cost": 0.0018219999999999998,
+      "usage": {
+        "completion_tokens": 59,
+        "prompt_tokens": 675
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "C’est bon, please go ahead and cancel 8C8K4E and LU15PA for me. For MSJ4OA, even if I cannot get a refund, I still want to cancel it to give up my seat. Can you do that, s’il vous plaît?",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "I can cancel the 2 but not the last one. let me proceed.",
+      "tool_calls": null,
+      "turn_idx": 28,
+      "timestamp": "2026-03-01T22:29:41.711260",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "I can cancel the 2 but not the last one. let me proceed."
+      }
+    },
+    {
+      "role": "user",
+      "content": "Merci, thank you for your help! Please let me know when it’s done.",
+      "tool_calls": null,
+      "turn_idx": 29,
+      "timestamp": "2026-03-01T22:29:43.608565",
+      "cost": 0.001652,
+      "usage": {
+        "completion_tokens": 17,
+        "prompt_tokens": 758
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Merci, thank you for your help! Please let me know when it’s done.",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "cancel_reservation",
+          "arguments": {
+            "reservation_id": "8C8K4E"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 30,
+      "timestamp": "2026-03-01T22:29:55.552177",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "cancel_reservation(reservation_id='8C8K4E')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"8C8K4E\", \"user_id\": \"amelia_davis_8890\", \"origin\": \"BOS\", \"destination\": \"DEN\", \"flight_type\": \"one_way\", \"cabin\": \"business\", \"flights\": [{\"flight_number\": \"HAT247\", \"origin\": \"BOS\", \"destination\": \"MIA\", \"date\": \"2024-05-24\", \"price\": 904}, {\"flight_number\": \"HAT193\", \"origin\": \"MIA\", \"destination\": \"DEN\", \"date\": \"2024-05-24\", \"price\": 1906}], \"passengers\": [{\"first_name\": \"Amelia\", \"last_name\": \"Davis\", \"dob\": \"1984-03-05\"}, {\"first_name\": \"Amelia\", \"last_name\": \"Jackson\", \"dob\": \"1999-04-26\"}], \"payment_history\": [{\"payment_id\": \"gift_card_1647044\", \"amount\": 5680}, {\"payment_id\": \"gift_card_1647044\", \"amount\": -5680}], \"created_at\": \"2024-05-08T10:31:36\", \"total_baggages\": 0, \"nonfree_baggages\": 0, \"insurance\": \"yes\", \"status\": \"cancelled\"}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 31,
+      "timestamp": "2026-03-01T22:29:55.553090"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "",
+          "name": "cancel_reservation",
+          "arguments": {
+            "reservation_id": "LU15PA"
+          },
+          "requestor": "assistant"
+        }
+      ],
+      "turn_idx": 32,
+      "timestamp": "2026-03-01T22:30:02.530047",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "cancel_reservation(reservation_id='LU15PA')"
+      }
+    },
+    {
+      "id": "",
+      "role": "tool",
+      "content": "{\"reservation_id\": \"LU15PA\", \"user_id\": \"amelia_davis_8890\", \"origin\": \"SFO\", \"destination\": \"SFO\", \"flight_type\": \"one_way\", \"cabin\": \"business\", \"flights\": [{\"flight_number\": \"HAT144\", \"origin\": \"SFO\", \"destination\": \"PHX\", \"date\": \"2024-05-23\", \"price\": 740}, {\"flight_number\": \"HAT009\", \"origin\": \"PHX\", \"destination\": \"SFO\", \"date\": \"2024-05-23\", \"price\": 443}], \"passengers\": [{\"first_name\": \"Amelia\", \"last_name\": \"Davis\", \"dob\": \"1984-03-05\"}, {\"first_name\": \"Amelia\", \"last_name\": \"Jackson\", \"dob\": \"1999-04-26\"}], \"payment_history\": [{\"payment_id\": \"gift_card_7397998\", \"amount\": 2366}, {\"payment_id\": \"gift_card_7397998\", \"amount\": -2366}], \"created_at\": \"2024-05-01T00:08:44\", \"total_baggages\": 4, \"nonfree_baggages\": 0, \"insurance\": \"no\", \"status\": \"cancelled\"}",
+      "requestor": "assistant",
+      "error": false,
+      "turn_idx": 33,
+      "timestamp": "2026-03-01T22:30:02.530895"
+    },
+    {
+      "role": "assistant",
+      "content": "it's done.",
+      "tool_calls": null,
+      "turn_idx": 34,
+      "timestamp": "2026-03-01T22:30:06.163959",
+      "cost": null,
+      "usage": null,
+      "raw_data": {
+        "action": "it's done."
+      }
+    },
+    {
+      "role": "user",
+      "content": "Merci beaucoup! I appreciate your assistance. Bonne journée! ###STOP###",
+      "tool_calls": null,
+      "turn_idx": 35,
+      "timestamp": "2026-03-01T22:30:07.153848",
+      "cost": 0.0016839999999999997,
+      "usage": {
+        "completion_tokens": 14,
+        "prompt_tokens": 786
+      },
+      "raw_data": {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Merci beaucoup! I appreciate your assistance. Bonne journée! ###STOP###",
+          "role": "assistant",
+          "tool_calls": null,
+          "function_call": null,
+          "provider_specific_fields": {
+            "refusal": null
+          },
+          "annotations": []
+        },
+        "provider_specific_fields": {}
+      }
+    }
+  ],
+  "trial": null,
+  "seed": null
+}
