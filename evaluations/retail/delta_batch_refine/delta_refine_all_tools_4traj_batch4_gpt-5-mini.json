@@ -1,0 +1,1533 @@
+{
+  "config": {
+    "pipeline": "delta_batch_refine",
+    "tool_name": null,
+    "n_traj": 4,
+    "batch_size": 4,
+    "model_name": "gpt-5-mini",
+    "results_path": "../evaluations/retail/llm_rollouts/agent=claude_code/seed_4tasks_claude-code.json",
+    "seed": 42,
+    "dedup_threshold": 0.85,
+    "selected_task_ids": [
+      0,
+      15,
+      11,
+      113
+    ]
+  },
+  "iterations": [
+    {
+      "batch_num": 1,
+      "task_ids": [
+        0,
+        15,
+        11,
+        113
+      ],
+      "step": "bootstrap",
+      "playbook": {
+        "bullets": [
+          {
+            "id": "info-001",
+            "section": "information_gathering",
+            "content": "IF a user requests account/order changes or returns \u2192 THEN ask for identity information by requesting either the user's email OR the user's first name, last name, and zip code",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "info-002",
+            "section": "information_gathering",
+            "content": "IF the user provides an email \u2192 THEN call find_user_id_by_email(email) to obtain user_id and then call get_user_details(user_id)",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "info-003",
+            "section": "information_gathering",
+            "content": "IF the user provides name and zip \u2192 THEN call find_user_id_by_name_zip(first_name, last_name, zip) to obtain user_id and then call get_user_details(user_id)",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "info-004",
+            "section": "information_gathering",
+            "content": "IF a user references or has multiple orders \u2192 THEN ask for or request the specific order ID; otherwise list the user's orders and ask which order contains the item(s) in question",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "info-005",
+            "section": "information_gathering",
+            "content": "IF an order ID is provided or selected \u2192 THEN call get_order_details(order_id) before taking any order-specific action",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "info-006",
+            "section": "information_gathering",
+            "content": "IF a product variant or availability needs checking for an exchange or size change \u2192 THEN call get_product_details(product_id) to list available variants, their availability, and prices",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "acti-001",
+            "section": "action_execution",
+            "content": "IF order.status == 'pending' AND the user requests an item modification (size, variant, etc.) \u2192 THEN call modify_pending_order_items(order_id, item_ids, new_item_ids, payment_method_id) and apply any price difference (issue refund or charge) to the original payment method",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "acti-002",
+            "section": "action_execution",
+            "content": "IF order.status == 'delivered' AND the user requests an exchange \u2192 THEN present available replacement variants (via get_product_details) and, after user confirmation, call exchange_delivered_order_items(order_id, item_ids, new_item_ids, payment_method_id) and record the exchange_price_difference (negative means refund)",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "acti-003",
+            "section": "action_execution",
+            "content": "IF order.status == 'delivered' AND the user requests a return of delivered items \u2192 THEN call return_delivered_order_items(order_id, item_ids, payment_method_id) and set return_items and return_payment_method_id accordingly",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "acti-004",
+            "section": "action_execution",
+            "content": "IF order.status == 'pending' AND the user requests cancellation \u2192 THEN require a cancellation reason and call cancel_pending_order(order_id, reason) which issues a refund to the original payment method",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "acti-005",
+            "section": "action_execution",
+            "content": "IF a refund is applied as part of modify/exchange/return/cancel actions \u2192 THEN use the original payment method id from the order/payment history as the payment_method_id when invoking the action tool",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "acti-006",
+            "section": "action_execution",
+            "content": "IF a desired variant is unavailable \u2192 THEN do not attempt to exchange to that variant and explicitly inform the user that the variant is not available",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "conf-001",
+            "section": "confirmation_communication",
+            "content": "IF multiple orders are on the account \u2192 THEN ask the user to specify which order ID contains the items to act on",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "conf-002",
+            "section": "confirmation_communication",
+            "content": "IF presenting exchange or replacement options \u2192 THEN show available variants with their options, availability, and prices, and ask the user to choose a specific variant before proceeding",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "conf-003",
+            "section": "confirmation_communication",
+            "content": "IF an action will change the order or payment (modify, exchange, cancel, or return) \u2192 THEN summarize the exact changes and the price difference or refund amount, state the refund destination, and ask the user to confirm (explicit 'yes') before executing",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "conf-004",
+            "section": "confirmation_communication",
+            "content": "IF a refund will be issued to a credit card \u2192 THEN inform the user the refund will be issued to that card and typically arrive within 5-7 business days",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "conf-005",
+            "section": "confirmation_communication",
+            "content": "IF the system cannot comply with a user request due to policy constraints (e.g., changing refund destination) \u2192 THEN explain the limitation, provide the allowed options (original payment method or existing gift card), and offer to transfer to a human agent for further assistance",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "prec-001",
+            "section": "precondition_rules",
+            "content": "IF the user has not provided identity info (email OR first name, last name, zip) \u2192 THEN do not retrieve order details or perform order actions until identity info is provided and lookup returns a user_id",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "prec-002",
+            "section": "precondition_rules",
+            "content": "IF an order is to be modified \u2192 THEN require order.status == 'pending'; do not modify items on orders that are already delivered (use exchange/return flows instead)",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "prec-003",
+            "section": "precondition_rules",
+            "content": "IF an exchange or return is to be performed \u2192 THEN require order.status == 'delivered' for delivered-order exchange/return actions",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "prec-004",
+            "section": "precondition_rules",
+            "content": "IF cancelling a pending order \u2192 THEN require the user to provide a cancellation reason (e.g., 'ordered by mistake' or 'no longer needed') before calling cancel_pending_order",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "prec-005",
+            "section": "precondition_rules",
+            "content": "IF a refund is to be issued \u2192 THEN refunds must be sent to the original payment method used on the order or to an existing gift card on the account; do not change refund destination",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "prec-006",
+            "section": "precondition_rules",
+            "content": "IF items are modified on a pending order \u2192 THEN inform the user that no further item modifications can be made on that order after the change",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          }
+        ],
+        "_counters": {
+          "information_gathering": 6,
+          "action_execution": 6,
+          "confirmation_communication": 5,
+          "precondition_rules": 6
+        }
+      },
+      "policy": "## Information Gathering\n  [info-001] IF a user requests account/order changes or returns \u2192 THEN ask for identity information by requesting either the user's email OR the user's first name, last name, and zip code\n  [info-002] IF the user provides an email \u2192 THEN call find_user_id_by_email(email) to obtain user_id and then call get_user_details(user_id)\n  [info-003] IF the user provides name and zip \u2192 THEN call find_user_id_by_name_zip(first_name, last_name, zip) to obtain user_id and then call get_user_details(user_id)\n  [info-004] IF a user references or has multiple orders \u2192 THEN ask for or request the specific order ID; otherwise list the user's orders and ask which order contains the item(s) in question\n  [info-005] IF an order ID is provided or selected \u2192 THEN call get_order_details(order_id) before taking any order-specific action\n  [info-006] IF a product variant or availability needs checking for an exchange or size change \u2192 THEN call get_product_details(product_id) to list available variants, their availability, and prices\n\n## Action Execution\n  [acti-001] IF order.status == 'pending' AND the user requests an item modification (size, variant, etc.) \u2192 THEN call modify_pending_order_items(order_id, item_ids, new_item_ids, payment_method_id) and apply any price difference (issue refund or charge) to the original payment method\n  [acti-002] IF order.status == 'delivered' AND the user requests an exchange \u2192 THEN present available replacement variants (via get_product_details) and, after user confirmation, call exchange_delivered_order_items(order_id, item_ids, new_item_ids, payment_method_id) and record the exchange_price_difference (negative means refund)\n  [acti-003] IF order.status == 'delivered' AND the user requests a return of delivered items \u2192 THEN call return_delivered_order_items(order_id, item_ids, payment_method_id) and set return_items and return_payment_method_id accordingly\n  [acti-004] IF order.status == 'pending' AND the user requests cancellation \u2192 THEN require a cancellation reason and call cancel_pending_order(order_id, reason) which issues a refund to the original payment method\n  [acti-005] IF a refund is applied as part of modify/exchange/return/cancel actions \u2192 THEN use the original payment method id from the order/payment history as the payment_method_id when invoking the action tool\n  [acti-006] IF a desired variant is unavailable \u2192 THEN do not attempt to exchange to that variant and explicitly inform the user that the variant is not available\n\n## Confirmation Communication\n  [conf-001] IF multiple orders are on the account \u2192 THEN ask the user to specify which order ID contains the items to act on\n  [conf-002] IF presenting exchange or replacement options \u2192 THEN show available variants with their options, availability, and prices, and ask the user to choose a specific variant before proceeding\n  [conf-003] IF an action will change the order or payment (modify, exchange, cancel, or return) \u2192 THEN summarize the exact changes and the price difference or refund amount, state the refund destination, and ask the user to confirm (explicit 'yes') before executing\n  [conf-004] IF a refund will be issued to a credit card \u2192 THEN inform the user the refund will be issued to that card and typically arrive within 5-7 business days\n  [conf-005] IF the system cannot comply with a user request due to policy constraints (e.g., changing refund destination) \u2192 THEN explain the limitation, provide the allowed options (original payment method or existing gift card), and offer to transfer to a human agent for further assistance\n\n## Precondition Rules\n  [prec-001] IF the user has not provided identity info (email OR first name, last name, zip) \u2192 THEN do not retrieve order details or perform order actions until identity info is provided and lookup returns a user_id\n  [prec-002] IF an order is to be modified \u2192 THEN require order.status == 'pending'; do not modify items on orders that are already delivered (use exchange/return flows instead)\n  [prec-003] IF an exchange or return is to be performed \u2192 THEN require order.status == 'delivered' for delivered-order exchange/return actions\n  [prec-004] IF cancelling a pending order \u2192 THEN require the user to provide a cancellation reason (e.g., 'ordered by mistake' or 'no longer needed') before calling cancel_pending_order\n  [prec-005] IF a refund is to be issued \u2192 THEN refunds must be sent to the original payment method used on the order or to an existing gift card on the account; do not change refund destination\n  [prec-006] IF items are modified on a pending order \u2192 THEN inform the user that no further item modifications can be made on that order after the change\n"
+    },
+    {
+      "batch_num": 2,
+      "task_ids": [],
+      "step": "curator_dedup",
+      "playbook": {
+        "bullets": [
+          {
+            "id": "info-001",
+            "section": "information_gathering",
+            "content": "IF a user requests account/order changes or returns \u2192 THEN ask for identity information by requesting either the user's email OR the user's first name, last name, and zip code",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "info-002",
+            "section": "information_gathering",
+            "content": "IF the user provides an email \u2192 THEN call find_user_id_by_email(email) to obtain user_id and then call get_user_details(user_id)",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "info-003",
+            "section": "information_gathering",
+            "content": "IF the user provides name and zip \u2192 THEN call find_user_id_by_name_zip(first_name, last_name, zip) to obtain user_id and then call get_user_details(user_id)",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "info-004",
+            "section": "information_gathering",
+            "content": "IF a user references or has multiple orders \u2192 THEN ask for or request the specific order ID; otherwise list the user's orders and ask which order contains the item(s) in question",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "info-005",
+            "section": "information_gathering",
+            "content": "IF an order ID is provided or selected \u2192 THEN call get_order_details(order_id) before taking any order-specific action",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "info-006",
+            "section": "information_gathering",
+            "content": "IF a product variant or availability needs checking for an exchange or size change \u2192 THEN call get_product_details(product_id) to list available variants, their availability, and prices",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "acti-001",
+            "section": "action_execution",
+            "content": "IF order.status == 'pending' AND the user requests an item modification (size, variant, etc.) \u2192 THEN call modify_pending_order_items(order_id, item_ids, new_item_ids, payment_method_id) and apply any price difference (issue refund or charge) to the original payment method",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "acti-002",
+            "section": "action_execution",
+            "content": "IF order.status == 'delivered' AND the user requests an exchange \u2192 THEN present available replacement variants (via get_product_details) and, after user confirmation, call exchange_delivered_order_items(order_id, item_ids, new_item_ids, payment_method_id) and record the exchange_price_difference (negative means refund)",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "acti-003",
+            "section": "action_execution",
+            "content": "IF order.status == 'delivered' AND the user requests a return of delivered items \u2192 THEN call return_delivered_order_items(order_id, item_ids, payment_method_id) and set return_items and return_payment_method_id accordingly",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "acti-004",
+            "section": "action_execution",
+            "content": "IF order.status == 'pending' AND the user requests cancellation \u2192 THEN require a cancellation reason and call cancel_pending_order(order_id, reason) which issues a refund to the original payment method",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "acti-005",
+            "section": "action_execution",
+            "content": "IF a refund is applied as part of modify/exchange/return/cancel actions \u2192 THEN use the original payment method id from the order/payment history as the payment_method_id when invoking the action tool",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "acti-006",
+            "section": "action_execution",
+            "content": "IF a desired variant is unavailable \u2192 THEN do not attempt to exchange to that variant and explicitly inform the user that the variant is not available",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "conf-001",
+            "section": "confirmation_communication",
+            "content": "IF multiple orders are on the account \u2192 THEN ask the user to specify which order ID contains the items to act on",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "conf-002",
+            "section": "confirmation_communication",
+            "content": "IF presenting exchange or replacement options \u2192 THEN show available variants with their options, availability, and prices, and ask the user to choose a specific variant before proceeding",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "conf-003",
+            "section": "confirmation_communication",
+            "content": "IF an action will change the order or payment (modify, exchange, cancel, or return) \u2192 THEN summarize the exact changes and the price difference or refund amount, state the refund destination, and ask the user to confirm (explicit 'yes') before executing",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "conf-004",
+            "section": "confirmation_communication",
+            "content": "IF a refund will be issued to a credit card \u2192 THEN inform the user the refund will be issued to that card and typically arrive within 5-7 business days",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "conf-005",
+            "section": "confirmation_communication",
+            "content": "IF the system cannot comply with a user request due to policy constraints (e.g., changing refund destination) \u2192 THEN explain the limitation, provide the allowed options (original payment method or existing gift card), and offer to transfer to a human agent for further assistance",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "prec-001",
+            "section": "precondition_rules",
+            "content": "IF the user has not provided identity info (email OR first name, last name, zip) \u2192 THEN do not retrieve order details or perform order actions until identity info is provided and lookup returns a user_id",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "prec-002",
+            "section": "precondition_rules",
+            "content": "IF an order is to be modified \u2192 THEN require order.status == 'pending'; do not modify items on orders that are already delivered (use exchange/return flows instead)",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "prec-003",
+            "section": "precondition_rules",
+            "content": "IF an exchange or return is to be performed \u2192 THEN require order.status == 'delivered' for delivered-order exchange/return actions",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "prec-004",
+            "section": "precondition_rules",
+            "content": "IF cancelling a pending order \u2192 THEN require the user to provide a cancellation reason (e.g., 'ordered by mistake' or 'no longer needed') before calling cancel_pending_order",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "prec-005",
+            "section": "precondition_rules",
+            "content": "IF a refund is to be issued \u2192 THEN refunds must be sent to the original payment method used on the order or to an existing gift card on the account; do not change refund destination",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          },
+          {
+            "id": "prec-006",
+            "section": "precondition_rules",
+            "content": "IF items are modified on a pending order \u2192 THEN inform the user that no further item modifications can be made on that order after the change",
+            "source_batch": 0,
+            "source_task_ids": [
+              0,
+              15,
+              11,
+              113
+            ]
+          }
+        ],
+        "_counters": {
+          "information_gathering": 6,
+          "action_execution": 6,
+          "confirmation_communication": 5,
+          "precondition_rules": 6
+        }
+      },
+      "policy": "## Information Gathering\n  [info-001] IF a user requests account/order changes or returns \u2192 THEN ask for identity information by requesting either the user's email OR the user's first name, last name, and zip code\n  [info-002] IF the user provides an email \u2192 THEN call find_user_id_by_email(email) to obtain user_id and then call get_user_details(user_id)\n  [info-003] IF the user provides name and zip \u2192 THEN call find_user_id_by_name_zip(first_name, last_name, zip) to obtain user_id and then call get_user_details(user_id)\n  [info-004] IF a user references or has multiple orders \u2192 THEN ask for or request the specific order ID; otherwise list the user's orders and ask which order contains the item(s) in question\n  [info-005] IF an order ID is provided or selected \u2192 THEN call get_order_details(order_id) before taking any order-specific action\n  [info-006] IF a product variant or availability needs checking for an exchange or size change \u2192 THEN call get_product_details(product_id) to list available variants, their availability, and prices\n\n## Action Execution\n  [acti-001] IF order.status == 'pending' AND the user requests an item modification (size, variant, etc.) \u2192 THEN call modify_pending_order_items(order_id, item_ids, new_item_ids, payment_method_id) and apply any price difference (issue refund or charge) to the original payment method\n  [acti-002] IF order.status == 'delivered' AND the user requests an exchange \u2192 THEN present available replacement variants (via get_product_details) and, after user confirmation, call exchange_delivered_order_items(order_id, item_ids, new_item_ids, payment_method_id) and record the exchange_price_difference (negative means refund)\n  [acti-003] IF order.status == 'delivered' AND the user requests a return of delivered items \u2192 THEN call return_delivered_order_items(order_id, item_ids, payment_method_id) and set return_items and return_payment_method_id accordingly\n  [acti-004] IF order.status == 'pending' AND the user requests cancellation \u2192 THEN require a cancellation reason and call cancel_pending_order(order_id, reason) which issues a refund to the original payment method\n  [acti-005] IF a refund is applied as part of modify/exchange/return/cancel actions \u2192 THEN use the original payment method id from the order/payment history as the payment_method_id when invoking the action tool\n  [acti-006] IF a desired variant is unavailable \u2192 THEN do not attempt to exchange to that variant and explicitly inform the user that the variant is not available\n\n## Confirmation Communication\n  [conf-001] IF multiple orders are on the account \u2192 THEN ask the user to specify which order ID contains the items to act on\n  [conf-002] IF presenting exchange or replacement options \u2192 THEN show available variants with their options, availability, and prices, and ask the user to choose a specific variant before proceeding\n  [conf-003] IF an action will change the order or payment (modify, exchange, cancel, or return) \u2192 THEN summarize the exact changes and the price difference or refund amount, state the refund destination, and ask the user to confirm (explicit 'yes') before executing\n  [conf-004] IF a refund will be issued to a credit card \u2192 THEN inform the user the refund will be issued to that card and typically arrive within 5-7 business days\n  [conf-005] IF the system cannot comply with a user request due to policy constraints (e.g., changing refund destination) \u2192 THEN explain the limitation, provide the allowed options (original payment method or existing gift card), and offer to transfer to a human agent for further assistance\n\n## Precondition Rules\n  [prec-001] IF the user has not provided identity info (email OR first name, last name, zip) \u2192 THEN do not retrieve order details or perform order actions until identity info is provided and lookup returns a user_id\n  [prec-002] IF an order is to be modified \u2192 THEN require order.status == 'pending'; do not modify items on orders that are already delivered (use exchange/return flows instead)\n  [prec-003] IF an exchange or return is to be performed \u2192 THEN require order.status == 'delivered' for delivered-order exchange/return actions\n  [prec-004] IF cancelling a pending order \u2192 THEN require the user to provide a cancellation reason (e.g., 'ordered by mistake' or 'no longer needed') before calling cancel_pending_order\n  [prec-005] IF a refund is to be issued \u2192 THEN refunds must be sent to the original payment method used on the order or to an existing gift card on the account; do not change refund destination\n  [prec-006] IF items are modified on a pending order \u2192 THEN inform the user that no further item modifications can be made on that order after the change\n"
+    }
+  ],
+  "all_deltas": [],
+  "bootstrap_playbook": {
+    "bullets": [
+      {
+        "id": "info-001",
+        "section": "information_gathering",
+        "content": "IF a user requests account/order changes or returns \u2192 THEN ask for identity information by requesting either the user's email OR the user's first name, last name, and zip code",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-002",
+        "section": "information_gathering",
+        "content": "IF the user provides an email \u2192 THEN call find_user_id_by_email(email) to obtain user_id and then call get_user_details(user_id)",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-003",
+        "section": "information_gathering",
+        "content": "IF the user provides name and zip \u2192 THEN call find_user_id_by_name_zip(first_name, last_name, zip) to obtain user_id and then call get_user_details(user_id)",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-004",
+        "section": "information_gathering",
+        "content": "IF a user references or has multiple orders \u2192 THEN ask for or request the specific order ID; otherwise list the user's orders and ask which order contains the item(s) in question",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-005",
+        "section": "information_gathering",
+        "content": "IF an order ID is provided or selected \u2192 THEN call get_order_details(order_id) before taking any order-specific action",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-006",
+        "section": "information_gathering",
+        "content": "IF a product variant or availability needs checking for an exchange or size change \u2192 THEN call get_product_details(product_id) to list available variants, their availability, and prices",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-001",
+        "section": "action_execution",
+        "content": "IF order.status == 'pending' AND the user requests an item modification (size, variant, etc.) \u2192 THEN call modify_pending_order_items(order_id, item_ids, new_item_ids, payment_method_id) and apply any price difference (issue refund or charge) to the original payment method",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-002",
+        "section": "action_execution",
+        "content": "IF order.status == 'delivered' AND the user requests an exchange \u2192 THEN present available replacement variants (via get_product_details) and, after user confirmation, call exchange_delivered_order_items(order_id, item_ids, new_item_ids, payment_method_id) and record the exchange_price_difference (negative means refund)",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-003",
+        "section": "action_execution",
+        "content": "IF order.status == 'delivered' AND the user requests a return of delivered items \u2192 THEN call return_delivered_order_items(order_id, item_ids, payment_method_id) and set return_items and return_payment_method_id accordingly",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-004",
+        "section": "action_execution",
+        "content": "IF order.status == 'pending' AND the user requests cancellation \u2192 THEN require a cancellation reason and call cancel_pending_order(order_id, reason) which issues a refund to the original payment method",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-005",
+        "section": "action_execution",
+        "content": "IF a refund is applied as part of modify/exchange/return/cancel actions \u2192 THEN use the original payment method id from the order/payment history as the payment_method_id when invoking the action tool",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-006",
+        "section": "action_execution",
+        "content": "IF a desired variant is unavailable \u2192 THEN do not attempt to exchange to that variant and explicitly inform the user that the variant is not available",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-001",
+        "section": "confirmation_communication",
+        "content": "IF multiple orders are on the account \u2192 THEN ask the user to specify which order ID contains the items to act on",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-002",
+        "section": "confirmation_communication",
+        "content": "IF presenting exchange or replacement options \u2192 THEN show available variants with their options, availability, and prices, and ask the user to choose a specific variant before proceeding",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-003",
+        "section": "confirmation_communication",
+        "content": "IF an action will change the order or payment (modify, exchange, cancel, or return) \u2192 THEN summarize the exact changes and the price difference or refund amount, state the refund destination, and ask the user to confirm (explicit 'yes') before executing",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-004",
+        "section": "confirmation_communication",
+        "content": "IF a refund will be issued to a credit card \u2192 THEN inform the user the refund will be issued to that card and typically arrive within 5-7 business days",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-005",
+        "section": "confirmation_communication",
+        "content": "IF the system cannot comply with a user request due to policy constraints (e.g., changing refund destination) \u2192 THEN explain the limitation, provide the allowed options (original payment method or existing gift card), and offer to transfer to a human agent for further assistance",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-001",
+        "section": "precondition_rules",
+        "content": "IF the user has not provided identity info (email OR first name, last name, zip) \u2192 THEN do not retrieve order details or perform order actions until identity info is provided and lookup returns a user_id",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-002",
+        "section": "precondition_rules",
+        "content": "IF an order is to be modified \u2192 THEN require order.status == 'pending'; do not modify items on orders that are already delivered (use exchange/return flows instead)",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-003",
+        "section": "precondition_rules",
+        "content": "IF an exchange or return is to be performed \u2192 THEN require order.status == 'delivered' for delivered-order exchange/return actions",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-004",
+        "section": "precondition_rules",
+        "content": "IF cancelling a pending order \u2192 THEN require the user to provide a cancellation reason (e.g., 'ordered by mistake' or 'no longer needed') before calling cancel_pending_order",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-005",
+        "section": "precondition_rules",
+        "content": "IF a refund is to be issued \u2192 THEN refunds must be sent to the original payment method used on the order or to an existing gift card on the account; do not change refund destination",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-006",
+        "section": "precondition_rules",
+        "content": "IF items are modified on a pending order \u2192 THEN inform the user that no further item modifications can be made on that order after the change",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      }
+    ],
+    "_counters": {
+      "information_gathering": 6,
+      "action_execution": 6,
+      "confirmation_communication": 5,
+      "precondition_rules": 6
+    }
+  },
+  "curated_playbook": {
+    "bullets": [
+      {
+        "id": "info-001",
+        "section": "information_gathering",
+        "content": "IF a user requests account/order changes or returns \u2192 THEN ask for identity information by requesting either the user's email OR the user's first name, last name, and zip code",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-002",
+        "section": "information_gathering",
+        "content": "IF the user provides an email \u2192 THEN call find_user_id_by_email(email) to obtain user_id and then call get_user_details(user_id)",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-003",
+        "section": "information_gathering",
+        "content": "IF the user provides name and zip \u2192 THEN call find_user_id_by_name_zip(first_name, last_name, zip) to obtain user_id and then call get_user_details(user_id)",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-004",
+        "section": "information_gathering",
+        "content": "IF a user references or has multiple orders \u2192 THEN ask for or request the specific order ID; otherwise list the user's orders and ask which order contains the item(s) in question",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-005",
+        "section": "information_gathering",
+        "content": "IF an order ID is provided or selected \u2192 THEN call get_order_details(order_id) before taking any order-specific action",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-006",
+        "section": "information_gathering",
+        "content": "IF a product variant or availability needs checking for an exchange or size change \u2192 THEN call get_product_details(product_id) to list available variants, their availability, and prices",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-001",
+        "section": "action_execution",
+        "content": "IF order.status == 'pending' AND the user requests an item modification (size, variant, etc.) \u2192 THEN call modify_pending_order_items(order_id, item_ids, new_item_ids, payment_method_id) and apply any price difference (issue refund or charge) to the original payment method",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-002",
+        "section": "action_execution",
+        "content": "IF order.status == 'delivered' AND the user requests an exchange \u2192 THEN present available replacement variants (via get_product_details) and, after user confirmation, call exchange_delivered_order_items(order_id, item_ids, new_item_ids, payment_method_id) and record the exchange_price_difference (negative means refund)",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-003",
+        "section": "action_execution",
+        "content": "IF order.status == 'delivered' AND the user requests a return of delivered items \u2192 THEN call return_delivered_order_items(order_id, item_ids, payment_method_id) and set return_items and return_payment_method_id accordingly",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-004",
+        "section": "action_execution",
+        "content": "IF order.status == 'pending' AND the user requests cancellation \u2192 THEN require a cancellation reason and call cancel_pending_order(order_id, reason) which issues a refund to the original payment method",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-005",
+        "section": "action_execution",
+        "content": "IF a refund is applied as part of modify/exchange/return/cancel actions \u2192 THEN use the original payment method id from the order/payment history as the payment_method_id when invoking the action tool",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-006",
+        "section": "action_execution",
+        "content": "IF a desired variant is unavailable \u2192 THEN do not attempt to exchange to that variant and explicitly inform the user that the variant is not available",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-001",
+        "section": "confirmation_communication",
+        "content": "IF multiple orders are on the account \u2192 THEN ask the user to specify which order ID contains the items to act on",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-002",
+        "section": "confirmation_communication",
+        "content": "IF presenting exchange or replacement options \u2192 THEN show available variants with their options, availability, and prices, and ask the user to choose a specific variant before proceeding",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-003",
+        "section": "confirmation_communication",
+        "content": "IF an action will change the order or payment (modify, exchange, cancel, or return) \u2192 THEN summarize the exact changes and the price difference or refund amount, state the refund destination, and ask the user to confirm (explicit 'yes') before executing",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-004",
+        "section": "confirmation_communication",
+        "content": "IF a refund will be issued to a credit card \u2192 THEN inform the user the refund will be issued to that card and typically arrive within 5-7 business days",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-005",
+        "section": "confirmation_communication",
+        "content": "IF the system cannot comply with a user request due to policy constraints (e.g., changing refund destination) \u2192 THEN explain the limitation, provide the allowed options (original payment method or existing gift card), and offer to transfer to a human agent for further assistance",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-001",
+        "section": "precondition_rules",
+        "content": "IF the user has not provided identity info (email OR first name, last name, zip) \u2192 THEN do not retrieve order details or perform order actions until identity info is provided and lookup returns a user_id",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-002",
+        "section": "precondition_rules",
+        "content": "IF an order is to be modified \u2192 THEN require order.status == 'pending'; do not modify items on orders that are already delivered (use exchange/return flows instead)",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-003",
+        "section": "precondition_rules",
+        "content": "IF an exchange or return is to be performed \u2192 THEN require order.status == 'delivered' for delivered-order exchange/return actions",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-004",
+        "section": "precondition_rules",
+        "content": "IF cancelling a pending order \u2192 THEN require the user to provide a cancellation reason (e.g., 'ordered by mistake' or 'no longer needed') before calling cancel_pending_order",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-005",
+        "section": "precondition_rules",
+        "content": "IF a refund is to be issued \u2192 THEN refunds must be sent to the original payment method used on the order or to an existing gift card on the account; do not change refund destination",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-006",
+        "section": "precondition_rules",
+        "content": "IF items are modified on a pending order \u2192 THEN inform the user that no further item modifications can be made on that order after the change",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      }
+    ],
+    "_counters": {
+      "information_gathering": 6,
+      "action_execution": 6,
+      "confirmation_communication": 5,
+      "precondition_rules": 6
+    }
+  },
+  "final_playbook": {
+    "bullets": [
+      {
+        "id": "info-001",
+        "section": "information_gathering",
+        "content": "IF a user requests account/order changes or returns \u2192 THEN ask for identity information by requesting either the user's email OR the user's first name, last name, and zip code",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-002",
+        "section": "information_gathering",
+        "content": "IF the user provides an email \u2192 THEN call find_user_id_by_email(email) to obtain user_id and then call get_user_details(user_id)",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-003",
+        "section": "information_gathering",
+        "content": "IF the user provides name and zip \u2192 THEN call find_user_id_by_name_zip(first_name, last_name, zip) to obtain user_id and then call get_user_details(user_id)",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-004",
+        "section": "information_gathering",
+        "content": "IF a user references or has multiple orders \u2192 THEN ask for or request the specific order ID; otherwise list the user's orders and ask which order contains the item(s) in question",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-005",
+        "section": "information_gathering",
+        "content": "IF an order ID is provided or selected \u2192 THEN call get_order_details(order_id) before taking any order-specific action",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "info-006",
+        "section": "information_gathering",
+        "content": "IF a product variant or availability needs checking for an exchange or size change \u2192 THEN call get_product_details(product_id) to list available variants, their availability, and prices",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-001",
+        "section": "action_execution",
+        "content": "IF order.status == 'pending' AND the user requests an item modification (size, variant, etc.) \u2192 THEN call modify_pending_order_items(order_id, item_ids, new_item_ids, payment_method_id) and apply any price difference (issue refund or charge) to the original payment method",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-002",
+        "section": "action_execution",
+        "content": "IF order.status == 'delivered' AND the user requests an exchange \u2192 THEN present available replacement variants (via get_product_details) and, after user confirmation, call exchange_delivered_order_items(order_id, item_ids, new_item_ids, payment_method_id) and record the exchange_price_difference (negative means refund)",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-003",
+        "section": "action_execution",
+        "content": "IF order.status == 'delivered' AND the user requests a return of delivered items \u2192 THEN call return_delivered_order_items(order_id, item_ids, payment_method_id) and set return_items and return_payment_method_id accordingly",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-004",
+        "section": "action_execution",
+        "content": "IF order.status == 'pending' AND the user requests cancellation \u2192 THEN require a cancellation reason and call cancel_pending_order(order_id, reason) which issues a refund to the original payment method",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-005",
+        "section": "action_execution",
+        "content": "IF a refund is applied as part of modify/exchange/return/cancel actions \u2192 THEN use the original payment method id from the order/payment history as the payment_method_id when invoking the action tool",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "acti-006",
+        "section": "action_execution",
+        "content": "IF a desired variant is unavailable \u2192 THEN do not attempt to exchange to that variant and explicitly inform the user that the variant is not available",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-001",
+        "section": "confirmation_communication",
+        "content": "IF multiple orders are on the account \u2192 THEN ask the user to specify which order ID contains the items to act on",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-002",
+        "section": "confirmation_communication",
+        "content": "IF presenting exchange or replacement options \u2192 THEN show available variants with their options, availability, and prices, and ask the user to choose a specific variant before proceeding",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-003",
+        "section": "confirmation_communication",
+        "content": "IF an action will change the order or payment (modify, exchange, cancel, or return) \u2192 THEN summarize the exact changes and the price difference or refund amount, state the refund destination, and ask the user to confirm (explicit 'yes') before executing",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-004",
+        "section": "confirmation_communication",
+        "content": "IF a refund will be issued to a credit card \u2192 THEN inform the user the refund will be issued to that card and typically arrive within 5-7 business days",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "conf-005",
+        "section": "confirmation_communication",
+        "content": "IF the system cannot comply with a user request due to policy constraints (e.g., changing refund destination) \u2192 THEN explain the limitation, provide the allowed options (original payment method or existing gift card), and offer to transfer to a human agent for further assistance",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-001",
+        "section": "precondition_rules",
+        "content": "IF the user has not provided identity info (email OR first name, last name, zip) \u2192 THEN do not retrieve order details or perform order actions until identity info is provided and lookup returns a user_id",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-002",
+        "section": "precondition_rules",
+        "content": "IF an order is to be modified \u2192 THEN require order.status == 'pending'; do not modify items on orders that are already delivered (use exchange/return flows instead)",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-003",
+        "section": "precondition_rules",
+        "content": "IF an exchange or return is to be performed \u2192 THEN require order.status == 'delivered' for delivered-order exchange/return actions",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-004",
+        "section": "precondition_rules",
+        "content": "IF cancelling a pending order \u2192 THEN require the user to provide a cancellation reason (e.g., 'ordered by mistake' or 'no longer needed') before calling cancel_pending_order",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-005",
+        "section": "precondition_rules",
+        "content": "IF a refund is to be issued \u2192 THEN refunds must be sent to the original payment method used on the order or to an existing gift card on the account; do not change refund destination",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      },
+      {
+        "id": "prec-006",
+        "section": "precondition_rules",
+        "content": "IF items are modified on a pending order \u2192 THEN inform the user that no further item modifications can be made on that order after the change",
+        "source_batch": 0,
+        "source_task_ids": [
+          0,
+          15,
+          11,
+          113
+        ]
+      }
+    ],
+    "_counters": {
+      "information_gathering": 6,
+      "action_execution": 6,
+      "confirmation_communication": 5,
+      "precondition_rules": 6
+    }
+  },
+  "final_policy": "## Information Gathering\n  [info-001] IF a user requests account/order changes or returns \u2192 THEN ask for identity information by requesting either the user's email OR the user's first name, last name, and zip code\n  [info-002] IF the user provides an email \u2192 THEN call find_user_id_by_email(email) to obtain user_id and then call get_user_details(user_id)\n  [info-003] IF the user provides name and zip \u2192 THEN call find_user_id_by_name_zip(first_name, last_name, zip) to obtain user_id and then call get_user_details(user_id)\n  [info-004] IF a user references or has multiple orders \u2192 THEN ask for or request the specific order ID; otherwise list the user's orders and ask which order contains the item(s) in question\n  [info-005] IF an order ID is provided or selected \u2192 THEN call get_order_details(order_id) before taking any order-specific action\n  [info-006] IF a product variant or availability needs checking for an exchange or size change \u2192 THEN call get_product_details(product_id) to list available variants, their availability, and prices\n\n## Action Execution\n  [acti-001] IF order.status == 'pending' AND the user requests an item modification (size, variant, etc.) \u2192 THEN call modify_pending_order_items(order_id, item_ids, new_item_ids, payment_method_id) and apply any price difference (issue refund or charge) to the original payment method\n  [acti-002] IF order.status == 'delivered' AND the user requests an exchange \u2192 THEN present available replacement variants (via get_product_details) and, after user confirmation, call exchange_delivered_order_items(order_id, item_ids, new_item_ids, payment_method_id) and record the exchange_price_difference (negative means refund)\n  [acti-003] IF order.status == 'delivered' AND the user requests a return of delivered items \u2192 THEN call return_delivered_order_items(order_id, item_ids, payment_method_id) and set return_items and return_payment_method_id accordingly\n  [acti-004] IF order.status == 'pending' AND the user requests cancellation \u2192 THEN require a cancellation reason and call cancel_pending_order(order_id, reason) which issues a refund to the original payment method\n  [acti-005] IF a refund is applied as part of modify/exchange/return/cancel actions \u2192 THEN use the original payment method id from the order/payment history as the payment_method_id when invoking the action tool\n  [acti-006] IF a desired variant is unavailable \u2192 THEN do not attempt to exchange to that variant and explicitly inform the user that the variant is not available\n\n## Confirmation Communication\n  [conf-001] IF multiple orders are on the account \u2192 THEN ask the user to specify which order ID contains the items to act on\n  [conf-002] IF presenting exchange or replacement options \u2192 THEN show available variants with their options, availability, and prices, and ask the user to choose a specific variant before proceeding\n  [conf-003] IF an action will change the order or payment (modify, exchange, cancel, or return) \u2192 THEN summarize the exact changes and the price difference or refund amount, state the refund destination, and ask the user to confirm (explicit 'yes') before executing\n  [conf-004] IF a refund will be issued to a credit card \u2192 THEN inform the user the refund will be issued to that card and typically arrive within 5-7 business days\n  [conf-005] IF the system cannot comply with a user request due to policy constraints (e.g., changing refund destination) \u2192 THEN explain the limitation, provide the allowed options (original payment method or existing gift card), and offer to transfer to a human agent for further assistance\n\n## Precondition Rules\n  [prec-001] IF the user has not provided identity info (email OR first name, last name, zip) \u2192 THEN do not retrieve order details or perform order actions until identity info is provided and lookup returns a user_id\n  [prec-002] IF an order is to be modified \u2192 THEN require order.status == 'pending'; do not modify items on orders that are already delivered (use exchange/return flows instead)\n  [prec-003] IF an exchange or return is to be performed \u2192 THEN require order.status == 'delivered' for delivered-order exchange/return actions\n  [prec-004] IF cancelling a pending order \u2192 THEN require the user to provide a cancellation reason (e.g., 'ordered by mistake' or 'no longer needed') before calling cancel_pending_order\n  [prec-005] IF a refund is to be issued \u2192 THEN refunds must be sent to the original payment method used on the order or to an existing gift card on the account; do not change refund destination\n  [prec-006] IF items are modified on a pending order \u2192 THEN inform the user that no further item modifications can be made on that order after the change\n",
+  "diagnostic_log": [
+    {
+      "step": "bootstrap",
+      "raw_llm_response": "{\n  \"information_gathering\": [\n    \"IF a user requests account/order changes or returns \u2192 THEN ask for identity information by requesting either the user's email OR the user's first name, last name, and zip code\",\n    \"IF the user provides an email \u2192 THEN call find_user_id_by_email(email) to obtain user_id and then call get_user_details(user_id)\",\n    \"IF the user provides name and zip \u2192 THEN call find_user_id_by_name_zip(first_name, last_name, zip) to obtain user_id and then call get_user_details(user_id)\",\n    \"IF a user references or has multiple orders \u2192 THEN ask for or request the specific order ID; otherwise list the user's orders and ask which order contains the item(s) in question\",\n    \"IF an order ID is provided or selected \u2192 THEN call get_order_details(order_id) before taking any order-specific action\",\n    \"IF a product variant or availability needs checking for an exchange or size change \u2192 THEN call get_product_details(product_id) to list available variants, their availability, and prices\"\n  ],\n  \"action_execution\": [\n    \"IF order.status == 'pending' AND the user requests an item modification (size, variant, etc.) \u2192 THEN call modify_pending_order_items(order_id, item_ids, new_item_ids, payment_method_id) and apply any price difference (issue refund or charge) to the original payment method\",\n    \"IF order.status == 'delivered' AND the user requests an exchange \u2192 THEN present available replacement variants (via get_product_details) and, after user confirmation, call exchange_delivered_order_items(order_id, item_ids, new_item_ids, payment_method_id) and record the exchange_price_difference (negative means refund)\",\n    \"IF order.status == 'delivered' AND the user requests a return of delivered items \u2192 THEN call return_delivered_order_items(order_id, item_ids, payment_method_id) and set return_items and return_payment_method_id accordingly\",\n    \"IF order.status == 'pending' AND the user requests cancellation \u2192 THEN require a cancellation reason and call cancel_pending_order(order_id, reason) which issues a refund to the original payment method\",\n    \"IF a refund is applied as part of modify/exchange/return/cancel actions \u2192 THEN use the original payment method id from the order/payment history as the payment_method_id when invoking the action tool\",\n    \"IF a desired variant is unavailable \u2192 THEN do not attempt to exchange to that variant and explicitly inform the user that the variant is not available\"\n  ],\n  \"confirmation_communication\": [\n    \"IF multiple orders are on the account \u2192 THEN ask the user to specify which order ID contains the items to act on\",\n    \"IF presenting exchange or replacement options \u2192 THEN show available variants with their options, availability, and prices, and ask the user to choose a specific variant before proceeding\",\n    \"IF an action will change the order or payment (modify, exchange, cancel, or return) \u2192 THEN summarize the exact changes and the price difference or refund amount, state the refund destination, and ask the user to confirm (explicit 'yes') before executing\",\n    \"IF a refund will be issued to a credit card \u2192 THEN inform the user the refund will be issued to that card and typically arrive within 5-7 business days\",\n    \"IF the system cannot comply with a user request due to policy constraints (e.g., changing refund destination) \u2192 THEN explain the limitation, provide the allowed options (original payment method or existing gift card), and offer to transfer to a human agent for further assistance\"\n  ],\n  \"precondition_rules\": [\n    \"IF the user has not provided identity info (email OR first name, last name, zip) \u2192 THEN do not retrieve order details or perform order actions until identity info is provided and lookup returns a user_id\",\n    \"IF an order is to be modified \u2192 THEN require order.status == 'pending'; do not modify items on orders that are already delivered (use exchange/return flows instead)\",\n    \"IF an exchange or return is to be performed \u2192 THEN require order.status == 'delivered' for delivered-order exchange/return actions\",\n    \"IF cancelling a pending order \u2192 THEN require the user to provide a cancellation reason (e.g., 'ordered by mistake' or 'no longer needed') before calling cancel_pending_order\",\n    \"IF a refund is to be issued \u2192 THEN refunds must be sent to the original payment method used on the order or to an existing gift card on the account; do not change refund destination\",\n    \"IF items are modified on a pending order \u2192 THEN inform the user that no further item modifications can be made on that order after the change\"\n  ]\n}",
+      "num_bullets": 23
+    },
+    {
+      "step": "curator",
+      "actions": []
+    },
+    {
+      "step": "dedup",
+      "events": [
+        {
+          "event": "similarity_pairs",
+          "section": "information_gathering",
+          "pairs": [
+            {
+              "a": "info-002",
+              "b": "info-003",
+              "similarity": 0.7931,
+              "above_threshold": false
+            }
+          ]
+        },
+        {
+          "event": "similarity_pairs",
+          "section": "action_execution",
+          "pairs": [
+            {
+              "a": "acti-001",
+              "b": "acti-004",
+              "similarity": 0.7346,
+              "above_threshold": false
+            },
+            {
+              "a": "acti-002",
+              "b": "acti-003",
+              "similarity": 0.7089,
+              "above_threshold": false
+            }
+          ]
+        },
+        {
+          "event": "similarity_pairs",
+          "section": "precondition_rules",
+          "pairs": [
+            {
+              "a": "prec-002",
+              "b": "prec-003",
+              "similarity": 0.7314,
+              "above_threshold": false
+            },
+            {
+              "a": "prec-002",
+              "b": "prec-006",
+              "similarity": 0.7481,
+              "above_threshold": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -11,6 +11,7 @@ from typing import Optional, List, Dict
 # Suppress noisy pydantic serialization warnings from litellm
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic.*")
 
+import anthropic
 import openai
 
 ANSI = {

@@ -78,6 +78,10 @@ def load_policy(path: str) -> str:
     if "final_population" in data:
         return data["final_population"][0]["wiki"]
 
+    # online_refine output
+    if "final_policy" in data:
+        return data["final_policy"]
+
     # Simple wiki JSON
     if "wiki" in data:
         return data["wiki"]

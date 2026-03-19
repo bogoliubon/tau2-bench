@@ -109,9 +109,11 @@ def batch_policy_refinement(
     current_policy = None
     
     # Shared extraction instructions
-    EXTRACTION_INSTRUCTIONS = """Your task is to write an actionable operational policy for a customer service agent, based on the provided trajectories. This policy will be injected into the agent's system prompt as its operating instructions.
+    EXTRACTION_INSTRUCTIONS = """Your task is to reconstruct the agent's operational policy as a set of explicit decision rules.
 
-Infer the concrete decision procedure that maps:
+Do NOT summarize the behavior.
+Do NOT describe general strategies.
+Instead, infer the concrete decision procedure that maps:
   (conversation state, retrieved information, system state) → next action
 
 Only extract rules supported by trajectory evidence.
@@ -128,6 +130,26 @@ Each rule must be:
 - Based only on observable evidence
 - Written as concrete instructions
 - Free of abstraction
+
+Avoid vague statements such as:
+- "The agent verifies information."
+- "The agent ensures correctness."
+
+Extraction Requirements:
+- If clarification is requested before acting, infer the missing precondition.
+- If a tool call occurs, infer: required prior information, why it was valid at that moment, conditions under which it would be invalid.
+- If tools are called in sequence, infer their dependency structure.
+- If multiple candidate entities exist, infer the selection procedure.
+- If confirmation occurs before execution, determine whether it is mandatory.
+- If system state changes, encode the state-dependent rule explicitly.
+
+Group rules into:
+1. Information Gathering Rules
+2. Selection Rules
+3. Action Execution Rules
+4. Confirmation Rules
+5. Tool Usage Constraints
+6. State-Dependent Rules
 
 Do not introduce domain-specific assumptions beyond the trajectory.{length_constraint}"""
 
@@ -248,7 +270,7 @@ Based on these new trajectories, update the policy. Add new rules, refine existi
             response = call_llm(prompt, model_name)
 
             # Enforce length limit — if over, ask LLM to compress
-            if max_policy_chars is not None and len(response) > max_policy_chars:
+            if max_policy_chars is not None and len(response) > max_policy_chars + 3000:
                 print(f"  Policy too long ({len(response)} chars), asking LLM to compress to {max_policy_chars}...")
                 compress_prompt = f"The following policy is {len(response)} characters but must not exceed {max_policy_chars} characters. Compress it by merging overlapping rules, using shorter bullet points, and dropping details that can be inferred. Provide ONLY the compressed policy.\n\n{response}"
                 response = call_llm(compress_prompt, model_name)

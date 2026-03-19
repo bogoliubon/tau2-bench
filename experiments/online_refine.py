@@ -302,6 +302,7 @@ def online_refine(
     batch_size: int = 5,
     max_concurrency: int = 5,
     start_batch: int = -1,
+    train_only: bool = False,
 ):
     """Run online policy refinement with concurrent rollouts per batch."""
 
@@ -335,7 +336,11 @@ def online_refine(
     train_held_out = [tid for tid in held_out_ids if tid not in test_id_set]
     test_held_out  = [tid for tid in held_out_ids if tid in test_id_set]
     train_batches = [train_held_out[i:i + batch_size] for i in range(0, len(train_held_out), batch_size)]
-    test_batches  = [test_held_out[i:i + batch_size]  for i in range(0, len(test_held_out),  batch_size)]
+    if train_only:
+        test_batches = []
+        print(f"Train-only mode: skipping {len(test_held_out)} test tasks")
+    else:
+        test_batches = [test_held_out[i:i + batch_size] for i in range(0, len(test_held_out), batch_size)]
     batches = train_batches + test_batches
     print(f"Batches: {len(train_batches)} train + {len(test_batches)} test = {len(batches)} total "
           f"(batch_size={batch_size}, concurrency={max_concurrency})")
@@ -478,7 +483,7 @@ def online_refine(
             print(f"  Calling {refine_llm} for refinement ({n_valid}/{len(batch_task_ids)} valid trajectories)...")
             new_policy = call_llm(prompt, refine_llm)
 
-            if max_policy_chars is not None and len(new_policy) > max_policy_chars:
+            if max_policy_chars is not None and len(new_policy) > max_policy_chars + 3000:
                 print(f"  Policy too long ({len(new_policy)} chars), compressing...")
                 compress_prompt = (
                     f"The following policy is {len(new_policy)} characters but must not exceed "
@@ -663,6 +668,12 @@ def main():
         ),
     )
 
+    parser.add_argument(
+        "--train_only",
+        action="store_true",
+        help="Only run on held-out train tasks, skip test tasks. Use evaluate_prompt.py to eval on test separately.",
+    )
+
     args = parser.parse_args()
 
     online_refine(
@@ -679,6 +690,7 @@ def main():
         batch_size=args.batch_size,
         max_concurrency=args.max_concurrency,
         start_batch=args.start_batch,
+        train_only=args.train_only,
     )
 
 
